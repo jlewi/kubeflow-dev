@@ -1,0 +1,85 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: 2018-03-01T23:22:03Z
+  labels:
+    app: jupyterhub
+    component: singleuser-server
+    heritage: jupyterhub
+    hub.jupyter.org/username: accounts_2Egoogle_2Ecom_3Ajlewi_40kubeflow_2Eorg
+  name: jlewi-jupyter-test-pod
+  namespace: kubeflow
+spec:
+  containers:
+  - args:
+    - start-singleuser.sh
+    - --ip="0.0.0.0"
+    - --port=8888
+    - --allow-root
+    env:
+    - name: JUPYTERHUB_API_TOKEN
+      value: b92291038f7845eab2a051315e175e3b
+    - name: JPY_API_TOKEN
+      value: b92291038f7845eab2a051315e175e3b
+    - name: JUPYTERHUB_CLIENT_ID
+      value: user-accounts.google.com%3Ajlewi%40kubeflow.org
+    - name: JUPYTERHUB_HOST
+    - name: JUPYTERHUB_OAUTH_CALLBACK_URL
+      value: /user/accounts.google.com%3Ajlewi@kubeflow.org/oauth_callback
+    - name: JUPYTERHUB_USER
+      value: accounts.google.com:jlewi@kubeflow.org
+    - name: JUPYTERHUB_API_URL
+      value: http://tf-hub-0:8081/hub/api
+    - name: JUPYTERHUB_BASE_URL
+      value: /
+    - name: JUPYTERHUB_SERVICE_PREFIX
+      value: /user/accounts.google.com%3Ajlewi@kubeflow.org/
+    - name: MEM_GUARANTEE
+      value: 1Gi
+    - name: CPU_GUARANTEE
+      value: 500m
+    image: gcr.io/kubeflow-images-staging/tensorflow-notebook-cpu:v20180301-pr317
+    imagePullPolicy: IfNotPresent
+    lifecycle: {}
+    name: notebook
+    ports:
+    - containerPort: 8888
+      name: notebook-port
+      protocol: TCP
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /mnt/github-issues-data
+      name: github-issues-data
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: no-api-access-please
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  nodeName: gke-gpu-cluster-large-cpu-7e8d79a1-tt1w
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext:
+    fsGroup: 0
+    runAsUser: 0
+  serviceAccount: default
+  serviceAccountName: default
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - name: github-issues-data
+    persistentVolumeClaim:
+      claimName: github-issues-data
+  - emptyDir: {}
+    name: no-api-access-please

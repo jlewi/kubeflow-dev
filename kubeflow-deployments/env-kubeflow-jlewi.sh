@@ -9,24 +9,15 @@
 # Set PROJECT to the project you want to use with Kubeflow.
 export PROJECT=cloud-ml-dev
 
+# Set DEPLOYMENT_NAME to the name to give to the deployment.
+# The name must be unique for each deployment within your project.
 export DEPLOYMENT_NAME=jlewi-kubeflow
 
-# The name of the ip address as defined in cluster.jinja
-# We will reserve a GCP IP address to use for ingress to the cluster.
-export IP_NAME=static-ip
-
-# Set the namespace to the name of the namespace to deploy Kubeflow in.
-export NAMESPACE=kubeflow
+# Set this to the zone in your ${CONFIG_FILE}
 export ZONE=us-east1-d
+
 # Set config file to the YAML file defining your deployment manager configs.
-export CONFIG_FILE=~/git_kubeflow-dev/kubeflow-deployments/cluster-cloud-ml-dev-jlewi.yaml
-export PROJECT_CONFIG_FILE=project-${PROJECT}.yaml
+export CONFIG_FILE=cluster-kubeflow.yaml
 
-# ksonnet environment
-#export ENV=${PROJECT}
-
-# The fully qualified domain name to use with ingress.
-# You only need to set this if you want to use a custom domain
-# with ingress as opposed to an automatic domain for your project.
-# TODO(jlewi): What is the automatic domain name.
-#export FQDN=${PROJECT}.kubeflow.dev
+# Get the project number
+export PROJECT_NUMBER=`gcloud projects describe ${PROJECT} --format='value(project_number)'`

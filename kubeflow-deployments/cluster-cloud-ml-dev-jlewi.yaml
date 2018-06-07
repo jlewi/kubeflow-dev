@@ -28,21 +28,47 @@ resources:
   type: cluster.jinja
   properties:
     zone: us-east1-d
+    # Set this to v1beta1 to use beta features such as private clusters,
+    gkeApiVersion: v1
     # An arbitrary string appending to name of nodepools
     # bump this if you want to modify the node pools.
     # This will cause existing node pools to be deleted and new ones to be created.
     # Use prefix v so it will be treated as a string.
-    pool-version: v1
+    pool-version: v2
     # Two is small enough to fit within default quota.
     cpu-pool-initialNodeCount: 2
-    gpu-pool-initialNodeCount: 0    
+    gpu-pool-initialNodeCount: 0
     # Whether to deploy the new Stackdriver Kubernetes agents
     stackdriver-kubernetes: false
+    securityConfig:
+      # Whether to use a cluster with private IPs
+      # Use v1beta1 api
+      privatecluster: false
+      # masterIpv4CidrBlock for private clusters, if enabled
+      # Use v1beta1 api
+      masterIpv4CidrBlock: 172.16.0.16/28
+      # Protect worker node metadata from pods
+      # Use v1beta1 api
+      secureNodeMetadata: false
+      # Whether to enable Pod Security Policy Admission Controller
+      # Use v1beta1 api
+      podSecurityPolicy: false
+      masterAuthorizedNetworksConfig:
+          cidrBlocks:
+          - cidrBlock: 1.2.3.4/32
+          - cidrBlock: 5.6.7.8/32
+          enabled: false
     # Path for the bootstrapper image.
-    bootstrapperImage: gcr.io/kubeflow-images-public/bootstrapper:v20180525-v0.1.1-71-ga9cdd5dd-e3b0c4
+    bootstrapperImage: gcr.io/kubeflow-images-public/bootstrapper:latest
     # This is the name of the GCP static ip address to reserve for your domain.
     # This must be different for each Kubeflow deployment in your project.
     ipName: jlewi-kubeflow-ip
+    users: 
+      # List users to grant appropriate GCP permissions to use Kubeflow.
+      # These can either be individual users (Google accounts) or Google
+      # Groups.
+      - user:jlewi@google.com
+      # - group:data-scientists@acme.com
     # Provide the config for the bootstrapper. This should be a string
     # containing the YAML spec for the bootstrapper.
     #
@@ -66,6 +92,8 @@ resources:
         components:
           - name: kubeflow-core
             prototype: kubeflow-core
+          # Remove component cloud-endpoints if you want to use your own
+          # domain and not a cloud.goog domain
           - name: cloud-endpoints
             prototype: cloud-endpoints
           - name: cert-manager
@@ -73,6 +101,8 @@ resources:
           - name: iap-ingress
             prototype: iap-ingress
         parameters:
+           # remove all parameters for cloud-endpoints if you are using your own domain
+           # and not a cloud.goog domain
           - component: cloud-endpoints
             name: secretName
             value: cloudep-sa
@@ -83,10 +113,11 @@ resources:
           - component: iap-ingress
             name: ipName
             # TODO: Keep this in sync with the value of property ipName
-            value: jlewi-kubeflow-ip
+            value: kubeflow-ip
           - component: iap-ingress
             name: hostname
-            # TODO: replace with Name of GCP project where kubeflow will be installed
+            # TODO: replace project with name GCP project where kubeflow will be installed.
+            # Set name to a name that is unique name for each deployment within your project.
             value: jlewi-kubeflow.endpoints.cloud-ml-dev.cloud.goog
           - component: kubeflow-core
             name: jupyterHubAuthenticator

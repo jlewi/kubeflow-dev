@@ -5,14 +5,14 @@ local k = import "k.libsonnet";
 local centraldashboard = import "test-central.libsonnet";
 local namespace = env.namespace;
 
-local uiService = {
+local uiLocal = {
       apiVersion: "v1",
       kind: "Service",
       metadata: {
         labels: {
           app: "centraldashboard",
         },
-        name: "centraldashboard",
+        name: "uiLocal",
         namespace: namespace,
         annotations: {
           "getambassador.io/config":
@@ -20,10 +20,10 @@ local uiService = {
               "---",
               "apiVersion: ambassador/v0",
               "kind:  Mapping",
-              "name: centralui-mapping",
+              "name: uiLocal-mapping",
               "prefix: /",
               "rewrite: /",
-              "service: centraldashboard." + namespace,
+              "service: uiLocal." + namespace,
             ]),
         },  //annotations
       },
@@ -42,7 +42,4 @@ local uiService = {
       },
     }; //service
 
-local parts = {
-	uiService :: uiService,
-};
-std.prune(k.core.v1.list.new([centraldashboard.uiService(namespace)]))
+std.prune(k.core.v1.list.new([centraldashboard.uiService(namespace), uiLocal]))

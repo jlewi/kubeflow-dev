@@ -12,9 +12,8 @@ resources:
       \  - {component: cert-manager, name: acmeEmail, value: jlewi@google.com}\n \
       \ - {component: iap-ingress, name: ipName, value: jlewi-kubeflow-ip}\n  - {component:\
       \ iap-ingress, name: hostname, value: jlewi-kubeflow.endpoints.cloud-ml-dev.cloud.goog}\n\
-      \  - {component: kubeflow-core, name: jupyterHubAuthenticator, value: iap}\n\
-      registries:\n- {branch: master, name: kubeflow, path: kubeflow, repo: 'https://github.com/kubeflow/kubeflow.git'}\n"
-    bootstrapperImage: gcr.io/kubeflow-images-public/bootstrapper:v20180607-v0.1.1-109-g4867d01b-dirty-601834
+      \  - {component: kubeflow-core, name: jupyterHubAuthenticator, value: iap}\n"
+    bootstrapperImage: gcr.io/kubeflow-images-public/bootstrapper:v20180615-2453eb7
     cpu-pool-initialNodeCount: 2
     gkeApiVersion: v1
     gpu-pool-initialNodeCount: 0

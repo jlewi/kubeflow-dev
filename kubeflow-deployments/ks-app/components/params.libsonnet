@@ -56,5 +56,9 @@
       pytorchDefaultImage: "null",
       pytorchJobImage: "jgaguirr/pytorch-operator:latest",
     },
+    "echo-server": {
+      image: "gcr.io/kubeflow-images-staging/echo-server:latest",
+      name: "echo-server",
+    },
   },
 }

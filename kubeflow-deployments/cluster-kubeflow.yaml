@@ -6,14 +6,15 @@ resources:
     bootstrapperConfig: "app:\n  components:\n  - {name: kubeflow-core, prototype:\
       \ kubeflow-core}\n  - {name: cloud-endpoints, prototype: cloud-endpoints}\n\
       \  - {name: cert-manager, prototype: cert-manager}\n  - {name: iap-ingress,\
-      \ prototype: iap-ingress}\n  packages:\n  - {name: core, registry: kubeflow}\n\
-      \  - {name: tf-serving, registry: kubeflow}\n  - {name: tf-job, registry: kubeflow}\n\
-      \  parameters:\n  - {component: cloud-endpoints, name: secretName, value: admin-gcp-sa}\n\
-      \  - {component: cert-manager, name: acmeEmail, value: jlewi@google.com}\n \
-      \ - {component: iap-ingress, name: ipName, value: jlewi-kubeflow-ip}\n  - {component:\
-      \ iap-ingress, name: hostname, value: jlewi-kubeflow.endpoints.cloud-ml-dev.cloud.goog}\n\
+      \ prototype: iap-ingress}\n  - {name: pytorch-operator, prototype: pytorch-operator}\n\
+      \  packages:\n  - {name: core, registry: kubeflow}\n  - {name: tf-serving, registry:\
+      \ kubeflow}\n  - {name: tf-job, registry: kubeflow}\n  - {name: pytorch-job,\
+      \ registry: kubeflow}\n  parameters:\n  - {component: cloud-endpoints, name:\
+      \ secretName, value: admin-gcp-sa}\n  - {component: cert-manager, name: acmeEmail,\
+      \ value: jlewi@google.com}\n  - {component: iap-ingress, name: ipName, value:\
+      \ jlewi-kubeflow-ip}\n  - {component: iap-ingress, name: hostname, value: jlewi-kubeflow.endpoints.cloud-ml-dev.cloud.goog}\n\
       \  - {component: kubeflow-core, name: jupyterHubAuthenticator, value: iap}\n"
-    bootstrapperImage: gcr.io/kubeflow-images-public/bootstrapper:v20180615-2453eb7
+    bootstrapperImage: gcr.io/kubeflow-images-public/bootstrapper:v20180618-715aafc
     cpu-pool-initialNodeCount: 2
     gkeApiVersion: v1
     gpu-pool-initialNodeCount: 0

@@ -19,6 +19,7 @@ python modify_yaml.py
 
 # create_k8s_secrets
 # Delete any of the previous service account keys
-rm *iam.gserviceaccount.com.json
+rm -f *iam.gserviceaccount.com.json
 
+export SETUP_PROJECT=false
 ./deploy.sh

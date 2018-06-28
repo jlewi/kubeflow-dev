@@ -2,88 +2,11 @@ local env = std.extVar("__ksonnet/environments");
 local params = std.extVar("__ksonnet/params").components["echo-server"];
 
 local k = import "k.libsonnet";
-local namespace = env.namespace;
 
 // TODO(https://github.com/ksonnet/ksonnet/issues/670) If we don't import the service
 // from a libsonnet file the annotation doesn't end up being escaped/represented in a way that 
 // Ambassador can understand.
-local all = import "kubeflow/core/all.libsonnet";
-local service = {
-  apiVersion: "v1",
-  kind: "Service",
-  metadata: {
-    labels: {
-      app: "echo",
-    },
-    name: "echo-new",
-    namespace: namespace,
-    annotations: {
-      "getambassador.io/config":
-        std.join("\n ", [
-          "---",
-          "apiVersion: ambassador/v0",
-          "kind:  Mapping",
-          "name: centralui-mapping",
-          "prefix: /",
-          "rewrite: /",
-          "service: centraldashboard." + namespace,
-        ]),
-    },  //annotations
-  },
-  spec: {
-    ports: [
-      {
-        port: 80,
-        targetPort: 8080,
-      },
-    ],
-    selector: {
-      app: "echo",
-    },
-    type: "ClusterIP",
-  },
-};  // service
+local echoParts = import "kubeflow/core/echo-server.libsonnet";
+local namespace = env.namespace;
 
-local deploy = {
-  apiVersion: "extensions/v1beta1",
-  kind: "Deployment",
-  metadata: {
-    name: "echo",
-    namespace: namespace,
-
-  },
-  spec: {
-    replicas: 1,
-    template: {
-      metadata: {
-        labels: {
-          app: "echo",
-        },
-      },
-      spec: {
-        containers: [
-          {
-            image: params.image,
-            name: "app",
-            ports: [
-              {
-                containerPort: 8080,
-              },
-            ],
-
-            readinessProbe: {
-              httpGet: {
-                path: "/headers",
-                port: 8080,
-              },
-              initialDelaySeconds: 5,
-              periodSeconds: 30,
-            },
-          },
-        ],
-      },
-    },
-  },
-};
-
-std.prune(k.core.v1.list.new([service, deploy]))
+std.prune(k.core.v1.list.new([echoParts.service(namespace, params.name), echoParts.deploy(namespace, params.name, params.image)]))

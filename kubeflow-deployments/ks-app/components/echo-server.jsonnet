@@ -2,9 +2,12 @@ local env = std.extVar("__ksonnet/environments");
 local params = std.extVar("__ksonnet/params").components["echo-server"];
 
 local k = import "k.libsonnet";
-
 local namespace = env.namespace;
 
+// TODO(https://github.com/ksonnet/ksonnet/issues/670) If we don't import the service
+// from a libsonnet file the annotation doesn't end up being escaped/represented in a way that 
+// Ambassador can understand.
+local all = import "kubeflow/core/all.libsonnet";
 local service = {
   apiVersion: "v1",
   kind: "Service",

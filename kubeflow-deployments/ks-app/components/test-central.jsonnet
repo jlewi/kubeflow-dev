@@ -24,6 +24,7 @@ local uiLocal = {
               "prefix: /",
               "rewrite: /",
               "service: uiLocal." + namespace,
+              "",
             ]),
         },  //annotations
       },
@@ -42,4 +43,26 @@ local uiLocal = {
       },
     }; //service
 
-std.prune(k.core.v1.list.new([centraldashboard.uiService(namespace), uiLocal]))
+
+local uiVerbatim = {
+      apiVersion: "v1",
+      kind: "Service",
+      metadata: {
+        labels: {
+          app: "verbatim",
+        },
+        name: "uiVerbatim",
+        namespace: namespace,
+        annotations: {
+          "getambassador.io/config":
+@"---
+apiVersion: ambassador/v0
+kind:  Mapping
+name: uiLocal-mapping
+prefix: /
+rewrite: /
+service: uiLocal."
+        },  //annotations
+      },
+    }; //service
+std.prune(k.core.v1.list.new([centraldashboard.uiService(namespace), uiLocal, uiVerbatim]))

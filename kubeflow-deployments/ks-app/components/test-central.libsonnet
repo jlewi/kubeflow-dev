@@ -18,6 +18,7 @@
               "prefix: /",
               "rewrite: /",
               "service: centraldashboard." + namespace,
+              "",
             ]),
         },  //annotations
       },

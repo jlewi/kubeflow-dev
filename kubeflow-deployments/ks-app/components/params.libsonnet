@@ -18,11 +18,15 @@
       reportUsage: "false",
       tfAmbassadorImage: "quay.io/datawire/ambassador:0.30.1",
       tfAmbassadorServiceType: "ClusterIP",
+      AmbassadorImage: "quay.io/datawire/ambassador:0.30.1",
+      AmbassadorServiceType: "ClusterIP",
+      centralUiImage: "",
       tfDefaultImage: "null",
-      tfJobImage: "gcr.io/kubeflow-images-public/tf_operator:v20180615-b2ac020",
+      tfJobImage: "gcr.io/kubeflow-images-staging/tf_operator:kubeflow-tf-operator-presubmit-v2-688-1b33543-759-49f7",
       tfJobUiServiceType: "ClusterIP",
-      tfJobVersion: "v1alpha2",
+      tfJobVersion: "v1alpha1",
       tfStatsdImage: "quay.io/datawire/statsd:0.30.1",
+      StatsdImage: "quay.io/datawire/statsd:0.30.1",
       usageId: "unknown_cluster",
     },
     "cloud-endpoints": {
@@ -59,6 +63,20 @@
     "echo-server": {
       image: "gcr.io/kubeflow-images-staging/echo-server:latest",
       name: "echo-server",
+    },
+    "tf-job-simple": {
+      name: "tf-job-simple",
+    },
+    katib: {
+      katibImageTag: "latest",
+      modeldbDatabaseImage: "mongo:3.4",
+      modeldbFrontendImage: "katib/katib-frontend",
+      modeldbImage: "mitdbg/modeldb-backend:latest",
+      name: "katib",
+      suggestionGridImage: "katib/suggestion-grid",
+      suggestionRandomImage: "katib/suggestion-random",
+      vizierCoreImage: "katib/vizier-core",
+      vizierDbImage: "mysql:8.0.3",
     },
   },
 }

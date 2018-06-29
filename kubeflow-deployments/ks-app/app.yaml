@@ -9,20 +9,35 @@ environments:
 kind: ksonnet.io/app
 libraries:
   core:
+    gitVersion:
+      commitSha: 445de31cae91ddb1547b4b81db239988a1b0df20
+      refSpec: master
     name: core
     registry: kubeflow
   pytorch-job:
+    gitVersion:
+      commitSha: 445de31cae91ddb1547b4b81db239988a1b0df20
+      refSpec: master
     name: pytorch-job
     registry: kubeflow
   tf-job:
+    gitVersion:
+      commitSha: 445de31cae91ddb1547b4b81db239988a1b0df20
+      refSpec: master
     name: tf-job
     registry: kubeflow
   tf-serving:
+    gitVersion:
+      commitSha: 445de31cae91ddb1547b4b81db239988a1b0df20
+      refSpec: master
     name: tf-serving
     registry: kubeflow
 name: app
 registries:
   kubeflow:
-    protocol: fs
-    uri: file:///opt/registries/kubeflow/kubeflow
+    gitVersion:
+      commitSha: 3be196cfa1d68d9a33e0674c133ffbbcc3e57d46
+      refSpec: v0.2.0-rc.1
+    protocol: github
+    uri: github.com/kubeflow/kubeflow/tree/v0.2.0-rc.1/kubeflow
 version: 0.0.1

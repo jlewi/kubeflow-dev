@@ -74,5 +74,23 @@
       tfJobVersion: 'v1alpha2',
       usageId: 'unknown_cluster',
     },
+    "pyt2": {
+      cloud: "null",
+      disks: "null",
+      name: "pyt2",
+      namespace: "null",
+      pytorchDefaultImage: "null",
+      pytorchJobImage: "gcr.io/kubeflow-images-public/pytorch-operator:v20180619-2e19016",
+    },
+    "pymnist-1": {
+      args: "null",
+      image: "gcr.io/kubeflow-examples/pytorch-dist-mnist:v20180702-a57993c",
+      image_gpu: "null",
+      name: "pymnist-1",
+      namespace: "null",
+      num_gpus: 0,
+      num_masters: 1,
+      num_workers: 1,
+    },
   },
 }

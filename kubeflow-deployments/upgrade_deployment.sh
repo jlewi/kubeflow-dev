@@ -15,3 +15,5 @@ cd ${DIR}/ks-app
 # Regenerate the core component
 ks component rm kubeflow-core
 ks generate kubeflow-core kubeflow-core
+ks param set kubeflow-core jupyterHubAuthenticator iap
+ks param set kubeflow-core jupyterNotebookPVCMount /home/jovyan

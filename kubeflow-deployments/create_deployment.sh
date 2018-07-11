@@ -10,7 +10,7 @@ cd ${DIR}
 # We need to copy the source to a directory otherwise it will try to check it out via 
 # an HTTP link which isn't what we want since we want to try out our source
 export KUBEFLOW_REPO=${DIR}/kubeflow_source
-cp -fr ~/git_kubeflow ${KUBEFLOW_REPO}
+cp -f ${KUBEFLOW_REPO}/scripts ./scripts
 
 # Source environment variables containing client id and secret
 .  env-kubeflow-jlewi.sh
@@ -21,5 +21,8 @@ cp -fr ~/git_kubeflow ${KUBEFLOW_REPO}
 rm -f *iam.gserviceaccount.com.json
 
 export SETUP_PROJECT=false
-cd ${KUBEFLOW_REPO}/scripts/gke
+cd ${DIR}/scripts/gke
 ./deploy.sh
+
+gcloud --project=${PROJECT} container clusters get-credentials --zone=${ZONE} ${DEPLOYMENT_NAME}
+~/git_kubeflow-dev/create_context.sh ${DEPLOYMENT_NAME} kubeflow

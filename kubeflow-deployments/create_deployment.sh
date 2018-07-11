@@ -7,19 +7,19 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 cd ${DIR}
 
-cp -f ~/git_kubeflow/docs/gke/configs/cluster-kubeflow.yaml  ./
-cp -f ~/git_kubeflow/docs/gke/configs/cluster.jinja  ./
-cp -f ~/git_kubeflow/docs/gke/configs/deploy.sh ./deploy.sh
+# We need to copy the source to a directory otherwise it will try to check it out via 
+# an HTTP link which isn't what we want since we want to try out our source
+export KUBEFLOW_REPO=${DIR}/kubeflow_source
+cp -fr ~/git_kubeflow ${KUBEFLOW_REPO}
 
 # Source environment variables containing client id and secret
 .  env-kubeflow-jlewi.sh
 . ~/secrets/jlewi-kubeflow-endpoints-oauth.sh
-
-python modify_yaml.py
 
 # create_k8s_secrets
 # Delete any of the previous service account keys
 rm -f *iam.gserviceaccount.com.json
 
 export SETUP_PROJECT=false
+cd ${KUBEFLOW_REPO}/scripts/gke
 ./deploy.sh

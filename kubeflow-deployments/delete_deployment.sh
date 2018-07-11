@@ -1,4 +1,5 @@
 #!/bin/bash
+# Don't fail on error because some commands will fail if the resources were already deleted.
 set -x 
 .  env-kubeflow-jlewi.sh
 
@@ -9,8 +10,6 @@ gcloud deployment-manager --project=${PROJECT} deployments delete \
 
 RESULT=$?
 
-set -e
-
 if [ ${RESULT} -ne 0 ]; then
 	echo deleting the deployment did not work retry with abandon
 	gcloud deployment-manager --project=${PROJECT} deployments delete \
@@ -20,16 +19,23 @@ if [ ${RESULT} -ne 0 ]; then
 
 fi
 
+# Ensure resources are deleted.
+
 gcloud --project=${PROJECT} container clusters delete --zone=${ZONE} \
 	${DEPLOYMENT_NAME} --quiet
 
-# Delete service accounts
+# Delete service accounts and all role bindings for the service accounts
 declare -a accounts=("vm" "admin" "user")
 
-# now loop through the above array
-for suffix in "${accounts[@]}"
+# ow loop through the above array
+for suffix in "${accounts[@]}";
 do   
+   # Delete all role bindings.
+   SA=${DEPLOYMENT_NAME}-${suffix}@${PROJECT}.iam.gserviceaccount.com
+   python delete_role_bindings.py --project=${PROJECT} --service_account=${SA}
    gcloud --project=${PROJECT} iam service-accounts delete \
-	${DEPLOYMENT_NAME}-${suffix}@${PROJECT}.iam.gserviceaccount.com \
-	--quiet	
+	${SA} \
+	--quiet		
 done
+
+# TODO(jlewi): Should we cleanup ingress , loadbalancer, etc...?

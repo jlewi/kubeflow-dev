@@ -23,7 +23,7 @@
       tfJobImage: 'gcr.io/kubeflow-images-public/tf_operator:v0.2.0',
       tfJobUiServiceType: 'ClusterIP',
       tfJobVersion: 'v1alpha2',
-      usageId: 'bca29719-4630-4f9b-a17f-dd41496c4ebe',
+      usageId: 'b80c7ba4-55ea-4e5e-b106-33849db5baaa',
     },
     "cloud-endpoints": {
       name: 'cloud-endpoints',
@@ -47,6 +47,16 @@
       namespace: 'null',
       oauthSecretName: 'kubeflow-oauth',
       secretName: 'envoy-ingress-tls',
+    },
+    katib: {
+      modeldbDatabaseImage: "mongo:3.4",
+      modeldbFrontendImage: "gcr.io/kubeflow-images-public/katib-frontend:v0.2.0",
+      modeldbImage: "gcr.io/kubeflow-images-public/modeldb-backend:v0.2.0",
+      name: "katib",
+      suggestionGridImage: "gcr.io/kubeflow-images-public/katib-suggestion-grid:v0.2.0",
+      suggestionRandomImage: "gcr.io/kubeflow-images-public/katib-suggestion-random:v0.2.0",
+      vizierCoreImage: "gcr.io/kubeflow-images-public/katib-vizier-core:v0.2.0",
+      vizierDbImage: "mysql:8.0.3",
     },
   },
 }

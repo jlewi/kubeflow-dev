@@ -9,8 +9,8 @@ cd ${DIR}
 
 # We need to copy the source to a directory otherwise it will try to check it out via 
 # an HTTP link which isn't what we want since we want to try out our source
-export KUBEFLOW_REPO=${DIR}/kubeflow_source
-cp -f ${KUBEFLOW_REPO}/scripts ./scripts
+export KUBEFLOW_REPO=~/git_kubeflow
+cp -fr ${KUBEFLOW_REPO}/scripts ./scripts
 
 # Source environment variables containing client id and secret
 .  env-kubeflow-jlewi.sh

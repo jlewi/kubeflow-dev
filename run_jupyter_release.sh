@@ -6,8 +6,8 @@ JOB_NAME="notebook-release"
 DATE=`date +%Y%m%d`
 
 JOB_NAME="tensorflow-notebook-image-release"
-#JOB_TYPE=postsubmit
-JOB_TYPE=presubmit
+JOB_TYPE=postsubmit
+#JOB_TYPE=presubmit
 
 BUILD_NUMBER=$(uuidgen)
 BUILD_NUMBER=${BUILD_NUMBER:0:4}

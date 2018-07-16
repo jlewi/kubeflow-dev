@@ -33,24 +33,24 @@ if __name__ == "__main__":
   print("I'm training some model")
 
   datasets = {
-    "train": Dataset("/path/to/train", {"num_cols": 15, "dist": "random"}),
-      "test": Dataset("/path/to/test", {"num_cols": 15, "dist": "gaussian"})
+    "train" : Dataset("/path/to/train", {"num_cols" : 15, "dist" : "random"}),
+    "test" : Dataset("/path/to/test", {"num_cols" : 15, "dist" : "gaussian"})
   }
+
+  # create the Model, ModelConfig, and ModelMetrics instances
   model = "model_obj"
-  mdb_model1 = Model("NN", model, "/path/to/model1")
-  model_config1 = ModelConfig("NN", {"l1": 10})
-  model_metrics1 = ModelMetrics({"accuracy": 0.8})
+  model_type = "NN"
+  mdb_model1 = Model(model_type, model, "/path/to/model1")
+  model_config1 = ModelConfig(model_type, {"l1" : 10})
+  model_metrics1 = ModelMetrics({"accuracy" : 0.8})
 
-  mdb_model2 = Model("NN", model, "/path/to/model2")
-  model_config2 = ModelConfig("NN", {"l1": 20})
-  model_metrics2 = ModelMetrics({"accuracy": 0.9})
-
+  # sync the datasets to modeldb
   syncer_obj.sync_datasets(datasets)
 
+  # sync the model with its model config and specify which dataset tag to use for it
   syncer_obj.sync_model("train", model_config1, mdb_model1)
-  syncer_obj.sync_metrics("test", mdb_model1, model_metrics1)
 
-  syncer_obj.sync_model("train", model_config2, mdb_model2)
-  syncer_obj.sync_metrics("test", mdb_model2, model_metrics2)
+  # sync the metrics to the model and also specify which dataset tag to use for it
+  syncer_obj.sync_metrics("test", mdb_model1, model_metrics1)
 
   syncer_obj.sync()

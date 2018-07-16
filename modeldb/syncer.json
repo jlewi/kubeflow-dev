@@ -5,7 +5,7 @@
   },
   "syncingStrategy": "eager",
   "project": {
-    "name": "Demo",
+    "name": "Test Project",
     "author": "modeldb_users",
     "description": "Project to hold all models from the demo"
   },

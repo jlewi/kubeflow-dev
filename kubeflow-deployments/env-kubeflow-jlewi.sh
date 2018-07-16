@@ -11,7 +11,7 @@ export PROJECT=cloud-ml-dev
 
 # Set DEPLOYMENT_NAME to the name to give to the deployment.
 # The name must be unique for each deployment within your project.
-export DEPLOYMENT_NAME=jlewi-kubeflow
+export DEPLOYMENT_NAME=jlewi-kf
 
 # Set this to the zone in your ${CONFIG_FILE}
 export ZONE=us-east1-d

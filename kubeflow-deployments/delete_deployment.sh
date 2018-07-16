@@ -1,8 +1,19 @@
 #!/bin/bash
 # Don't fail on error because some commands will fail if the resources were already deleted.
+
 set -x 
 .  env-kubeflow-jlewi.sh
 
+VERSION=$1
+
+if [ -z ${VERSION} ]; then
+	echo "usage create_deployment.sh <version>"
+	exit 1
+fi	
+
+VERSION_NAME=${VERSION//./-}
+
+DEPLOYMENT_NAME=${DEPLOYMENT_NAME}-${VERSION_NAME}
 
 gcloud deployment-manager --project=${PROJECT} deployments delete \
 	${DEPLOYMENT_NAME} \

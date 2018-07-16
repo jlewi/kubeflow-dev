@@ -2,10 +2,17 @@
 timeout: 7200s
 steps:
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['pull', 'gcr.io/kubeflow-dev/kubeflow-kaggle-notebook@sha256:6a7e3423c3a8db391bc6d3e48356bbc43ed4126a400f3c80d3de005e7df80f99']  
+  args: 
+    - pull
+    - gcr.io/kubeflow-dev/kubeflow-kaggle-notebook@sha256:c90e1a0e7e71af1c1dcfeac263c97398edc030e3015591ed3807b343539b22cf
   timeout: 7200s
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['tag', 'gcr.io/kubeflow-dev/kubeflow-kaggle-notebook@sha256:6a7e3423c3a8db391bc6d3e48356bbc43ed4126a400f3c80d3de005e7df80f99', 'gcr.io/kubeflow-images-public/kaggle-notebook:v20180629']  
+  args: 
+    - tag
+    - gcr.io/kubeflow-dev/kubeflow-kaggle-notebook@sha256:c90e1a0e7e71af1c1dcfeac263c97398edc030e3015591ed3807b343539b22cf
+    - gcr.io/kubeflow-images-public/kaggle-notebook:v20180713
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/kubeflow-images-public/kaggle-notebook:v20180629']
+  args: 
+    - push
+    - gcr.io/kubeflow-images-public/kaggle-notebook:v20180713
   timeout: 7200s

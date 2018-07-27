@@ -20,7 +20,7 @@
       namespace: 'null',
       reportUsage: true,
       tfDefaultImage: 'null',
-      tfJobImage: 'gcr.io/kubeflow-images-public/tf_operator:v0.2.0',
+      tfJobImage: 'gcr.io/kubeflow-images-public/tf_operator:v20180724-13863edf',
       tfJobUiServiceType: 'ClusterIP',
       tfJobVersion: 'v1alpha2',
       usageId: '3adee82f-4aad-4cb3-9af7-31e1e060255b',

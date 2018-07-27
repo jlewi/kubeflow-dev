@@ -38,4 +38,3 @@ if __name__ == "__main__":
         ]
     print(" ".join(command))
     subprocess.call(command)
-  print done

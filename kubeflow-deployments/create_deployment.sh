@@ -7,7 +7,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 PROJECT=$1
 VERSION=$2
-DEPLOYMENT_NAME=$1
+DEPLOYMENT_NAME=$3
 
 if [ -z ${VERSION} ]; then
 	echo "usage create_deployment.sh <version>"

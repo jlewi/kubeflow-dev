@@ -16,11 +16,6 @@ html, body {
   margin-right: -15px !important;
 }
 
-.isDisabled {
-  color: currentColor;
-  opacity: 0.5;
-}
-
 .navbar-right {
   float: right!important;
 }

@@ -102,6 +102,8 @@ else
 fi
 
 if ${KUBEFLOW_DEPLOY}; then
+  cd "${KUBEFLOW_DM_DIR}"
+
   # Check if it already exists
   set +e
   gcloud deployment-manager --project=${PROJECT} deployments describe ${DEPLOYMENT_NAME}

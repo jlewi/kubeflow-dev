@@ -102,6 +102,7 @@ else
 fi
 
 if ${KUBEFLOW_DEPLOY}; then
+  cd ${KUBEFLOW_DM_DIR}
   # Check if it already exists
   set +e
   gcloud deployment-manager --project=${PROJECT} deployments describe ${DEPLOYMENT_NAME}
@@ -140,33 +141,36 @@ fi
 
 # Create the ksonnet app
 cd $(dirname "${KUBEFLOW_KS_DIR}")
-ks init $(basename "${KUBEFLOW_KS_DIR}")
-cd "${KUBEFLOW_KS_DIR}"
 
-ks env set default --namespace "${K8S_NAMESPACE}"
-# Add the local registry
-ks registry add kubeflow "${KUBEFLOW_REPO}/kubeflow"
+if [ ! -d "${KUBEFLOW_KS_DIR}"" ]; then 
+  ks init $(basename "${KUBEFLOW_KS_DIR}")
+  cd "${KUBEFLOW_KS_DIR}"
 
-# Install all required packages
-ks pkg install kubeflow/argo
-ks pkg install kubeflow/core
-ks pkg install kubeflow/examples
-ks pkg install kubeflow/katib
-ks pkg install kubeflow/mpi-job
-ks pkg install kubeflow/pytorch-job
-ks pkg install kubeflow/seldon
-ks pkg install kubeflow/tf-serving
+  ks env set default --namespace "${K8S_NAMESPACE}"
+  # Add the local registry
+  ks registry add kubeflow "${KUBEFLOW_REPO}/kubeflow"
 
-# Generate all required components
-ks generate kubeflow-core kubeflow-core --jupyterHubAuthenticator iap
-ks generate cloud-endpoints cloud-endpoints
-ks generate cert-manager cert-manager --acmeEmail=${EMAIL}
-ks generate iap-ingress iap-ingress --ipName=${KUBEFLOW_IP_NAME} --hostname=${KUBEFLOW_HOSTNAME}
+  # Install all required packages
+  ks pkg install kubeflow/argo
+  ks pkg install kubeflow/core
+  ks pkg install kubeflow/examples
+  ks pkg install kubeflow/katib
+  ks pkg install kubeflow/mpi-job
+  ks pkg install kubeflow/pytorch-job
+  ks pkg install kubeflow/seldon
+  ks pkg install kubeflow/tf-serving
 
-# Enable collection of anonymous usage metrics
-# Skip this step if you don't want to enable collection.
-ks param set kubeflow-core reportUsage true
-ks param set kubeflow-core usageId $(uuidgen)
+  # Generate all required components
+  ks generate kubeflow-core kubeflow-core --jupyterHubAuthenticator iap
+  ks generate cloud-endpoints cloud-endpoints
+  ks generate cert-manager cert-manager --acmeEmail=${EMAIL}
+  ks generate iap-ingress iap-ingress --ipName=${KUBEFLOW_IP_NAME} --hostname=${KUBEFLOW_HOSTNAME}
+
+  # Enable collection of anonymous usage metrics
+  # Skip this step if you don't want to enable collection.
+  ks param set kubeflow-core reportUsage true
+  ks param set kubeflow-core usageId $(uuidgen)
+fi
 
 # Apply the components generated
 if ${KUBEFLOW_DEPLOY}; then

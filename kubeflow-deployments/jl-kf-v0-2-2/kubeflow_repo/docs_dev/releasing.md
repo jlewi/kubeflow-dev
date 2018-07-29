@@ -6,7 +6,7 @@
   - [Create Release Workflow](#create-release-workflow)
   - [Update Release Config](#update-release-config)
 
-- [Release Kubeflow](#release-kubeflow)
+- [Manual Release Kubeflow](#manual-release-kubeflow)
   - [Authenticate to GCP](#authenticate-to-gcp)
   - [Update TFJob](#update-tfjob)
   - [Build TF Serving Images](#build-tf-serving-images)
@@ -27,7 +27,7 @@ Currently auto release will use master branch.
 
 ## Create Release Workflow
 
-1. To have your image release workflow, you need build context which contains a script, build_image.sh which has the executable bit set:
+1. To have your image release workflow, you need build context which contains a build_image.sh which can be executed:
 ```
   build_image.sh ${DOCKERFILE} ${IMAGE} ${TAG} ...EXTRA_ARGS
 ```
@@ -62,12 +62,6 @@ Currently auto release will use master branch.
     jsonnet fmt -i $(find . -name '[a-z]*sonnet') --string-style d --comment-style s --indent 2
 ```
 
-4. Include vendor folder in your ks app when make pull request.
-
-```
-    git add -f vendor
-```
-
 ## Update Release Config
 
 Add your new workflow to [release config](../releasing/prow_config_release.yaml).
@@ -75,7 +69,7 @@ Add your new workflow to [release config](../releasing/prow_config_release.yaml)
 A prototype would be:
 ```
 - app_dir: kubeflow/kubeflow/releasing/<new release workflow folder>
-    component: RELEASENAME
+    component: release
     name: <your release name>
     params:
       extra_args: <for your build_image.sh>
@@ -83,7 +77,7 @@ A prototype would be:
 
 Your images will be auto released everyday.
 
-# Release Kubeflow
+# Example: Manual Release Kubeflow
 
 Some preliminary instructions for how to cut a release.
 

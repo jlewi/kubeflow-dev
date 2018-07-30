@@ -48,5 +48,11 @@
       oauthSecretName: 'kubeflow-oauth',
       secretName: 'envoy-ingress-tls',
     },
+    tfjob: {
+      name: "tfjob",
+    },
+    "tfjob2": {
+      name: "tfjob2",
+    },
   },
 }

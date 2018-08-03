@@ -142,7 +142,7 @@ fi
 # Create the ksonnet app
 cd $(dirname "${KUBEFLOW_KS_DIR}")
 
-if [ ! -d "${KUBEFLOW_KS_DIR}"" ]; then 
+if [ ! -d "${KUBEFLOW_KS_DIR}" ]; then 
   ks init $(basename "${KUBEFLOW_KS_DIR}")
   cd "${KUBEFLOW_KS_DIR}"
 

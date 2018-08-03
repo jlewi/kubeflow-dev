@@ -1,0 +1,1 @@
+/home/jlewi/git_kubeflow-dev/kubeflow-deployments/jl-0801-b/kubeflow_repo/scripts/gke/teardown.sh

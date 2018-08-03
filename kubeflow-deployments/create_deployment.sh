@@ -5,75 +5,39 @@
 set -ex
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-PROJECT=$1
+export PROJECT=$1
+export DEPLOYMENT_NAME=$3
 # Tag to checkout
 KUBEFLOW_TAG=$2
-DEPLOYMENT_NAME=$3
-DEPLOY=$4
+export KUBEFLOW_CLOUD=gke
 
-if [ -z ${KUBEFLOW_TAG} ]; then
-	echo "usage create_deployment.sh <project> <kubeflow_tag> <DEPLOYMENT_NAME> <DEPLOY>"
-	exit 1
+usage () {
+	echo "create_deployment.sh <PROJECT> <DEPLOYMENT_NAME> <TAG>"
+}
+
+if [  -z  "${PROJECT}" ]; then
+  usage
+  exit 1
 fi	
 
-if [ -z ${DEPLOY} ]; then
-	DEPLOY=true
-fi
-
-KUBEFLOW_VERSION=${KUBEFLOW_TAG//v/}
-VERSION_NAME=${KUBEFLOW_VERSION//./-}
-
-cd ${DIR}
-
-DEPLOY_DIR=${DIR}/${DEPLOYMENT_NAME}
-
-if [ -d "${DEPLOY_DIR}" ]; then
-	echo "${DEPLOY_DIR}" already exists
-	exit 1
+if [ -z  "${DEPLOYMENT_NAME}" ]; then
+  usage
+  exit 1
 fi	
 
+if [ -z  "${KUBEFLOW_TAG}" ]; then
+  usage
+  exit 1
+fi	
 
-mkdir -p ${DEPLOY_DIR}
+mkdir -p ${DEPLOYMENT_NAME}
 
-. ~/secrets/jlewi-kubeflow-endpoints-oauth.sh
+cd ${DEPLOYMENT_NAME}
 
-if [ "${KUBEFLOW_VERSION}" == "local" ]; then
-	export KUBEFLOW_REPO=~/git_kubeflow
-	rm -rf ./scripts
-	cp -r ${KUBEFLOW_REPO}/scripts .${DEPLOY_DIR}/
+if [ -z "${KUBEFLOW_SOURCE}" ]; then  
+  curl https://raw.githubusercontent.com/kubeflow/kubeflow/${KUBEFLOW_TAG}/scripts/download.sh | bash
 else
-	export _KUBEFLOW_REPO=$(mktemp -d /tmp/tmp.kubeflow-${VERSION_NAME}-XXXX)
-fi	
-
-# create_k8s_secrets
-# Delete any of the previous service account keys
-rm -f *iam.gserviceaccount.com.json
-
-SETUP_PROJECT=${SETUP_PROJECT:false}
-
-# Output the environment variables
-cat > ${DEPLOY_DIR}/env.sh << EOF
-export PROJECT=${PROJECT}
-export KUBEFLOW_TAG=${KUBEFLOW_TAG}
-export KUBEFLOW_VERSION=${VERSION}
-export KUBEFLOW_DM_DIR=${DEPLOY_DIR}/dm-configs
-export KUBEFLOW_KS_DIR=${DEPLOY_DIR}/ks-app
-export DEPLOYMENT_NAME=${DEPLOYMENT_NAME}
-EOF
-
-. ${DEPLOY_DIR}/env.sh
-
-if [ "${VERSION}" == "local" ]; then
-	cd ${DEPLOY_DIR}/scripts/gke
-	./deploy.sh
-else
-	curl -o ${DEPLOY_DIR}/deploy.sh https://raw.githubusercontent.com/kubeflow/kubeflow/${KUBEFLOW_TAG}/scripts/gke/deploy.sh 
-    cd ${DEPLOY_DIR}
-    chmod a+x deploy.sh
-    ./deploy.sh
+  ${KUBEFLOW_SOURCE}/scripts/download.sh
 fi
 
-if ${DEPLOY}; then
-	gcloud --project=${PROJECT} container clusters get-credentials --zone=${ZONE} ${DEPLOYMENT_NAME}
-	~/git_kubeflow-dev/create_context.sh ${DEPLOYMENT_NAME} kubeflow
-fi
+${DIR}/${DEPLOYMENT_NAME}/deploy.sh configure

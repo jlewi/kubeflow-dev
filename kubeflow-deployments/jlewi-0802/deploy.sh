@@ -1,1 +1,0 @@
-/home/jlewi/git_kubeflow/scripts/gke/deploy.sh

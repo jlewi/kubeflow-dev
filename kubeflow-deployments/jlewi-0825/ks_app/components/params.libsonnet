@@ -46,7 +46,7 @@
       name: 'tf-job-operator',
       namespace: 'null',
       tfDefaultImage: 'null',
-      tfJobImage: 'gcr.io/kubeflow-images-public/tf_operator:v20180822-b576c253',
+      tfJobImage: 'gcr.io/kubeflow-images-public/tf_operator:v20180901-454c5c1a',
       tfJobUiServiceType: 'ClusterIP',
       tfJobVersion: 'v1alpha2',
     },

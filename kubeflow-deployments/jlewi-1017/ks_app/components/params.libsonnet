@@ -55,11 +55,11 @@
       tfJobVersion: 'v1alpha2',
     },
     argo: {
-      executorImage: 'argoproj/argoexec:v2.1.1',
+      executorImage: 'argoproj/argoexec:v2.2.0',
       name: 'argo',
       namespace: 'null',
-      uiImage: 'argoproj/argoui:v2.1.1',
-      workflowControllerImage: 'argoproj/workflow-controller:v2.1.1',
+      uiImage: 'argoproj/argoui:v2.2.0',
+      workflowControllerImage: 'argoproj/workflow-controller:v2.2.0',
     },
     katib: {
       modeldbDatabaseImage: 'mongo:3.4',
@@ -75,7 +75,7 @@
     spartakus: {
       name: 'spartakus',
       reportUsage: 'true',
-      usageId: '120162470',
+      usageId: '370475734',
     },
     "cloud-endpoints": {
       name: 'cloud-endpoints',
@@ -92,10 +92,10 @@
     },
     "iap-ingress": {
       disableJwtChecking: 'false',
-      envoyImage: 'envoyproxy/envoy:v1.8.0',
-      hostname: 'jlewi-0929-iap-fix.endpoints.cloud-ml-dev.cloud.goog',
+      envoyImage: 'gcr.io/kubeflow-images-public/envoy:v20180309-0fb4886b463698702b6a08955045731903a18738',
+      hostname: 'jlewi-1017.endpoints.cloud-ml-dev.cloud.goog',
       ingressSetupImage: 'gcr.io/kubeflow-images-public/ingress-setup:latest',
-      ipName: 'jlewi-0929-iap-fix-ip',
+      ipName: 'jlewi-1017-ip',
       issuer: 'letsencrypt-prod',
       name: 'iap-ingress',
       namespace: 'null',

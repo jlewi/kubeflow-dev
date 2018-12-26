@@ -36,7 +36,7 @@
     jupyter: {
       accessLocalFs: 'false',
       gcpSecretName: 'user-gcp-sa',
-      image: 'gcr.io/kubeflow/jupyterhub-k8s:v20180531-3bb991b1',
+      image: 'gcr.io/kubeflow-images-public/jupyterhub-k8s:v20181218-8468ca1c-dirty-269c6c',
       jupyterHubAuthenticator: 'iap',
       name: 'jupyter',
       notebookGid: '-1',

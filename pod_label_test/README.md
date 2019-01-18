@@ -1,0 +1,1 @@
+A simlple K8s manifest to test that pod labels are attached to pods with the new stack driver labels.

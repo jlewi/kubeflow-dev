@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logging-test  
+  labels:
+    app: logging-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logging-test
+  template:
+    metadata:
+      labels:
+        app: logging-test
+    spec:
+      containers:
+      - name: ubuntu
+        image: ubuntu
+        command:
+          -  /bin/bash 
+          - -c 
+          - "while true; do  echo hello; sleep 10;  done"
+
+        

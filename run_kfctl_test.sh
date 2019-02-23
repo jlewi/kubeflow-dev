@@ -10,7 +10,7 @@ REPO_NAME=kubeflow
 ENV=kubeflow-testing
 DATE=`date +%Y%m%d`
 NAMESPACE=kubeflow-test-infra
-PULL_NUMBER=1342
+PULL_NUMBER=2333
 # Don't set PULL_PULL_SHA if you want to pull the head of the PR.
 # PULL_PULL_SHA=0bc73dc
 
@@ -34,10 +34,15 @@ ks param set --env=${ENV} ${WORKFLOW} name ${NAME}
 ks param set --env=${ENV} ${WORKFLOW} prow_env "${PROW_VAR}"
 
 # LEAVE THE CLUSTER UP 
-ks param set --env=${ENV} ${WORKFLOW} deleteCluster "true"
+ks param set --env=${ENV} ${WORKFLOW} deleteKubeflow "true"
 
 ks apply ${ENV} -c ${WORKFLOW}
 popd 
 
+kubectl config use-context kubeflow-testing
 kubectl get wf -o yaml ${NAME}
 echo WORKFLOW=${NAME}
+echo UI URL
+URL=http://testing-argo.kubeflow.org/workflows/kubeflow-test-infra/${NAME}
+echo ${URL}
+google-chrome ${URL}&

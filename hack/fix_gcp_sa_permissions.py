@@ -43,8 +43,9 @@ if __name__ == "__main__":
       roles.append(b["role"])
 
 
-  # TODO(jlewi): Can we issue a single gcloud command.
-
+  if not roles:
+    raise ValueError("No roles found for service account: {0}".format(
+      args.service_account))
   for r in roles:
     command = ["gcloud", "projects", "remove-iam-policy-binding",
           args.project,

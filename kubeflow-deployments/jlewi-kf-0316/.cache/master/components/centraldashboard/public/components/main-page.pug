@@ -1,0 +1,43 @@
+app-drawer-layout.flex(narrow='{{narrowMode}}', force-narrow='[[or(inIframe, thinView)]]', thin$='[[thinView]]')
+    app-location(route='{{route}}')
+    app-route(route='{{route}}', pattern='/:page', data='{{routeData}}',
+        tail='{{subRouteData}}')
+    app-drawer#MainDrawer(slot='drawer')
+        figure#Logo
+            img(alt='Kubeflow Logo', src='assets/kf-logo_64px.svg')
+            figcaption Kubeflow
+        iron-selector(selected='{{sidebarItemIndex}}')
+            a(href='/', tabindex='-1')
+                paper-item.menu-item Home
+                aside.divider
+            template(is='dom-repeat', items='[[menuLinks]]')
+                a(href$='[[item.href]]', on-click='openInIframe', tabindex='-1')
+                    paper-item.menu-item [[item.text]]
+        aside.flex
+        footer.footer
+            section.privacy Privacy
+            section.build build version&nbsp;
+                span(title="Build: v[[buildVersion]] | Dashboard: v[[dashVersion]]") v[[buildVersion]]
+    app-header-layout(fullbleed)
+        app-header(slot='header')
+            app-toolbar(blue$='[[inIframe]]')
+                aside#Narrow-Slider(hides, hidden$='[[!narrowMode]]')
+                    paper-icon-button#Menu(icon='menu', drawer-toggle)
+                    figure.Logo
+                paper-tabs.bottom(selected='[[page]]', attr-for-selected='page', hides, hidden$='[[inIframe]]')
+                    paper-tab(page='dashboard', link)
+                        a.link(tabindex='-1', href='/') Dashboard
+                    paper-tab(page='activity', link)
+                        a.link(tabindex='-1', href='/activity') Activity
+                aside#NamespaceSelector
+                    paper-dropdown-menu(label='Namespace')
+        neon-animated-pages(selected='[[page]]', attr-for-selected='page',
+                            entry-animation='fade-in-animation',
+                            exit-animation='fade-out-animation')
+            neon-animatable(page='dashboard')
+                dashboard-view
+            neon-animatable(page='activity')
+                activity-view
+            neon-animatable#iframe-page(page='iframe')
+                iframe#PageFrame.flex(src='[[iframeUrl]]')
+    iron-media-query(query='(max-width: 900px)', query-matches='{{thinView}}')

@@ -1,0 +1,11 @@
+apiVersion: ksonnet.apps.kubeflow.org/v1alpha1
+kind: Ksonnet
+metadata:
+  creationTimestamp: null
+  name: ksonnet
+  namespace: kubeflow
+spec:
+  platform: ksonnet
+  repo: /Users/kdkasrav/ksonnet/.cache/master/kubeflow
+  version: master
+status: {}

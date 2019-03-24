@@ -1,0 +1,19 @@
+apiVersion: gcp.apps.kubeflow.org/v1alpha1
+kind: Gcp
+metadata:
+  creationTimestamp: null
+  name: jlewi-basic-0308
+  namespace: kubeflow
+spec:
+  appdir: /home/jlewi/git_kubeflow-dev/kubeflow-deployments/jlewi-basic-0308
+  email: jlewi@google.com
+  hostname: jlewi-basic-0308.endpoints.cloud-ml-dev.cloud.goog
+  ipName: jlewi-basic-0308-ip
+  platform: gcp
+  project: cloud-ml-dev
+  repo: /home/jlewi/git_kubeflow-dev/kubeflow-deployments/jlewi-basic-0308/.cache/master/kubeflow
+  skipInitProject: true
+  useBasicAuth: true
+  version: master
+  zone: us-east1-d
+status: {}

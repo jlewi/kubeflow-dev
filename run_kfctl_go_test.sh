@@ -10,7 +10,7 @@ REPO_NAME=kubeflow
 ENV=kubeflow-testing
 DATE=`date +%Y%m%d`
 NAMESPACE=kubeflow-test-infra
-PULL_NUMBER=2705
+PULL_NUMBER=2795
 # Don't set PULL_PULL_SHA if you want to pull the head of the PR.
 # PULL_PULL_SHA=0bc73dc
 
@@ -34,7 +34,7 @@ ks param set --env=${ENV} ${WORKFLOW} name ${NAME}
 ks param set --env=${ENV} ${WORKFLOW} prow_env "${PROW_VAR}"
 
 # LEAVE THE CLUSTER UP 
-ks param set --env=${ENV} ${WORKFLOW} deleteKubeflow "true"
+ks param set --env=${ENV} ${WORKFLOW} deleteKubeflow "false"
 
 ks apply ${ENV} -c ${WORKFLOW}
 popd 

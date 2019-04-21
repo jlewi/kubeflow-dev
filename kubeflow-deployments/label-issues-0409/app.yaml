@@ -1,0 +1,85 @@
+apiVersion: kfdef.apps.kubeflow.org/v1alpha1
+kind: KfDef
+metadata:
+  creationTimestamp: null
+  name: label-issues-0409
+  namespace: kubeflow
+spec:
+  appdir: /home/jlewi/git_kubeflow-dev/kubeflow-deployments/label-issues-0409
+  componentParams:
+    cert-manager:
+    - initRequired: true
+      name: acmeEmail
+      value: jlewi@google.com
+    cloud-endpoints:
+    - name: secretName
+      value: admin-gcp-sa
+    iap-ingress:
+    - initRequired: true
+      name: ipName
+      value: label-issues-0409-ip
+    - initRequired: true
+      name: hostname
+      value: label-issues-0409.endpoints.code-search-demo.cloud.goog
+    notebook-controller:
+    - name: injectGcpCredentials
+      value: "true"
+    pipeline:
+    - name: mysqlPd
+      value: label-issues-0409-storage-metadata-store
+    - name: minioPd
+      value: label-issues-0409-storage-artifact-store
+    spartakus:
+    - initRequired: true
+      name: usageId
+      value: "2236178201272928026"
+    - initRequired: true
+      name: reportUsage
+      value: "true"
+  components:
+  - metacontroller
+  - ambassador
+  - argo
+  - centraldashboard
+  - cert-manager
+  - cloud-endpoints
+  - gcp-credentials-admission-webhook
+  - gpu-driver
+  - iap-ingress
+  - jupyter-web-app
+  - katib
+  - notebook-controller
+  - pipeline
+  - pytorch-operator
+  - spartakus
+  - tensorboard
+  - tf-job-operator
+  email: jlewi@google.com
+  hostname: label-issues-0409.endpoints.code-search-demo.cloud.goog
+  ipName: label-issues-0409-ip
+  packages:
+  - argo
+  - common
+  - examples
+  - gcp
+  - jupyter
+  - katib
+  - metacontroller
+  - modeldb
+  - mpi-job
+  - pipeline
+  - pytorch-job
+  - seldon
+  - tensorboard
+  - tf-serving
+  - tf-training
+  platform: gcp
+  project: code-search-demo
+  repo: /home/jlewi/git_kubeflow-dev/kubeflow-deployments/label-issues-0409/.cache/master/kubeflow
+  serverVersion: file:/home/jlewi/git_kubeflow-dev/kubeflow-deployments/label-issues-0409/.cache/master/bootstrap/k8sSpec/v1.11.7/api/openapi-spec/swagger.json
+  skipInitProject: true
+  useBasicAuth: false
+  useIstio: false
+  version: master
+  zone: us-east1-d
+status: {}

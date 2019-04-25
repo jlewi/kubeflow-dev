@@ -4,11 +4,11 @@
     // Component-level parameters, defined initially from 'ks prototype use ...'
     // Each object below should correspond to a component in the components/ directory
     metacontroller: {
-      image: 'metacontroller/metacontroller:v0.3.0',
+      image: 'gcr.io/cloud-ml-dev/metacontroller:v0.3.0',
       name: 'metacontroller',
     },
     ambassador: {
-      ambassadorImage: 'quay.io/datawire/ambassador:0.37.0',
+      ambassadorImage: 'gcr.io/cloud-ml-dev/datawire/ambassador:0.37.0',
       ambassadorNodePort: 0,
       ambassadorServiceType: 'ClusterIP',
       name: 'ambassador',
@@ -25,21 +25,15 @@
       artifactRepositorySecretKeySecretKey: 'secretkey',
       artifactRepositorySecretKeySecretName: 'mlpipeline-minio-artifact',
       clusterDomain: 'svc.cluster.local',
-      executorImage: 'argoproj/argoexec:v2.2.0',
+      executorImage: 'gcr.io/cloud-ml-dev/argoexec:v2.2.0',
       injectIstio: 'false',
       name: 'argo',
-      uiImage: 'argoproj/argoui:v2.2.0',
-      workflowControllerImage: 'argoproj/workflow-controller:v2.2.0',
+      uiImage: 'gcr.io/cloud-ml-dev/argoui:v2.2.0',
+      workflowControllerImage: 'gcr.io/cloud-ml-dev/workflow-controller:v2.2.0',
     },
     centraldashboard: {
       image: 'gcr.io/kubeflow-images-public/centraldashboard:v0.5.0',
       name: 'centraldashboard',
-    },
-    "cert-manager": {
-      acmeEmail: 'jlewi@google.com',
-      acmeUrl: 'https://acme-v02.api.letsencrypt.org/directory',
-      certManagerImage: 'quay.io/jetstack/cert-manager-controller:v0.4.0',
-      name: 'cert-manager',
     },
     "cloud-endpoints": {
       name: 'cloud-endpoints',
@@ -64,7 +58,7 @@
       istioNamespace: 'istio-system',
       name: 'iap-ingress',
       oauthSecretName: 'kubeflow-oauth',
-      privateGKECluster: 'false',
+      privateGKECluster: true,
       secretName: 'envoy-ingress-tls',
       useIstio: 'false',
     },
@@ -83,6 +77,7 @@
       injectIstio: 'false',
       katibUIImage: 'gcr.io/kubeflow-images-public/katib/katib-ui:v0.1.2-alpha-156-g4ab3dbd',
       metricsCollectorImage: 'gcr.io/kubeflow-images-public/katib/metrics-collector:v0.1.2-alpha-156-g4ab3dbd',
+      modeldbDatabaseImage: 'gcr.io/kubeflow-images-public/mongo:3.4',
       name: 'katib',
       studyJobControllerImage: 'gcr.io/kubeflow-images-public/katib/studyjob-controller:v0.1.2-alpha-156-g4ab3dbd',
       suggestionBayesianOptimizationImage: 'gcr.io/kubeflow-images-public/katib/suggestion-bayesianoptimization:v0.1.2-alpha-156-g4ab3dbd',
@@ -91,7 +86,7 @@
       suggestionRandomImage: 'gcr.io/kubeflow-images-public/katib/suggestion-random:v0.1.2-alpha-156-g4ab3dbd',
       vizierCoreImage: 'gcr.io/kubeflow-images-public/katib/vizier-core:v0.1.2-alpha-156-g4ab3dbd',
       vizierCoreRestImage: 'gcr.io/kubeflow-images-public/katib/vizier-core-rest:v0.1.2-alpha-156-g4ab3dbd',
-      vizierDbImage: 'mysql:8.0.3',
+      vizierDbImage: 'gcr.io/cloud-ml-dev/mysql:8.0.3',
     },
     "notebook-controller": {
       controllerImage: 'gcr.io/kubeflow-images-public/notebook-controller:v20190401-v0.4.0-rc.1-308-g33618cc9-e3b0c4',

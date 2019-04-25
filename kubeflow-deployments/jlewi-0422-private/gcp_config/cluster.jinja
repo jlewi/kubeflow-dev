@@ -59,6 +59,7 @@ resources:
     zone: {{ properties['zone'] }}
     cluster:
       name: {{ CLUSTER_NAME }}
+      network: network-jlewi-0422-private-network
       initialClusterVersion: "{{ properties['cluster-version'] }}"
       resourceLabels:
         application: 'kubeflow'

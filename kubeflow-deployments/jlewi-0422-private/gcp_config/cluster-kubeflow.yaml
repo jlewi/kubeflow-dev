@@ -33,7 +33,7 @@ resources:
       masterAuthorizedNetworksConfigEnabled: false
       masterIpv4CidrBlock: 172.16.0.16/28
       podSecurityPolicy: false
-      privatecluster: false
+      privatecluster: true
       secureNodeMetadata: false
     users:
     - user:jlewi@google.com

@@ -1,0 +1,75 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    getambassador.io/config: |-
+      ---
+      apiVersion: ambassador/v0
+      kind:  Mapping
+      name: jlewi-vcode_vscode_mapping
+      prefix: /vscode/jlewi-vscode
+      rewrite: /
+      service: jlewi-vscode-svc.kubeflow
+  labels:
+    ksonnet.io/component: tensorboard
+  name: jlewi-vscode-svc
+  namespace: kubeflow
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8443
+  selector:
+    notebook-name: jlewi-vscode
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  finalizers:
+  - kubernetes.io/pvc-protection
+  name: jlewi-vscode
+  namespace: kubeflow
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard
+---
+apiVersion: kubeflow.org/v1alpha1
+kind: Notebook
+metadata:
+  labels:
+    app: notebook
+  name: jlewi-vscode
+  namespace: kubeflow
+spec:
+  template:
+    spec:
+      containers:
+      # Is it better to run vscode in a sidecar rather than the same container?
+      - env: []
+        command:
+          - tail
+          - -f
+          - /dev/null
+        image: gcr.io/code-search-demo/vscode:v20190523-5c69fac-dirty-dce996
+        name: jupyter
+        resources:
+          limits:
+            cpu: 8
+            memory: 16Gi
+          requests:
+            cpu: 1
+            memory: 1Gi    
+        volumeMounts:
+        - mountPath: /home/jovyan
+          name: jlewi-vscode
+      serviceAccountName: jupyter-notebook
+      ttlSecondsAfterFinished: 300
+      volumes:
+      - name: jlewi-vscode
+        persistentVolumeClaim:
+          claimName: jlewi-vscode

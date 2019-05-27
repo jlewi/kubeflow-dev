@@ -36,6 +36,9 @@ curl http://localhost:8443
 </html>
 ```
 
-* Happens even if I run from within the pod.
-* The thing that changed is I'm user jovyan now; I think it was working when I was running as root.
-  * Seems to work as root; takes some time to load.
+* Can connect to it running it in a sidecar as jupyter
+  * Seems to take a while to load.
+  * Issue with websockets and port-forward?
+
+  
+

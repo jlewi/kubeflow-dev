@@ -44,3 +44,7 @@ build-gcb: build-dir
 	gcloud builds submit --machine-type=n1-highcpu-32 --project=$(PROJECT) --tag=$(IMG):$(TAG) \
 		--timeout=3600 ./.build
 	@echo Built $(IMG):$(TAG)
+
+push: build
+	docker push $(IMG):$(TAG) 
+	docker push $(IMG):latest

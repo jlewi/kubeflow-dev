@@ -48,6 +48,9 @@ metadata:
 spec:
   template:
     spec:
+      # Try running as root
+      securityContext:
+        runAsUser: 0
       containers:
       # Is it better to run vscode in a sidecar rather than the same container?
       - env: []
@@ -55,7 +58,7 @@ spec:
           - tail
           - -f
           - /dev/null
-        image: gcr.io/code-search-demo/vscode:v20190523-5c69fac-dirty-dce996
+        image: gcr.io/code-search-demo/vscode:v20190523-1db087b-dirty-2a6816
         name: jupyter
         resources:
           limits:

@@ -28,12 +28,10 @@ all: build
 # To build without the cache set the environment variable
 # export DOCKER_BUILD_OPTS=--no-cache
 .PHONY: build
-build-dir: ./Dockerfile environment.yml docker-entrypoint.sh
-	rm -rf ./.build
+build-dir: ./Dockerfile requirements.txt
 	mkdir  -p ./.build
 	cp ./Dockerfile* ./.build/
-	cp ./environment.yml* ./.build/
-	cp ./docker-entrypoint.sh ./.build/
+	cp ./requirements* ./.build/
 
 build: build-dir
 	cd .build && docker build ${DOCKER_BUILD_OPTS} -t $(IMG):$(TAG) -f Dockerfile . \

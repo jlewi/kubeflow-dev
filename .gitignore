@@ -40,3 +40,4 @@ examples/.ipynb_checkpoints/
 
 # Secrets
 **/*gserviceaccount.com.json
+**/.build

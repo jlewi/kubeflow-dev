@@ -41,59 +41,59 @@ Instructions for using Git and GitHub in particular with Kubeflow.
    * Here's a sample pod spec
 
      ```
-   apiVersion: v1
-   kind: Pod
-   metadata:
-     name: jlewi-pod
-     labels:
-       app: jlewi
-   spec:
-     initContainers:
-     - command:
-       - /usr/local/bin/setup_ssh.sh
-       - --ssh_dir=/root/.ssh
-       - --private_key=/secret/ssh-key/id_rsa
-       - --public_key=/secret/ssh-key/id_rsa.pub
-       image: gcr.io/kubeflow-releasing/test-worker:v20190421-c9a1370-dirty-228f45
-       name: setup-ssh
-       volumeMounts:
-       - mountPath: /root/.ssh
-         name: ssh-config
-       - mountPath: /secret/ssh-key
-         name: ssh
-         readOnly: true
-     containers:
-     - command:
-       - tail
-       - -f 
-       - /dev/null
-       image: gcr.io/kubeflow-releasing/test-worker:v20190421-c9a1370-dirty-228f45
-       name: update
-       env:
-       - name: GOOGLE_APPLICATION_CREDENTIALS
-         value: /secret/gcp-credentials/key.json
-       - name: PYTHONPATH
-         value: /src/kubeflow/kubeflow/py:/src/kubeflow/testing/py:/src/kubeflow/fairing        
-       volumeMounts:
-       - mountPath: /src
-         name: src
-       - mountPath: /secret/gcp-credentials
-         name: gcp-credentials
-         readOnly: true
-       - mountPath: /root/.ssh
-         name: ssh-config
-     restartPolicy: Never
-     volumes:
-     - name: ssh-config
-       emptyDir: {}
-     - name: src
-       emptyDir: {}
-     - name: gcp-credentials
-       secret:
-         secretName: user-gcp-sa
-     - name: ssh
-       secret:
-         secretName: kubeflow-bot-ssh
+     apiVersion: v1
+     kind: Pod
+     metadata:
+       name: jlewi-pod
+       labels:
+         app: jlewi
+     spec:
+       initContainers:
+       - command:
+         - /usr/local/bin/setup_ssh.sh
+         - --ssh_dir=/root/.ssh
+         - --private_key=/secret/ssh-key/id_rsa
+         - --public_key=/secret/ssh-key/id_rsa.pub
+         image: gcr.io/kubeflow-releasing/test-worker:v20190421-c9a1370-dirty-228f45
+         name: setup-ssh
+         volumeMounts:
+         - mountPath: /root/.ssh
+           name: ssh-config
+         - mountPath: /secret/ssh-key
+           name: ssh
+           readOnly: true
+       containers:
+       - command:
+         - tail
+         - -f 
+         - /dev/null
+         image: gcr.io/kubeflow-releasing/test-worker:v20190421-c9a1370-dirty-228f45
+         name: update
+         env:
+         - name: GOOGLE_APPLICATION_CREDENTIALS
+           value: /secret/gcp-credentials/key.json
+         - name: PYTHONPATH
+           value: /src/kubeflow/kubeflow/py:/src/kubeflow/testing/py:/src/kubeflow/fairing        
+         volumeMounts:
+         - mountPath: /src
+           name: src
+         - mountPath: /secret/gcp-credentials
+           name: gcp-credentials
+           readOnly: true
+         - mountPath: /root/.ssh
+           name: ssh-config
+       restartPolicy: Never
+       volumes:
+       - name: ssh-config
+         emptyDir: {}
+       - name: src
+         emptyDir: {}
+       - name: gcp-credentials
+         secret:
+           secretName: user-gcp-sa
+       - name: ssh
+         secret:
+           secretName: kubeflow-bot-ssh
      ```
 
    * The init container runs the script setup_ssh.sh from https://github.com/kubeflow/testing this script

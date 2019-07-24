@@ -42,7 +42,7 @@ func main() {
 		Permissions: []string{"resourcemanager.projects.setIamPolicy",},
 	}
 
-	res, err  := p.TestIamPermissions("kubeflow-dev", req).Do()
+	res, err  := p.TestIamPermissions("jlewi-dev", req).Do()
 
 	if err != nil {
 		log.Fatalf("Error: %+v", err)

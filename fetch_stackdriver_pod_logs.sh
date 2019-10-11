@@ -5,7 +5,8 @@ PROJECT=$1
 POD=$2
 
 OUTFILE=~/tmp/${POD}.log.txt
-gcloud --project=${PROJECT} logging read --format="table(timestamp, resource.labels.container_name, textPayload)" \
+gcloud logging read --format="table(timestamp, resource.labels.container_name, textPayload)" \
+	--project=${PROJECT} \
 	--freshness=24h \
 	--order asc  \
 	"resource.type=\"k8s_container\" resource.labels.pod_name=\"${POD}\"  " > ${OUTFILE}

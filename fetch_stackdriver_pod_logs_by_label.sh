@@ -6,8 +6,9 @@ LABEL=$2
 VALUE=$3
 
 OUTFILE=~/tmp/${PROJECT}.${LABEL}.value.txt
-gcloud --project=${PROJECT} logging read --format="table(timestamp, resource.labels.pod_name, resource.labels.container_name, textPayload, jsonPayload.msg) " \
+gcloud logging read --format="table(timestamp, resource.labels.pod_name, resource.labels.container_name, textPayload, jsonPayload.msg) " \
 	--freshness=6h \
+	--project=${PROJECT} \
 	"resource.type=\"k8s_container\" metadata.userLabels.${LABEL} =\"${VALUE}\"  " > ${OUTFILE}
 
 cat ${OUTFILE}

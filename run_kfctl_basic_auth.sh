@@ -2,15 +2,17 @@
 #
 # A hack script for rerunning the kfctl commands. 
 # Intended for quick iteration during development
+#
+# Deploys with basic auth
 set -ex
 
 BOOTSTRAPDIR=/home/jlewi/git_kubeflow-kubeflow/bootstrap
 
-APPNAME=kftest-$(date +%m%d-%H%M%S)
+APPNAME=kfbasic-$(date +%m%d-%H%M%S)
 APPDIR=/home/jlewi/git_jlewi-kubeflow-dev/kubeflow-deployments/${APPNAME}
 
 # Source iap secrets
-. ~/secrets/jlewi-dev.oauth.sh 
+. ~/secrets/jlewi-kf-basic-auth.sh 
 
 cd ${BOOTSTRAPDIR}
 make build-kfctl
@@ -20,10 +22,10 @@ KFCTL=${BOOTSTRAPDIR}/bin/kfctl
 mkdir -p ${APPDIR}
 
 MANIFESTSDIR=/home/jlewi/git_kubeflow-manifests/kfdef
-if [ -f ${MANIFESTSDIR}/kfctl_gcp_iap.0.7.0.yaml ]; then
-	CFGNAME=kfctl_gcp_iap.0.7.0.yaml
+if [ -f ${MANIFESTSDIR}/kfctl_gcp_basic_auth.0.7.0.yaml ]; then
+	CFGNAME=kfctl_gcp_basic_auth.0.7.0.yaml
 else
-	CFGNAME=kfctl_gcp_iap.yaml
+	CFGNAME=kfctl_gcp_basic.yaml
 fi
 
 cp ${MANIFESTSDIR}/${CFGNAME} ${APPDIR}/

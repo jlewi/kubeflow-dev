@@ -4,7 +4,7 @@ set -ex
 PROJECT=$1
 CLUSTER=$2
 OBJECT=$3
-
+FRESHNESS="${FRESHNESS:-24h}"
 FILTER="resource.labels.cluster_name=\"${CLUSTER}\""
 FILTER="${FILTER} logName=\"projects/${PROJECT}/logs/events\" "
 FILTER="${FILTER} jsonPayload.involvedObject.name=\"${OBJECT}\""
@@ -13,7 +13,7 @@ FILTER="${FILTER} jsonPayload.involvedObject.name=\"${OBJECT}\""
 LOGFILE=/home/jlewi/tmp/${OBJECT}.${CLUSTER}.logs.txt
 gcloud --project=${PROJECT} logging read  \
 		--format="table(timestamp, jsonPayload.involvedObject.namespace, jsonPayload.involvedObject.name, jsonPayload.message)" \
-        --freshness=24h \
+        --freshness=${FRESHNESS} \
         --order asc \
 	    "${FILTER}" > ${LOGFILE}
 

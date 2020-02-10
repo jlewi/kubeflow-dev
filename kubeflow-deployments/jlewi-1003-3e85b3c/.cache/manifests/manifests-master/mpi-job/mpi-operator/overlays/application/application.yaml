@@ -1,0 +1,25 @@
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: $(generateName)
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: $(generateName)
+  componentKinds:
+  - group: apps
+    kind: Deployment
+  - group: core
+    kind: ServiceAccount
+  - group: kubeflow.org
+    kind: MPIJob
+  descriptor:
+    type: "mpi-operator"
+    version: "v1alpha1"
+    description: "Mpi-operator allows users to create and manage the \"MPIJob\" custom resource."
+    keywords:
+    - "mpijob"
+    - "mpi-operator"
+    links:
+    - description: About
+      url: "https://github.com/kubeflow/mpi-operator"

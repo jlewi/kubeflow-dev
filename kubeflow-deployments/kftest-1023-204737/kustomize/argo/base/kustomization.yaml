@@ -1,5 +1,99 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+apiversion: kustomize.config.k8s.io/v1beta1
+commonLabels:
+  kustomize.component: argo
+images:
+- name: argoproj/argoui
+  newName: gcr.io/jlewi-dev/argoproj/argoui
+  newTag: v2.3.0
+- name: argoproj/workflow-controller
+  newName: gcr.io/jlewi-dev/argoproj/workflow-controller
+  newTag: v2.3.0
+vars:
+- name: executorImage
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: workflow-controller-parameters
+  fieldref:
+    fieldPath: data.executorImage
+- name: containerRuntimeExecutor
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: workflow-controller-parameters
+  fieldref:
+    fieldPath: data.containerRuntimeExecutor
+- name: artifactRepositoryBucket
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: workflow-controller-parameters
+  fieldref:
+    fieldPath: data.artifactRepositoryBucket
+- name: artifactRepositoryKeyPrefix
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: workflow-controller-parameters
+  fieldref:
+    fieldPath: data.artifactRepositoryKeyPrefix
+- name: artifactRepositoryEndpoint
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: workflow-controller-parameters
+  fieldref:
+    fieldPath: data.artifactRepositoryEndpoint
+- name: artifactRepositoryInsecure
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: workflow-controller-parameters
+  fieldref:
+    fieldPath: data.artifactRepositoryInsecure
+- name: artifactRepositoryAccessKeySecretName
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: workflow-controller-parameters
+  fieldref:
+    fieldPath: data.artifactRepositoryAccessKeySecretName
+- name: artifactRepositoryAccessKeySecretKey
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: workflow-controller-parameters
+  fieldref:
+    fieldPath: data.artifactRepositoryAccessKeySecretKey
+- name: artifactRepositorySecretKeySecretName
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: workflow-controller-parameters
+  fieldref:
+    fieldPath: data.artifactRepositorySecretKeySecretName
+- name: artifactRepositorySecretKeySecretKey
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: workflow-controller-parameters
+  fieldref:
+    fieldPath: data.artifactRepositorySecretKeySecretKey
+- name: namespace
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: workflow-controller-parameters
+  fieldref:
+    fieldPath: data.namespace
+- name: clusterDomain
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: workflow-controller-parameters
+  fieldref:
+    fieldPath: data.clusterDomain
 resources:
 - cluster-role-binding.yaml
 - cluster-role.yaml
@@ -8,104 +102,11 @@ resources:
 - deployment.yaml
 - service-account.yaml
 - service.yaml
-commonLabels:
-  kustomize.component: argo
-images:
-- name: argoproj/argoui
-  newName: argoproj/argoui
-  newTag: v2.3.0
-- name: argoproj/workflow-controller
-  newName: argoproj/workflow-controller
-  newTag: v2.3.0
 configMapGenerator:
 - name: workflow-controller-parameters
   env: params.env
 generatorOptions:
   disableNameSuffixHash: true
-vars:
-- name: executorImage
-  objref:
-    kind: ConfigMap
-    name: workflow-controller-parameters
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.executorImage
-- name: containerRuntimeExecutor
-  objref:
-    kind: ConfigMap
-    name: workflow-controller-parameters
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.containerRuntimeExecutor
-- name: artifactRepositoryBucket
-  objref:
-    kind: ConfigMap
-    name: workflow-controller-parameters
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.artifactRepositoryBucket
-- name: artifactRepositoryKeyPrefix
-  objref:
-    kind: ConfigMap
-    name: workflow-controller-parameters
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.artifactRepositoryKeyPrefix
-- name: artifactRepositoryEndpoint
-  objref:
-    kind: ConfigMap
-    name: workflow-controller-parameters
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.artifactRepositoryEndpoint
-- name: artifactRepositoryInsecure
-  objref:
-    kind: ConfigMap
-    name: workflow-controller-parameters
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.artifactRepositoryInsecure
-- name: artifactRepositoryAccessKeySecretName
-  objref:
-    kind: ConfigMap
-    name: workflow-controller-parameters
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.artifactRepositoryAccessKeySecretName
-- name: artifactRepositoryAccessKeySecretKey
-  objref:
-    kind: ConfigMap
-    name: workflow-controller-parameters
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.artifactRepositoryAccessKeySecretKey
-- name: artifactRepositorySecretKeySecretName
-  objref:
-    kind: ConfigMap
-    name: workflow-controller-parameters
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.artifactRepositorySecretKeySecretName
-- name: artifactRepositorySecretKeySecretKey
-  objref:
-    kind: ConfigMap
-    name: workflow-controller-parameters
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.artifactRepositorySecretKeySecretKey
-- name: namespace
-  objref:
-    kind: ConfigMap
-    name: workflow-controller-parameters
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.namespace
-- name: clusterDomain
-  objref:
-    kind: ConfigMap
-    name: workflow-controller-parameters
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.clusterDomain
 configurations:
 - params.yaml
+inventory:omitempty: null

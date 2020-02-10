@@ -5,3 +5,4 @@ resources:
 - trial-crd.yaml
 generatorOptions:
   disableNameSuffixHash: true
+inventory:omitempty: null

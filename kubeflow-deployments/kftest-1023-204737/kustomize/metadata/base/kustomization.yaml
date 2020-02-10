@@ -1,11 +1,54 @@
-namePrefix: metadata-
-apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+apiversion: kustomize.config.k8s.io/v1beta1
+namePrefix: metadata-
+namespace: kubeflow
 commonLabels:
   kustomize.component: metadata
-configMapGenerator:
-- name: ui-parameters
-  env: params.env
+images:
+- name: gcr.io/kubeflow-images-public/metadata
+  newName: gcr.io/jlewi-dev/kubeflow-images-public/metadata
+  newTag: v0.1.9
+- name: gcr.io/tfx-oss-public/ml_metadata_store_server
+  newName: gcr.io/jlewi-dev/tfx-oss-public/ml_metadata_store_server
+  newTag: 0.14.0
+- name: gcr.io/ml-pipeline/envoy
+  newName: gcr.io/jlewi-dev/ml-pipeline/envoy
+  newTag: metadata-grpc
+- name: mysql
+  newName: gcr.io/jlewi-dev/mysql
+  newTag: 8.0.3
+- name: gcr.io/kubeflow-images-public/metadata-frontend
+  newName: gcr.io/jlewi-dev/kubeflow-images-public/metadata-frontend
+  newTag: v0.1.8
+vars:
+- name: ui-namespace
+  objref:
+    apiVersion: v1
+    kind: Service
+    name: ui
+  fieldref:
+    fieldPath: metadata.namespace
+- name: ui-clusterDomain
+  objref:
+    version: v1
+    kind: ConfigMap
+    name: ui-parameters
+  fieldref:
+    fieldPath: data.uiClusterDomain
+- name: service
+  objref:
+    apiVersion: v1
+    kind: Service
+    name: ui
+  fieldref:
+    fieldPath: metadata.name
+- name: metadata-envoy-service
+  objref:
+    apiVersion: v1
+    kind: Service
+    name: envoy-service
+  fieldref:
+    fieldPath: metadata.name
 resources:
 - metadata-db-pvc.yaml
 - metadata-db-secret.yaml
@@ -20,49 +63,7 @@ resources:
 - metadata-ui-service.yaml
 - metadata-envoy-deployment.yaml
 - metadata-envoy-service.yaml
-namespace: kubeflow
-vars:
-- name: ui-namespace
-  objref:
-    kind: Service
-    name: ui
-    apiVersion: v1
-  fieldref:
-    fieldpath: metadata.namespace
-- name: ui-clusterDomain
-  objref:
-    kind: ConfigMap
-    name: ui-parameters
-    version: v1
-  fieldref:
-    fieldpath: data.uiClusterDomain
-- name: service
-  objref:
-    kind: Service
-    name: ui
-    apiVersion: v1
-  fieldref:
-    fieldpath: metadata.name
-- name: metadata-envoy-service
-  objref:
-    kind: Service
-    name: envoy-service
-    apiVersion: v1
-  fieldref:
-    fieldpath: metadata.name
-images:
-- name: gcr.io/kubeflow-images-public/metadata
-  newName: gcr.io/kubeflow-images-public/metadata
-  newTag: v0.1.9
-- name: gcr.io/tfx-oss-public/ml_metadata_store_server
-  newName: gcr.io/tfx-oss-public/ml_metadata_store_server
-  newTag: 0.14.0
-- name: gcr.io/ml-pipeline/envoy
-  newName: gcr.io/ml-pipeline/envoy
-  newTag: metadata-grpc
-- name: mysql
-  newName: mysql
-  newTag: 8.0.3
-- name: gcr.io/kubeflow-images-public/metadata-frontend
-  newName: gcr.io/kubeflow-images-public/metadata-frontend
-  newTag: v0.1.8
+configMapGenerator:
+- name: ui-parameters
+  env: params.env
+inventory:omitempty: null

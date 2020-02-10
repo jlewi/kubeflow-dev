@@ -1,25 +1,26 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-bases:
-- ../../base
+apiversion: kustomize.config.k8s.io/v1beta1
 patchesStrategicMerge:
 - deployment.yaml
+images:
+- name: gcr.io/$(project)/profile-controller
+  newName: gcr.io/jlewi-dev
+  newTag: latest
+vars:
+- name: project
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: parameters
+  fieldref:
+    fieldPath: data.project
+bases:
+- ../../base
 configMapGenerator:
 - name: parameters
   env: params.env
 generatorOptions:
   disableNameSuffixHash: true
-vars:
-- name: project
-  objref:
-    kind: ConfigMap
-    name: parameters
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.project
 configurations:
 - params.yaml
-images:
-- name: gcr.io/$(project)/profile-controller
-  newName: gcr.io/$(project)/profile-controller
-  newTag: latest
+inventory:omitempty: null

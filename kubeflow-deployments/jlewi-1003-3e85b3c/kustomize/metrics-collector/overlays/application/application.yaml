@@ -1,0 +1,49 @@
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: $(generateName)
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: $(generateName)
+  componentKinds:
+  - group: core
+    kind: ConfigMap
+  - group: core
+    kind: ServiceAccount
+  descriptor:
+    type: "metrics-collector"
+    version: "v1alpha2"
+    description: "Katib metrics collector is used to collect the metrics of each trial."
+    maintainers:
+    - name: Zhongxuan Wu
+      email: wuzhongxuan@caicloud.io
+    - name: Ce Gao
+      email: gaoce@caicloud.io
+    - name: Johnu George
+      email: johnugeo@cisco.com
+    - name: Hougang Liu
+      email: liuhougang6@126.com
+    - name: Richard Liu
+      email: ricliu@google.com
+    - name: YujiOshima
+      email: yuji.oshima0x3fd@gmail.com
+    owners:
+    - name: Ce Gao
+      email: gaoce@caicloud.io
+    - name: Johnu George
+      email: johnugeo@cisco.com
+    - name: Hougang Liu
+      email: liuhougang6@126.com
+    - name: Richard Liu
+      email: ricliu@google.com
+    - name: YujiOshima
+      email: yuji.oshima0x3fd@gmail.com
+    keywords:
+    - katib
+    - metrics-collector
+    - hyperparameter tuning
+    links:
+    - description: About
+      url: "https://github.com/kubeflow/katib"
+  addOwnerRef: true

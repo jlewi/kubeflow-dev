@@ -1,6 +1,6 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
-bases:
-- base
+kind: Kustomization
+apiversion: kustomize.config.k8s.io/v1beta1
+namespace: kubeflow
 commonLabels:
   app.kubernetes.io/component: minio
   app.kubernetes.io/instance: minio-0.1.31
@@ -8,33 +8,34 @@ commonLabels:
   app.kubernetes.io/name: minio
   app.kubernetes.io/part-of: kubeflow
   app.kubernetes.io/version: 0.1.31
-configMapGenerator:
-- behavior: merge
-  env: overlays/minioPd/params.env
-  name: pipeline-minio-parameters
-configurations:
-- overlays/minioPd/params.yaml
-generatorOptions:
-  disableNameSuffixHash: true
-kind: Kustomization
-namespace: kubeflow
 patchesStrategicMerge:
 - overlays/minioPd/persistent-volume-claim.yaml
+vars:
+- name: minioPd
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: pipeline-minio-parameters
+  fieldref:
+    fieldPath: data.minioPd
+- name: minioPvName
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: pipeline-minio-parameters
+  fieldref:
+    fieldPath: data.minioPvName
 resources:
 - overlays/minioPd/persistent-volume.yaml
 - overlays/application/application.yaml
-vars:
-- fieldref:
-    fieldPath: data.minioPd
-  name: minioPd
-  objref:
-    apiVersion: v1
-    kind: ConfigMap
-    name: pipeline-minio-parameters
-- fieldref:
-    fieldPath: data.minioPvName
-  name: minioPvName
-  objref:
-    apiVersion: v1
-    kind: ConfigMap
-    name: pipeline-minio-parameters
+bases:
+- base
+configMapGenerator:
+- name: pipeline-minio-parameters
+  behavior: merge
+  env: overlays/minioPd/params.env
+generatorOptions:
+  disableNameSuffixHash: true
+configurations:
+- overlays/minioPd/params.yaml
+inventory:omitempty: null

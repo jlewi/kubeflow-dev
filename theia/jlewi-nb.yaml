@@ -1,0 +1,89 @@
+apiVersion: kubeflow.org/v1beta1
+kind: Notebook
+metadata:
+  labels:
+    app: jlewi-nb
+  name: jlewi-nb
+  namespace: kubeflow-jlewi
+spec:
+  template:
+    spec:
+      containers:
+      - env: []
+        image: gcr.io/kubeflow-images-public/tensorflow-1.14.0-notebook-gpu:v0.7.0
+        name: jlewi-nb
+        resources:
+          limits: {}
+          requests:
+            cpu: "0.5"
+            memory: 1.0Gi
+        volumeMounts:
+        - mountPath: /home/jovyan
+          name: workspace-jlewi-nb
+        - mountPath: /dev/shm
+          name: dshm
+      - env: []
+        # TODO(jlewi): Should we use an image which actually includes an appropriate toolchain like python?
+        image: theiaide/theia:next
+        name: thei
+        resources:
+          limits: {}
+          requests:
+            cpu: "0.5"
+            memory: 1.0Gi
+        volumeMounts:
+        - mountPath: /mount/jovyan
+          name: workspace-jlewi-nb
+      serviceAccountName: default-editor
+      ttlSecondsAfterFinished: 300
+      volumes:
+      - name: workspace-jlewi-nb
+        persistentVolumeClaim:
+          claimName: workspace-jlewi-nb
+      - emptyDir:
+          medium: Memory
+        name: dshm
+
+---
+
+# Define a service for theia
+apiVersion: v1
+kind: Service
+metadata:
+  name: jlewi-theia
+  namespace: kubeflow-jlewi  
+spec:
+  ports:
+
+  - name: http-theia
+    port: 3000
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    statefulset: jlewi-nb
+  type: ClusterIP
+
+--- 
+
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: notebook-kubeflow-jlewi-jlewi-theia
+  namespace: kubeflow-jlewi  
+spec:
+  gateways:
+  - kubeflow/kubeflow-gateway
+  hosts:
+  - '*'
+  http:
+  - match:
+    - uri:
+        prefix: /notebook/kubeflow-jlewi/jlewi-theia
+    rewrite:
+      uri: /notebook/kubeflow-jlewi/jlewi-theia
+    route:
+    - destination:
+        host: jlewi-theia.kubeflow-jlewi.svc.cluster.local
+        port:
+          number: 3000
+    timeout: 300s

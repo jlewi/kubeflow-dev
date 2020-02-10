@@ -1,7 +1,19 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+apiversion: kustomize.config.k8s.io/v1beta1
 commonLabels:
   app: mysql
+images:
+- name: mysql
+  newName: gcr.io/jlewi-dev/mysql
+  newTag: "5.6"
+vars:
+- name: mysqlPvcName
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: pipeline-mysql-parameters
+  fieldref:
+    fieldPath: data.mysqlPvcName
 resources:
 - deployment.yaml
 - service.yaml
@@ -11,17 +23,6 @@ configMapGenerator:
   env: params.env
 generatorOptions:
   disableNameSuffixHash: true
-vars:
-- name: mysqlPvcName
-  objref:
-    kind: ConfigMap
-    name: pipeline-mysql-parameters
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.mysqlPvcName
-images:
-- name: mysql
-  newTag: '5.6'
-  newName: mysql
 configurations:
 - params.yaml
+inventory:omitempty: null

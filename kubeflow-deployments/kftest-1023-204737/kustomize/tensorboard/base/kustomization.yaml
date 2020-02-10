@@ -1,32 +1,33 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+apiversion: kustomize.config.k8s.io/v1beta1
 namespace: kubeflow
-resources:
-- deployment.yaml
-- service.yaml
 commonLabels:
   kustomize.component: tensorboard
-configMapGenerator:
-- name: parameters
-  env: params.env
+images:
+- name: tensorflow/tensorflow
+  newName: gcr.io/jlewi-dev/tensorflow/tensorflow
+  newTag: 1.8.0
 vars:
 - name: namespace
   objref:
+    apiVersion: v1
     kind: Service
     name: tensorboard
-    apiVersion: v1
   fieldref:
-    fieldpath: metadata.namespace
+    fieldPath: metadata.namespace
 - name: clusterDomain
   objref:
+    apiVersion: v1
     kind: ConfigMap
     name: parameters
-    apiVersion: v1
   fieldref:
-    fieldpath: data.clusterDomain
+    fieldPath: data.clusterDomain
+resources:
+- deployment.yaml
+- service.yaml
+configMapGenerator:
+- name: parameters
+  env: params.env
 configurations:
 - params.yaml
-images:
-- name: tensorflow/tensorflow
-  newName: tensorflow/tensorflow
-  newTag: 1.8.0
+inventory:omitempty: null

@@ -1,6 +1,6 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
-bases:
-- base
+kind: Kustomization
+apiversion: kustomize.config.k8s.io/v1beta1
+namespace: knative-serving
 commonLabels:
   app.kubernetes.io/component: knative-serving-crds
   app.kubernetes.io/instance: knative-serving-crds-v0.8.0
@@ -8,7 +8,8 @@ commonLabels:
   app.kubernetes.io/name: knative-serving-crds
   app.kubernetes.io/part-of: kubeflow
   app.kubernetes.io/version: v0.8.0
-kind: Kustomization
-namespace: knative-serving
 resources:
 - overlays/application/application.yaml
+bases:
+- base
+inventory:omitempty: null

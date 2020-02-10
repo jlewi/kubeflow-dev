@@ -1,6 +1,5 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+apiversion: kustomize.config.k8s.io/v1beta1
 bases:
 - ../../base
-#generators:
-#- app_test.yaml
+inventory:omitempty: null

@@ -1,6 +1,6 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
-bases:
-- base
+kind: Kustomization
+apiversion: kustomize.config.k8s.io/v1beta1
+namespace: kubeflow
 commonLabels:
   app.kubernetes.io/component: notebook-controller
   app.kubernetes.io/instance: notebook-controller-v0.7.0
@@ -8,15 +8,16 @@ commonLabels:
   app.kubernetes.io/name: notebook-controller
   app.kubernetes.io/part-of: kubeflow
   app.kubernetes.io/version: v0.7.0
-configMapGenerator:
-- behavior: merge
-  env: overlays/istio/params.env
-  name: parameters
-generatorOptions:
-  disableNameSuffixHash: true
-kind: Kustomization
-namespace: kubeflow
 patchesStrategicMerge:
 - overlays/istio/deployment.yaml
 resources:
 - overlays/application/application.yaml
+bases:
+- base
+configMapGenerator:
+- name: parameters
+  behavior: merge
+  env: overlays/istio/params.env
+generatorOptions:
+  disableNameSuffixHash: true
+inventory:omitempty: null

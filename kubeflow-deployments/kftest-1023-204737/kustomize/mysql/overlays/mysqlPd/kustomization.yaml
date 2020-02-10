@@ -1,31 +1,32 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-bases:
-- ../../base
-resources:
-- persistent-volume.yaml
+apiversion: kustomize.config.k8s.io/v1beta1
 patchesStrategicMerge:
 - persistent-volume-claim.yaml
+vars:
+- name: mysqlPd
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: pipeline-mysql-parameters
+  fieldref:
+    fieldPath: data.mysqlPd
+- name: mysqlPvName
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: pipeline-mysql-parameters
+  fieldref:
+    fieldPath: data.mysqlPvName
+resources:
+- persistent-volume.yaml
+bases:
+- ../../base
 configMapGenerator:
 - name: pipeline-mysql-parameters
   behavior: merge
   env: params.env
 generatorOptions:
   disableNameSuffixHash: true
-vars:
-- name: mysqlPd
-  objref:
-    kind: ConfigMap
-    name: pipeline-mysql-parameters
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.mysqlPd
-- name: mysqlPvName
-  objref:
-    kind: ConfigMap
-    name: pipeline-mysql-parameters
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.mysqlPvName
 configurations:
 - params.yaml
+inventory:omitempty: null

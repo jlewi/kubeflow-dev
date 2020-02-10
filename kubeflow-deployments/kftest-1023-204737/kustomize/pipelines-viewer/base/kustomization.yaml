@@ -1,16 +1,17 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+apiversion: kustomize.config.k8s.io/v1beta1
+namePrefix: ml-pipeline-viewer-
 namespace: kubeflow
-nameprefix: ml-pipeline-viewer-
 commonLabels:
   app: ml-pipeline-viewer-crd
+images:
+- name: gcr.io/ml-pipeline/viewer-crd-controller
+  newName: gcr.io/jlewi-dev/ml-pipeline/viewer-crd-controller
+  newTag: 0.1.31
 resources:
 - crd.yaml
 - cluster-role-binding.yaml
 - cluster-role.yaml
 - deployment.yaml
 - service-account.yaml
-images:
-- name: gcr.io/ml-pipeline/viewer-crd-controller
-  newTag: 0.1.31
-  newName: gcr.io/ml-pipeline/viewer-crd-controller
+inventory:omitempty: null

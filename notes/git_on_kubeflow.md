@@ -19,14 +19,21 @@ Instructions for using Git and GitHub in particular with Kubeflow.
     chmod 700 ~/.ssh
     chmod 644 ~/.ssh/authorized_keys
     chmod 644 ~/.ssh/known_hosts   
-    chmod 600 ~/.ssh/id_rsa
-    chmod 644 ~/.ssh/id_rsa.pub
+    chmod 600 ~/.ssh/github_kf
+    chmod 644 ~/.ssh/github_kf.pub
     ```
 1. In your Jupyter notebook upload the private and public key
 
 1. In jupyter start a notebook and copy the public and private key to `~/.ssh/id_rsa` and `~/.ssh/id_rsa.pub`
    
    * Make sure the ssh keys have the correct permissions
+
+1. Add keys to ssh agent
+
+   ```
+   eval "$(ssh-agent -s)"
+   ssh-add ~/.ssh/github_kf
+   ```
 
 ## Mounting the SSH key from a secret
 

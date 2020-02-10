@@ -1,39 +1,40 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+apiversion: kustomize.config.k8s.io/v1beta1
+namePrefix: admission-webhook-bootstrap-
+namespace: kubeflow
+commonLabels:
+  kustomize.component: admission-webhook-bootstrap
+images:
+- name: gcr.io/kubeflow-images-public/ingress-setup
+  newName: gcr.io/jlewi-dev/kubeflow-images-public/ingress-setup
+  newTag: latest
+vars:
+- name: webhookNamePrefix
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: config-map
+  fieldref:
+    fieldPath: data.webhookNamePrefix
+- name: namespace
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: config-map
+  fieldref:
+    fieldPath: data.namespace
 resources:
 - cluster-role-binding.yaml
 - cluster-role.yaml
 - config-map.yaml
 - service-account.yaml
 - stateful-set.yaml
-commonLabels:
-  kustomize.component: admission-webhook-bootstrap
-namePrefix: admission-webhook-bootstrap-
-images:
-- name: gcr.io/kubeflow-images-public/ingress-setup
-  newName: gcr.io/kubeflow-images-public/ingress-setup
-  newTag: latest
-generatorOptions:
-  disableNameSuffixHash: true
-configurations:
-- params.yaml
-namespace: kubeflow
 configMapGenerator:
 - name: config-map
   behavior: merge
   env: params.env
-vars:
-- name: webhookNamePrefix
-  objref:
-    kind: ConfigMap
-    name: config-map
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.webhookNamePrefix
-- name: namespace
-  objref:
-    kind: ConfigMap
-    name: config-map
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.namespace
+generatorOptions:
+  disableNameSuffixHash: true
+configurations:
+- params.yaml
+inventory:omitempty: null

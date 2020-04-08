@@ -1,0 +1,231 @@
+images:
+- gcr.io/jlewi-dev/argoproj/argoui:v2.3.0
+- gcr.io/jlewi-dev/argoproj/workflow-controller:v2.3.0
+- gcr.io/jlewi-dev/docker.io/istio/citadel:1.1.6
+- gcr.io/jlewi-dev/docker.io/istio/galley:1.1.6
+- gcr.io/jlewi-dev/docker.io/istio/kubectl:1.1.6
+- gcr.io/jlewi-dev/docker.io/istio/mixer:1.1.6
+- gcr.io/jlewi-dev/docker.io/istio/pilot:1.1.6
+- gcr.io/jlewi-dev/docker.io/istio/proxyv2:1.1.6
+- gcr.io/jlewi-dev/docker.io/istio/sidecar_injector:1.1.6
+- gcr.io/jlewi-dev/docker.io/jaegertracing/all-in-one:1.9
+- gcr.io/jlewi-dev/docker.io/kiali/kiali:v0.16
+- gcr.io/jlewi-dev/docker.io/prom/prometheus:v2.3.1
+- gcr.io/jlewi-dev/grafana/grafana:6.0.2
+- gcr.io/jlewi-dev/metacontroller/metacontroller:v0.3.0
+- gcr.io/jlewi-dev/minio/minio:RELEASE.2018-02-09T22-40-05Z
+- gcr.io/jlewi-dev/mysql:5.6
+- gcr.io/jlewi-dev/mysql:8
+- gcr.io/jlewi-dev/mysql:8.0.3
+- gcr.io/jlewi-dev/quay.io/jetstack/cert-manager-cainjector:v0.11.0
+- gcr.io/jlewi-dev/quay.io/jetstack/cert-manager-controller:v0.11.0
+- gcr.io/jlewi-dev/quay.io/jetstack/cert-manager-webhook:v0.11.0
+- gcr.io/jlewi-dev/tensorflow/tensorflow:1.8.0
+steps:
+- args:
+  - build
+  - -t
+  - gcr.io/jlewi-dev/argoproj/argoui:v2.3.0
+  - --build-arg=INPUT_IMAGE=argoproj/argoui:v2.3.0
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/jlewi-dev/argoproj/workflow-controller:v2.3.0
+  - --build-arg=INPUT_IMAGE=argoproj/workflow-controller:v2.3.0
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/jlewi-dev/docker.io/istio/citadel:1.1.6
+  - --build-arg=INPUT_IMAGE=docker.io/istio/citadel:1.1.6
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/jlewi-dev/docker.io/istio/galley:1.1.6
+  - --build-arg=INPUT_IMAGE=docker.io/istio/galley:1.1.6
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/jlewi-dev/docker.io/istio/kubectl:1.1.6
+  - --build-arg=INPUT_IMAGE=docker.io/istio/kubectl:1.1.6
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/jlewi-dev/docker.io/istio/mixer:1.1.6
+  - --build-arg=INPUT_IMAGE=docker.io/istio/mixer:1.1.6
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/jlewi-dev/docker.io/istio/pilot:1.1.6
+  - --build-arg=INPUT_IMAGE=docker.io/istio/pilot:1.1.6
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/jlewi-dev/docker.io/istio/proxyv2:1.1.6
+  - --build-arg=INPUT_IMAGE=docker.io/istio/proxyv2:1.1.6
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/jlewi-dev/docker.io/istio/sidecar_injector:1.1.6
+  - --build-arg=INPUT_IMAGE=docker.io/istio/sidecar_injector:1.1.6
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/jlewi-dev/docker.io/jaegertracing/all-in-one:1.9
+  - --build-arg=INPUT_IMAGE=docker.io/jaegertracing/all-in-one:1.9
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/jlewi-dev/docker.io/kiali/kiali:v0.16
+  - --build-arg=INPUT_IMAGE=docker.io/kiali/kiali:v0.16
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/jlewi-dev/docker.io/prom/prometheus:v2.3.1
+  - --build-arg=INPUT_IMAGE=docker.io/prom/prometheus:v2.3.1
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/jlewi-dev/grafana/grafana:6.0.2
+  - --build-arg=INPUT_IMAGE=grafana/grafana:6.0.2
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/jlewi-dev/metacontroller/metacontroller:v0.3.0
+  - --build-arg=INPUT_IMAGE=metacontroller/metacontroller:v0.3.0
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/jlewi-dev/minio/minio:RELEASE.2018-02-09T22-40-05Z
+  - --build-arg=INPUT_IMAGE=minio/minio:RELEASE.2018-02-09T22-40-05Z
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/jlewi-dev/mysql:5.6
+  - --build-arg=INPUT_IMAGE=mysql:5.6
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/jlewi-dev/mysql:8
+  - --build-arg=INPUT_IMAGE=mysql:8
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/jlewi-dev/mysql:8.0.3
+  - --build-arg=INPUT_IMAGE=mysql:8.0.3
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/jlewi-dev/quay.io/jetstack/cert-manager-cainjector:v0.11.0
+  - --build-arg=INPUT_IMAGE=quay.io/jetstack/cert-manager-cainjector:v0.11.0
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/jlewi-dev/quay.io/jetstack/cert-manager-controller:v0.11.0
+  - --build-arg=INPUT_IMAGE=quay.io/jetstack/cert-manager-controller:v0.11.0
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/jlewi-dev/quay.io/jetstack/cert-manager-webhook:v0.11.0
+  - --build-arg=INPUT_IMAGE=quay.io/jetstack/cert-manager-webhook:v0.11.0
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/jlewi-dev/tensorflow/tensorflow:1.8.0
+  - --build-arg=INPUT_IMAGE=tensorflow/tensorflow:1.8.0
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/jlewi-dev/docker.io/istio/proxy_init:1.1.6
+  - --build-arg=INPUT_IMAGE=docker.io/istio/proxy_init:1.1.6
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'  

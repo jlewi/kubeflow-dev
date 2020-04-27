@@ -4,27 +4,23 @@
 # Intended for quick iteration during development
 set -ex
 
-BOOTSTRAPDIR=/home/jlewi/git_kubeflow-kubeflow/bootstrap
+BOOTSTRAPDIR=/home/jlewi/git_kubeflow-kfctl
 
-APPNAME=kftest-$(date +%m%d-%H%M%S)
-APPDIR=/home/jlewi/git_jlewi-kubeflow-dev/kubeflow-deployments/${APPNAME}
+APPNAME=jl-stack-$(date +%m%d-%H%M%S)
+APPDIR=~/tmp/stack_apps/${APPNAME}
 
 # Source iap secrets
 . ~/secrets/jlewi-dev.oauth.sh 
 
 cd ${BOOTSTRAPDIR}
-make build-kfctl
+make build-kfctl-fast
 
-KFCTL=${BOOTSTRAPDIR}/bin/kfctl
+KFCTL=${BOOTSTRAPDIR}/bin/linux/kfctl
 
 mkdir -p ${APPDIR}
 
-MANIFESTSDIR=/home/jlewi/git_kubeflow-manifests/kfdef
-if [ -f ${MANIFESTSDIR}/kfctl_gcp_iap.0.7.0.yaml ]; then
-	CFGNAME=kfctl_gcp_iap.0.7.0.yaml
-else
-	CFGNAME=kfctl_gcp_iap.yaml
-fi
+MANIFESTSDIR=/home/jlewi/git_kubeflow-manifests/stacks/examples
+CFGNAME=kfctl_gcp_stacks.experimental.yaml
 
 cp ${MANIFESTSDIR}/${CFGNAME} ${APPDIR}/
 
@@ -42,4 +38,9 @@ yq w -i ${CFGFILE} spec.zone ${ZONE}   # Work around for https://github.com/kube
 yq w -i ${CFGFILE} spec.repos[0].uri /home/jlewi/git_kubeflow-manifests
 #--use_basic_auth
 
-${KFCTL} apply all -V  -f ${CFGFILE}
+${KFCTL} build all -V  -f ${CFGFILE}
+
+# Generate the output for testing
+cd ${APPDIR}/kustomize/kubeflow-apps
+mkdir -p /tmp/stack_apps/${APPNAME}
+kustomize build --load_restrictor none -o /tmp/stack_apps/${APPNAME}

@@ -1,0 +1,14 @@
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  labels:
+    kf-name: gcp-private-0527
+  name: gcp-private-0527-user-storage
+  namespace: gcp-private-dev
+spec:
+  member: serviceAccount:gcp-private-0527-user@gcp-private-dev.iam.gserviceaccount.com
+  resourceRef:
+    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+    external: projects/gcp-private-dev
+    kind: Project
+  role: roles/storage.admin

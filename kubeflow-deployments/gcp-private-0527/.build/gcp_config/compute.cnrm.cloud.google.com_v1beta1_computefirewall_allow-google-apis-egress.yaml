@@ -1,0 +1,18 @@
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeFirewall
+metadata:
+  labels:
+    kf-name: gcp-private-0527
+  name: allow-google-apis-egress
+  namespace: gcp-private-dev
+spec:
+  allow:
+  - ports:
+    - 0-65535
+    protocol: tcp
+  destinationRanges:
+  - 199.36.153.4/30
+  direction: EGRESS
+  enableLogging: true
+  networkRef:
+    name: gcp-private-0527

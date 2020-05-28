@@ -1,0 +1,15 @@
+apiVersion: dns.cnrm.cloud.google.com/v1beta1
+kind: DNSManagedZone
+metadata:
+  labels:
+    kf-name: gcp-private-0527
+  name: gcr-io
+  namespace: gcp-private-dev
+spec:
+  description: private zone for GCR.io
+  dnsName: gcr.io.
+  privateVisibilityConfig:
+    networks:
+    - networkRef:
+        name: gke-no-internet-network
+  visibility: private

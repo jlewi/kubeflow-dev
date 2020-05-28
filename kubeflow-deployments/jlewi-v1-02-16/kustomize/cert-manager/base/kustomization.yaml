@@ -1,4 +1,23 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
+commonLabels:
+  kustomize.component: cert-manager
+configMapGenerator:
+- env: params.env
+  name: cert-manager-parameters
+configurations:
+- params.yaml
+generatorOptions:
+  disableNameSuffixHash: true
+images:
+- name: quay.io/jetstack/cert-manager-controller
+  newName: gcr.io/jlewi-dev/quay.io/jetstack/cert-manager-controller
+  newTag: v0.11.0
+- name: quay.io/jetstack/cert-manager-webhook
+  newName: gcr.io/jlewi-dev/quay.io/jetstack/cert-manager-webhook
+  newTag: v0.11.0
+- name: quay.io/jetstack/cert-manager-cainjector
+  newName: gcr.io/jlewi-dev/quay.io/jetstack/cert-manager-cainjector
+  newTag: v0.11.0
 kind: Kustomization
 namespace: cert-manager
 resources:
@@ -11,30 +30,11 @@ resources:
 - service-account.yaml
 - service.yaml
 - validating-webhook-configuration.yaml
-commonLabels:
-  kustomize.component: cert-manager
-images:
-- name: quay.io/jetstack/cert-manager-controller
-  newName: quay.io/jetstack/cert-manager-controller
-  newTag: v0.11.0
-- name: quay.io/jetstack/cert-manager-webhook
-  newName: quay.io/jetstack/cert-manager-webhook
-  newTag: v0.11.0
-- name: quay.io/jetstack/cert-manager-cainjector
-  newName: quay.io/jetstack/cert-manager-cainjector
-  newTag: v0.11.0
-configMapGenerator:
-- name: cert-manager-parameters
-  env: params.env
-generatorOptions:
-  disableNameSuffixHash: true
 vars:
-- name: namespace
+- fieldref:
+    fieldPath: data.namespace
+  name: namespace
   objref:
+    apiVersion: v1
     kind: ConfigMap
     name: cert-manager-parameters
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.namespace
-configurations:
-- params.yaml

@@ -19,7 +19,7 @@ generatorOptions:
   disableNameSuffixHash: true
 images:
 - name: mysql
-  newName: mysql
+  newName: gcr.io/jlewi-dev/mysql
   newTag: 8.0.3
 kind: Kustomization
 namespace: kubeflow

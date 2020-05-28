@@ -1,3 +1,23 @@
+configMapGenerator:
+- env: params.env
+  name: katib-parameters
+configurations:
+- params.yaml
+generatorOptions:
+  disableNameSuffixHash: true
+images:
+- name: gcr.io/kubeflow-images-public/katib/v1alpha3/katib-controller
+  newName: gcr.io/kubeflow-images-public/katib/v1alpha3/katib-controller
+  newTag: v0.8.0
+- name: gcr.io/kubeflow-images-public/katib/v1alpha3/katib-db-manager
+  newName: gcr.io/kubeflow-images-public/katib/v1alpha3/katib-db-manager
+  newTag: v0.8.0
+- name: gcr.io/kubeflow-images-public/katib/v1alpha3/katib-ui
+  newName: gcr.io/kubeflow-images-public/katib/v1alpha3/katib-ui
+  newTag: v0.8.0
+- name: mysql
+  newName: gcr.io/jlewi-dev/mysql
+  newTag: "8"
 namespace: kubeflow
 resources:
 - katib-configmap.yaml
@@ -15,38 +35,18 @@ resources:
 - katib-ui-rbac.yaml
 - katib-ui-service.yaml
 - trial-template-configmap.yaml
-configMapGenerator:
-- name: katib-parameters
-  env: params.env
-generatorOptions:
-  disableNameSuffixHash: true
-images:
-- name: gcr.io/kubeflow-images-public/katib/v1alpha3/katib-controller
-  newTag: v0.8.0
-  newName: gcr.io/kubeflow-images-public/katib/v1alpha3/katib-controller
-- name: gcr.io/kubeflow-images-public/katib/v1alpha3/katib-db-manager
-  newTag: v0.8.0
-  newName: gcr.io/kubeflow-images-public/katib/v1alpha3/katib-db-manager
-- name: gcr.io/kubeflow-images-public/katib/v1alpha3/katib-ui
-  newTag: v0.8.0
-  newName: gcr.io/kubeflow-images-public/katib/v1alpha3/katib-ui
-- name: mysql
-  newTag: "8"
-  newName: mysql
 vars:
-- name: clusterDomain
+- fieldref:
+    fieldPath: data.clusterDomain
+  name: clusterDomain
   objref:
+    apiVersion: v1
     kind: ConfigMap
     name: katib-parameters
-    apiVersion: v1
-  fieldref:
-    fieldpath: data.clusterDomain
-- name: namespace
+- fieldref:
+    fieldPath: metadata.namespace
+  name: namespace
   objref:
+    apiVersion: v1
     kind: Service
     name: katib-ui
-    apiVersion: v1
-  fieldref:
-    fieldpath: metadata.namespace
-configurations:
-- params.yaml

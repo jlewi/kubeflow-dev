@@ -1,0 +1,14 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineRun
+metadata:
+  creationTimestamp: null
+  name: replication-pipeline
+spec:
+  params:
+  - name: context
+    value: gs://kubeflow-examples/image-replicate/replicate-context.tar.gz
+  pipelineSpec:
+    params:
+    - name: context
+      type: string
+status: {}

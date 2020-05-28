@@ -1,0 +1,29 @@
+# A patch to use private GKE clusters
+apiVersion: container.cnrm.cloud.google.com/v1beta1
+kind: ContainerCluster
+metadata:
+  clusterName: "gcp-private-dev/us-central1/gcp-private-0527" # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"},{"name":"name","value":"gcp-private-0527"},{"name":"location","value":"us-central1"}]}}
+  name: gcp-private-0527 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}
+spec:
+  # https://cloud.google.com/kubernetes-engine/docs/reference/rest/v1/projects.locations.clusters#Cluster.PrivateClusterConfig
+  # This is the least secure config because it allows access to master from all public IPs.
+  # For alternative options see the above link.
+  privateClusterConfig:
+    enablePrivateNodes: true
+    enablePrivateEndpoint: false
+    masterIpv4CidrBlock: 172.16.0.32/28
+  #
+  # TODO(https://github.com/kubeflow/gcp-blueprints/issues/32): Following options don't appear to be supported in CNRM; will private GKE work
+  # without them?
+  ipAllocationPolicy:
+    # Make the cluster VPC Native
+    useIpAliases: true
+    # TODO(jlewi): https://github.com/kubeflow/gcp-blueprints/issues/32 the following fields
+    # don't seem to be included in CNRM 1.9.1
+    #createSubnetwork: true
+    #subnetworkName: gcp-private-0527 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}
+  # Create the clsuter in the private network we created.
+  networkRef:
+    name: gcp-private-0527 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}
+  subnetworkRef:
+    name: gcp-private-0527 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}

@@ -24,7 +24,7 @@ ACM_KF_REPO=acm-repo
 BUILD_DIR=.build
 
 # The URL you want to fetch manifests from
-MANIFESTS_URL=https://github.com/kubeflow/manifests.git@master
+MANIFESTS_URL=https://github.com/jlewi/manifests.git@private
 
 # Print out the context
 .PHONY: echo
@@ -40,7 +40,8 @@ get-pkg:
 	# TODO(jlewi): We should think about how we layout packages in kubeflow/manifests so
 	# users don't end up pulling tests or other things they don't need.
 	mkdir -p  ./upstream
-	kpt pkg get $(MANIFESTS_URL) $(MANIFESTS_DIR)
+	# Ignore errors on get pkg because of 
+	-kpt pkg get $(MANIFESTS_URL) $(MANIFESTS_DIR)
 	rm -rf $(MANIFESTS_DIR)/tests
 	# TODO(jlewi): Package appears to cause problems for kpt. We should delete in the upstream
 	# since its not needed anymore.
@@ -96,7 +97,7 @@ hydrate-gcp:
 	# ***********************************************************************************
 	# Hydrate cnrm
 	mkdir -p $(BUILD_DIR)/gcp_config 
-	kustomize build -o $(BUILD_DIR)/gcp_config $(GCP_CONFIG)
+	kustomize build --load_restrictor none -o $(BUILD_DIR)/gcp_config $(GCP_CONFIG)
 
 .PHONY: hydrate-asm
 hydrate-asm:	
@@ -189,9 +190,11 @@ delete-gcp:
 	kubectl	--context=$(MGMTCTXT) delete -f $(BUILD_DIR)/gcp_config
 
 #----------------------------------------------------------------------------------------------------------------------
-# Oneoff for 
-.PHONE: set-values
+# Oneoff for quick development
+.PHONY: set-values
 set-values:
+	kpt cfg set ./instance mgmt-ctxt gcp-private-dev-mgmt
+
 	kpt cfg set ./upstream/manifests/gcp  name gcp-private-0527
 	kpt cfg set ./upstream/manifests/gcp gcloud.core.project gcp-private-dev
 	kpt cfg set ./upstream/manifests/gcp  gcloud.compute.zone us-central1-f
@@ -199,4 +202,10 @@ set-values:
 
 	kpt cfg set ./instance name gcp-private-0527   
 	kpt cfg set ./instance location us-central1
+	kpt cfg set ./instance gcloud.compute.region us-central1
 	kpt cfg set ./instance gcloud.core.project gcp-private-dev
+
+reset:
+	rm -rf upstream
+	make get-pkg
+	make set-values

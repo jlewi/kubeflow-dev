@@ -12,7 +12,9 @@ spec:
   direction: EGRESS
   priority: 1100
   networkRef:
-    name: gke-no-internet-network
+    name: gcp-private-0527 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}  
+  # Enable logging to help debugging
+  enableLogging: true
 ---
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeFirewall
@@ -26,10 +28,12 @@ spec:
     - "443"
   sourceRanges:
   - 130.211.0.0/22
-  - 35.191.0.0/16
+  - 35.184.0.0/16
   direction: INGRESS
   networkRef:
-    name: gke-no-internet-network
+    name: gcp-private-0527 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}
+  # Enable logging to help debugging
+  enableLogging: true
 ---
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeFirewall
@@ -43,10 +47,12 @@ spec:
     - "443"
   destinationRanges:
   - 130.211.0.0/22
-  - 35.191.0.0/16
+  - 35.184.0.0/16
   direction: EGRESS
   networkRef:
-    name: gke-no-internet-network
+    name: gcp-private-0527 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}
+  # Enable logging to help debugging
+  enableLogging: true
 ---
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeFirewall
@@ -61,7 +67,9 @@ spec:
   - 199.36.153.4/30
   direction: EGRESS
   networkRef:
-    name: gke-no-internet-network
+    name: gcp-private-0527 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}
+  # Enable logging to help debugging
+  enableLogging: true
 ---
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeFirewall
@@ -77,7 +85,9 @@ spec:
   - 172.16.0.0/28
   direction: EGRESS
   networkRef:
-    name: gke-no-internet-network
+    name: gcp-private-0527 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}
+  # Enable logging to help debugging
+  enableLogging: true
 ---
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeFirewall
@@ -92,4 +102,6 @@ spec:
   - 10.0.0.0/8
   direction: EGRESS
   networkRef:
-    name: gke-no-internet-network
+    name: gcp-private-0527 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}
+  # Enable logging to help debugging
+  enableLogging: true

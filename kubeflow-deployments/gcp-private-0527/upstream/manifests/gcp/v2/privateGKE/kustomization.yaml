@@ -5,6 +5,7 @@
 # here so we can't patch it.
 resources:
 - compute-network.yaml
+- enable-services.yaml
 - dns-gcr.yaml
 - dns-google-apis.yaml
 - firewall.yaml

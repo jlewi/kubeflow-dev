@@ -11,5 +11,5 @@ spec:
   privateVisibilityConfig:
     networks:
     - networkRef:
-        name: gke-no-internet-network
+        name: gcp-private-0527
   visibility: private

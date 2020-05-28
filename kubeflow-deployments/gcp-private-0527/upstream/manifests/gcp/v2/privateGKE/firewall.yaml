@@ -89,7 +89,8 @@ spec:
   - 172.16.0.0/28
   # TODO(jlewi): This was a bit of a hack to try to fix failing health checks during cluster
   # provisioning. I was seeing packets get blocket.
-  - 172.217.0.0/28
+  #- 172.217.0.0/28
+
   direction: EGRESS
   networkRef:
     name: gcp-private-0527 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}
@@ -107,6 +108,8 @@ spec:
     - "0-65535"
   destinationRanges:
   - 10.0.0.0/8
+  # This rule is needed to ensure that any K8s services running within the cluster are accessible
+  - 192.168.0.0/16
   direction: EGRESS
   networkRef:
     name: gcp-private-0527 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}

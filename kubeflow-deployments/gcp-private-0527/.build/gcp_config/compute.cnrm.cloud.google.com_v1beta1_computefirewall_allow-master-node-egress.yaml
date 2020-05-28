@@ -13,7 +13,6 @@ spec:
     protocol: tcp
   destinationRanges:
   - 172.16.0.0/28
-  - 172.217.0.0/28
   direction: EGRESS
   enableLogging: true
   networkRef:

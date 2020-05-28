@@ -10,6 +10,7 @@ spec:
   # For alternative options see the above link.
   privateClusterConfig:
     enablePrivateNodes: true
+    # We set enablePrivateEndpoint to false because we want a publicly accessible endpoint.
     enablePrivateEndpoint: false
     masterIpv4CidrBlock: 172.16.0.32/28
   #

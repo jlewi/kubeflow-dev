@@ -1,0 +1,11 @@
+apiVersion: kpt.dev/v1alpha1
+kind: Kptfile
+metadata:
+    name: kubeflow
+upstream:
+    type: git
+    git:
+        commit: be2ea5f07bee50b3663e422d6b19044f89922dcb
+        repo: https://github.com/kubeflow/manifests
+        directory: /
+        ref: master

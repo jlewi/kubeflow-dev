@@ -1,0 +1,167 @@
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: gcp-private-0527-admin-source # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
+spec:
+  member: serviceAccount:gcp-private-0527-admin@gcp-private-dev.iam.gserviceaccount.com # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"},{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+  role: roles/source.admin
+  resourceRef:
+    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+    kind: Project
+    external: projects/gcp-private-dev # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+---
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: gcp-private-0527-admin-servicemanagement # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
+spec:
+  member: serviceAccount:gcp-private-0527-admin@gcp-private-dev.iam.gserviceaccount.com # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"},{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+  role: roles/servicemanagement.admin
+  resourceRef:
+    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+    kind: Project
+    external: projects/gcp-private-dev # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+---
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: gcp-private-0527-admin-network # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
+spec:
+  member: serviceAccount:gcp-private-0527-admin@gcp-private-dev.iam.gserviceaccount.com # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"},{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+  role: roles/compute.networkAdmin
+  resourceRef:
+    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+    kind: Project
+    external: projects/gcp-private-dev # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+---
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: gcp-private-0527-admin-cloudbuild # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
+spec:
+  member: serviceAccount:gcp-private-0527-admin@gcp-private-dev.iam.gserviceaccount.com # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"},{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+  role: roles/cloudbuild.builds.editor
+  resourceRef:
+    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+    kind: Project
+    external: projects/gcp-private-dev # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+---
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: gcp-private-0527-admin-viewer # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
+spec:
+  member: serviceAccount:gcp-private-0527-admin@gcp-private-dev.iam.gserviceaccount.com # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"},{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+  role: roles/viewer
+  resourceRef:
+    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+    kind: Project
+    external: projects/gcp-private-dev # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+---
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: gcp-private-0527-admin-storage # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
+spec:
+  member: serviceAccount:gcp-private-0527-admin@gcp-private-dev.iam.gserviceaccount.com # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"},{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+  role: roles/storage.admin
+  resourceRef:
+    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+    kind: Project
+    external: projects/gcp-private-dev # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+---
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: gcp-private-0527-admin-bigquery # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
+spec:
+  member: serviceAccount:gcp-private-0527-admin@gcp-private-dev.iam.gserviceaccount.com # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"},{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+  role: roles/bigquery.admin
+  resourceRef:
+    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+    kind: Project
+    external: projects/gcp-private-dev # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+---
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: gcp-private-0527-admin-dataflow # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
+spec:
+  member: serviceAccount:gcp-private-0527-admin@gcp-private-dev.iam.gserviceaccount.com # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"},{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+  role: roles/dataflow.admin
+  resourceRef:
+    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+    kind: Project
+    external: projects/gcp-private-dev # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+---
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: gcp-private-0527-admin-ml # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
+spec:
+  member: serviceAccount:gcp-private-0527-admin@gcp-private-dev.iam.gserviceaccount.com # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"},{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+  role: roles/ml.admin
+  resourceRef:
+    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+    kind: Project
+    external: projects/gcp-private-dev # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+---
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: gcp-private-0527-admin-dataproc # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
+spec:
+  member: serviceAccount:gcp-private-0527-admin@gcp-private-dev.iam.gserviceaccount.com # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"},{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+  role: roles/dataproc.editor
+  resourceRef:
+    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+    kind: Project
+    external: projects/gcp-private-dev # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+---
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: gcp-private-0527-admin-cloudsql # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
+spec:
+  member: serviceAccount:gcp-private-0527-admin@gcp-private-dev.iam.gserviceaccount.com # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"},{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+  role: roles/cloudsql.admin
+  resourceRef:
+    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+    kind: Project
+    external: projects/gcp-private-dev # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+---
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: gcp-private-0527-admin-logging # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
+spec:
+  member: serviceAccount:gcp-private-0527-admin@gcp-private-dev.iam.gserviceaccount.com # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"},{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+  role: roles/logging.logWriter
+  resourceRef:
+    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+    kind: Project
+    external: projects/gcp-private-dev # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+---
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: gcp-private-0527-admin-metricwriter # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
+spec:
+  member: serviceAccount:gcp-private-0527-admin@gcp-private-dev.iam.gserviceaccount.com # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"},{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+  role: roles/monitoring.metricWriter
+  resourceRef:
+    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+    kind: Project
+    external: projects/gcp-private-dev # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+---
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: gcp-private-0527-admin-monitoringviewer # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
+spec:
+  member: serviceAccount:gcp-private-0527-admin@gcp-private-dev.iam.gserviceaccount.com # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"},{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+  role: roles/monitoring.viewer
+  resourceRef:
+    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+    kind: Project
+    external: projects/gcp-private-dev # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}

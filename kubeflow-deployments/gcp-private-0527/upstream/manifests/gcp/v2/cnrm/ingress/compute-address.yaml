@@ -1,0 +1,11 @@
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeAddress
+metadata:
+  name: gcp-private-0527-ip # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
+  labels:
+    label-one: "value-one"
+spec:
+  addressType: EXTERNAL
+  description: Static IP for Kubeflow ingress.
+  location: global
+  ipVersion: IPV4

@@ -1,0 +1,10 @@
+apiVersion: v1
+data:
+  appName: gcp-private-0527 # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
+  hostname: gcp-private-0527.endpoints.gcp-private-dev.cloud.goog # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"},{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+  ipName: gcp-private-0527-ip # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
+  project: "gcp-private-dev" # {"type":"string","x-kustomize":{"setBy":"kpt","setter":{"name":"gcloud.core.project","value":"gcp-private-dev"}}}
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: iap-ingress-config

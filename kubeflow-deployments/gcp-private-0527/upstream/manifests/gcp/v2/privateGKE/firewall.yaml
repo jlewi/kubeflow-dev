@@ -116,3 +116,23 @@ spec:
     name: gcp-private-0527 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}
   # Enable logging to help debugging
   enableLogging: true
+---
+# Per https://istio.io/docs/setup/platform-setup/gke/
+# GKE will not automatically create a rule allowing traffic to the istio side car
+# webhook ports so we need to add that.
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeFirewall
+metadata:
+  name: gcp-private-0527-istio # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}
+spec:
+  allow:
+  - protocol: tcp
+    ports:
+    - "15017"
+  sourceRanges:
+  - 172.16.0.32/28
+  direction: INGRESS
+  networkRef:
+    name: gcp-private-0527 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}
+  # Enable logging to help debugging
+  enableLogging: true

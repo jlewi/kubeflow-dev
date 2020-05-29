@@ -26,6 +26,9 @@ spec:
       resourceType: nvidia-tesla-k80
   initialNodeCount: 2
   ipAllocationPolicy:
+    clusterSecondaryRangeName: pods
+    createSubnetwork: false
+    servicesSecondaryRangeName: services
     useIpAliases: true
   location: us-central1
   loggingService: logging.googleapis.com/kubernetes

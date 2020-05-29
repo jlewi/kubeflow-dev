@@ -86,7 +86,8 @@ spec:
     - "443"
     - "10250"
   destinationRanges:
-  - 172.16.0.0/28
+  # Keep this in sync with the masterCidrBlock specified in cluster-private-patch.yaml
+  - 172.16.0.32/28
   # TODO(jlewi): This was a bit of a hack to try to fix failing health checks during cluster
   # provisioning. I was seeing packets get blocket.
   #- 172.217.0.0/28

@@ -12,7 +12,7 @@ spec:
     - "10250"
     protocol: tcp
   destinationRanges:
-  - 172.16.0.0/28
+  - 172.16.0.32/28
   direction: EGRESS
   enableLogging: true
   networkRef:

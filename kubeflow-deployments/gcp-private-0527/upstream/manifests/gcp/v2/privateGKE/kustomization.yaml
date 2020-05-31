@@ -9,3 +9,4 @@ resources:
 - dns-gcr.yaml
 - dns-google-apis.yaml
 - firewall.yaml
+- nat.yaml

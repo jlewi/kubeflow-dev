@@ -128,10 +128,54 @@ spec:
   allow:
   - protocol: tcp
     ports:
+    # In ASM 1.4 the port is 9443. Starting in ASM 1.5 the port is 15017
     - "15017"
+    - "9443"
   sourceRanges:
   - 172.16.0.32/28
   direction: INGRESS
+  networkRef:
+    name: gcp-private-0527 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}
+  # Enable logging to help debugging
+  enableLogging: true
+---
+# Allow traffic to DockerHub so we can pull docker images.
+#
+# IP addresses can be obtained by running
+# 1. nslookup index.dockerhub.io
+# 2. nslookup dockerhub.io
+# 3. nslookup registry-1.docker.io
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeFirewall
+metadata:
+  name: gcp-private-0527-dockerhub # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}
+spec:
+  allow:
+  - protocol: tcp
+    ports:
+    - "443"
+    - "80"
+  destinationRanges:
+  # Keep this in sync with the masterCidrBlock specified in cluster-private-patch.yaml
+  - "3.211.199.249"
+  - "18.232.227.119"
+  - "18.213.137.78"
+  - "23.22.155.84"
+  - "23.202.231.169"
+  - "23.217.138.110"
+  - "52.54.232.21"
+  - "52.72.232.213"
+  - "54.85.107.53"
+  - "54.236.131.166"
+  - "107.23.149.57"
+  - "217.70.184.38"
+  # production.cloudfare.docker.com
+  - "104.18.121.25"
+  - "104.18.122.25"
+  - "104.18.123.25"
+  - "104.18.124.25"
+  - "104.18.125.25"
+  direction: EGRESS
   networkRef:
     name: gcp-private-0527 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}
   # Enable logging to help debugging

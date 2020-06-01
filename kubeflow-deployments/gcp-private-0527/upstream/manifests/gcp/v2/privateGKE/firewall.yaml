@@ -1,8 +1,9 @@
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeFirewall
 metadata:
-  name: deny-egress
+  name: gcp-private-0527-deny-egress # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
 spec:
+  description: "Deny all internet traffic by default"
   deny:
   - protocol: tcp
     ports:
@@ -12,15 +13,16 @@ spec:
   direction: EGRESS
   priority: 1100
   networkRef:
-    name: gcp-private-0527 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}  
+    name: gcp-private-0527 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}
   # Enable logging to help debugging
-  enableLogging: true
+  enableLogging: false # {"type":"bool","x-kustomize":{"setter":{"name":"log-firewalls","value":"false"}}}
 ---
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeFirewall
 metadata:
-  name: allow-healthcheck-ingress
+  name: gcp-private-0527-health-ingress # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
 spec:
+  description: "Allow health check ingress"
   allow:
   - protocol: tcp
     ports:
@@ -35,13 +37,14 @@ spec:
   networkRef:
     name: gcp-private-0527 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}
   # Enable logging to help debugging
-  enableLogging: true
+  enableLogging: false # {"type":"bool","x-kustomize":{"setter":{"name":"log-firewalls","value":"false"}}}
 ---
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeFirewall
 metadata:
-  name: allow-healthcheck-egress
+  name: gcp-private-0527-health-egress # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
 spec:
+  description: "Allow health check egress"
   allow:
   - protocol: tcp
     ports:
@@ -56,13 +59,14 @@ spec:
   networkRef:
     name: gcp-private-0527 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}
   # Enable logging to help debugging
-  enableLogging: true
+  enableLogging: false # {"type":"bool","x-kustomize":{"setter":{"name":"log-firewalls","value":"false"}}}
 ---
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeFirewall
 metadata:
-  name: allow-google-apis-egress
+  name: gcp-private-0527-apis-egress # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
 spec:
+  description: "Allow egress to google APIs"
   allow:
   - protocol: tcp
     ports:
@@ -73,13 +77,14 @@ spec:
   networkRef:
     name: gcp-private-0527 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}
   # Enable logging to help debugging
-  enableLogging: true
+  enableLogging: false # {"type":"bool","x-kustomize":{"setter":{"name":"log-firewalls","value":"false"}}}
 ---
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeFirewall
 metadata:
-  name: allow-master-node-egress
+  name: gcp-private-0527-master-egress # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
 spec:
+  description: "Allow master node egress"
   allow:
   - protocol: tcp
     ports:
@@ -96,13 +101,14 @@ spec:
   networkRef:
     name: gcp-private-0527 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}
   # Enable logging to help debugging
-  enableLogging: true
+  enableLogging: false # {"type":"bool","x-kustomize":{"setter":{"name":"log-firewalls","value":"false"}}}
 ---
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeFirewall
 metadata:
-  name: allow-internal-egress
+  name: gcp-private-0527-int-egress # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
 spec:
+  description: "Allow traffic to internal ips"
   allow:
   - protocol: tcp
     ports:
@@ -115,7 +121,7 @@ spec:
   networkRef:
     name: gcp-private-0527 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}
   # Enable logging to help debugging
-  enableLogging: true
+  enableLogging: false # {"type":"bool","x-kustomize":{"setter":{"name":"log-firewalls","value":"false"}}}
 ---
 # Per https://istio.io/docs/setup/platform-setup/gke/
 # GKE will not automatically create a rule allowing traffic to the istio side car
@@ -123,7 +129,7 @@ spec:
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeFirewall
 metadata:
-  name: gcp-private-0527-istio # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}
+  name: gcp-private-0527-istio # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
 spec:
   allow:
   - protocol: tcp
@@ -137,7 +143,7 @@ spec:
   networkRef:
     name: gcp-private-0527 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}
   # Enable logging to help debugging
-  enableLogging: true
+  enableLogging: false # {"type":"bool","x-kustomize":{"setter":{"name":"log-firewalls","value":"false"}}}
 ---
 # Allow traffic to DockerHub so we can pull docker images.
 #
@@ -148,8 +154,9 @@ spec:
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeFirewall
 metadata:
-  name: gcp-private-0527-dockerhub # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}
+  name: gcp-private-0527-dockerhub # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
 spec:
+  description: "Allow egress to dockerhub and quay.io"
   allow:
   - protocol: tcp
     ports:
@@ -192,4 +199,4 @@ spec:
   networkRef:
     name: gcp-private-0527 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}
   # Enable logging to help debugging
-  enableLogging: true
+  enableLogging: false # {"type":"bool","x-kustomize":{"setter":{"name":"log-firewalls","value":"false"}}}

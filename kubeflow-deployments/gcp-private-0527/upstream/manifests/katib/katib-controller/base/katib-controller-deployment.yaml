@@ -24,7 +24,7 @@ spec:
         imagePullPolicy: IfNotPresent
         command: ["./katib-controller"]
         args:
-          - '--webhook-port=8443'
+        - '--webhook-port=8443'
         ports:
         - containerPort: 8443
           name: webhook

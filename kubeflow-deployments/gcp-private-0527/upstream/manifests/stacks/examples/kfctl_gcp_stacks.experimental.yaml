@@ -19,7 +19,7 @@ spec:
       repoRef:
         name: manifests
         path: istio/istio/base
-    name: kubeflow-istio      
+    name: kubeflow-istio
   # Install controllers that other applications depend on
   # e.g. metacontroller and application controller.
   - kustomizeConfig:
@@ -54,7 +54,7 @@ spec:
         name: manifests
         path: cert-manager/cert-manager-kube-system-resources/base
     name: cert-manager-kube-system-resources
-  - kustomizeConfig:      
+  - kustomizeConfig:
       repoRef:
         name: manifests
         path: cert-manager/cert-manager/v3
@@ -90,5 +90,5 @@ spec:
       useBasicAuth: false
   repos:
   - name: manifests
-    uri: https://github.com/jlewi/manifests/archive/stacks.tar.gz    
+    uri: https://github.com/jlewi/manifests/archive/stacks.tar.gz
   version: master

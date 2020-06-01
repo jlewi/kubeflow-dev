@@ -23,8 +23,8 @@ spec:
     maintainers: []
     owners: []
     keywords:
-     - knative-serving-crds
-     - kubeflow
+    - knative-serving-crds
+    - kubeflow
     links:
     - description: About
       url: ""

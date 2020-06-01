@@ -240,7 +240,7 @@ data:
         </buffer>
       </match>
     </label>
-  host.conf: |
+  host.conf: |-
     <source>
       @type tail
       @id in_tail_dmesg

@@ -8,7 +8,7 @@ spec:
   template:
     spec:
       containers:
-      - name: jupyter-web-app        
+      - name: jupyter-web-app
         env:
         - name: USERID_HEADER
           valueFrom:

@@ -7,6 +7,6 @@ roleRef:
   kind: ClusterRole
   name: fluentd
 subjects:
-  - kind: ServiceAccount
-    name: fluentd
-    namespace: kube-system
+- kind: ServiceAccount
+  name: fluentd
+  namespace: kube-system

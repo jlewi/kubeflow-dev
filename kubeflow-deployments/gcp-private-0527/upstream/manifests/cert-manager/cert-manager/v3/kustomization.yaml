@@ -4,6 +4,8 @@ commonLabels:
   app.kubernetes.io/name: cert-manager
 kind: Kustomization
 namespace: cert-manager
+commonAnnotations:
+  "image-prefix.kubeflow.org": '{"quay.io/jetstack": "gcr.io/gcp-project-dev/quay.io/jetstack"}' # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"image-prefix.kubeflow.org","value":"{\"quay.io/jetstack\": \"gcr.io/gcp-project-dev/quay.io/jetstack\"}"}]}}
 resources:
 - ../base
 - ../overlays/application/application.yaml

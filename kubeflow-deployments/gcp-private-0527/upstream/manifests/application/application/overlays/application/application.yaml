@@ -12,9 +12,9 @@ spec:
       app.kubernetes.io/part-of: kubeflow
       app.kubernetes.io/version: v0.7.0
   componentKinds:
-    - group: app.k8s.io
-      kind: Application
-  descriptor: 
+  - group: app.k8s.io
+    kind: Application
+  descriptor:
     type: kubeflow
     version: v1beta1
     description: application that aggregates all kubeflow applications
@@ -27,7 +27,7 @@ spec:
     - name: Jeremy Lewi
       email: jlewi@google.com
     keywords:
-     - kubeflow
+    - kubeflow
     links:
     - description: About
       url: "https://kubeflow.org"

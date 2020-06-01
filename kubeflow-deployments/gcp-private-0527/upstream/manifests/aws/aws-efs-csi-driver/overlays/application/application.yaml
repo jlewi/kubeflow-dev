@@ -19,7 +19,9 @@ spec:
   descriptor:
     type: aws-efs-csi-driver
     version: v0.3.0
-    description: The Amazon EFS Container Storage Interface (CSI) driver provides a CSI interface that allows Amazon EKS clusters to manage the lifecycle of Amazon EFS file systems.
+    description: The Amazon EFS Container Storage Interface (CSI) driver provides
+      a CSI interface that allows Amazon EKS clusters to manage the lifecycle of Amazon
+      EFS file systems.
     maintainers:
     - name: Jiaxin Shan
       email: shjiaxin@amazon.com
@@ -27,10 +29,9 @@ spec:
     - name: Jiaxin Shan
       email: shjiaxin@amazon.com
     keywords:
-     - aws
-     - kubeflow
+    - aws
+    - kubeflow
     links:
     - description: About
       url: https://github.com/kubernetes-sigs/aws-efs-csi-driver
   addOwnerRef: true
-

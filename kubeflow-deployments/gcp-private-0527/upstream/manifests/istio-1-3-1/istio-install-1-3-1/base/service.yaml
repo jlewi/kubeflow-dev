@@ -15,9 +15,7 @@ spec:
     port: 15014
   selector:
     istio: citadel
-
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -35,9 +33,7 @@ spec:
     port: 9901
   selector:
     istio: galley
-
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -53,37 +49,35 @@ spec:
     app: istio-ingressgateway
     istio: ingressgateway
   ports:
-    - name: status-port
-      port: 15020
-      targetPort: 15020
-    - name: http2
-      nodePort: 31380
-      port: 80
-      targetPort: 80
-    - name: https
-      nodePort: 31390
-      port: 443
-    - name: tcp
-      nodePort: 31400
-      port: 31400
-    - name: https-kiali
-      port: 15029
-      targetPort: 15029
-    - name: https-prometheus
-      port: 15030
-      targetPort: 15030
-    - name: https-grafana
-      port: 15031
-      targetPort: 15031
-    - name: https-tracing
-      port: 15032
-      targetPort: 15032
-    - name: tls
-      port: 15443
-      targetPort: 15443
-
+  - name: status-port
+    port: 15020
+    targetPort: 15020
+  - name: http2
+    nodePort: 31380
+    port: 80
+    targetPort: 80
+  - name: https
+    nodePort: 31390
+    port: 443
+  - name: tcp
+    nodePort: 31400
+    port: 31400
+  - name: https-kiali
+    port: 15029
+    targetPort: 15029
+  - name: https-prometheus
+    port: 15030
+    targetPort: 15030
+  - name: https-grafana
+    port: 15031
+    targetPort: 15031
+  - name: https-tracing
+    port: 15032
+    targetPort: 15032
+  - name: tls
+    port: 15443
+    targetPort: 15443
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -103,9 +97,7 @@ spec:
     port: 15014
   selector:
     istio: pilot
-
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -126,9 +118,7 @@ spec:
   selector:
     istio: mixer
     istio-mixer-type: policy
-
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -144,9 +134,7 @@ spec:
     port: 15014
   selector:
     istio: sidecar-injector
-
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -169,9 +157,7 @@ spec:
   selector:
     istio: mixer
     istio-mixer-type: telemetry
-
 ---
-
 apiVersion: v1
 kind: Service
 metadata:

@@ -6,21 +6,17 @@
 # bootstrap and use certmanager by default.
 bases:
 - ../../base
-
 resources:
 - certificate.yaml
-
 patchesStrategicMerge:
 - mutating-webhook-configuration.yaml
 - deployment.yaml
-
 configMapGenerator:
 - name: admission-webhook-parameters
   behavior: merge
   env: params.env
 generatorOptions:
   disableNameSuffixHash: true
-
 vars:
 # These vars are used to substitute in the namespace, service name and
 # deployment name into the mutating WebHookConfiguration.
@@ -37,12 +33,11 @@ vars:
     fieldpath: data.issuer
 - name: podDefaultsCertName
   objref:
-      kind: Certificate
-      group: cert-manager.io
-      version: v1alpha2
-      name: admission-webhook-cert
+    kind: Certificate
+    group: cert-manager.io
+    version: v1alpha2
+    name: admission-webhook-cert
   fieldref:
     fieldpath: metadata.name
-
 configurations:
 - params.yaml

@@ -1,4 +1,3 @@
----
 apiVersion: v1
 data: null
 kind: ConfigMap
@@ -107,4 +106,3 @@ data:
 kind: ConfigMap
 metadata:
   name: config-observability
----

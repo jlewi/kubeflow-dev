@@ -23,4 +23,3 @@ spec:
         ports:
         - containerPort: 3000
       serviceAccountName: ui
-

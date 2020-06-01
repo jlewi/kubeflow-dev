@@ -17,22 +17,19 @@ spec:
     spec:
       serviceAccountName: cert-manager-cainjector
       containers:
-        - name: cainjector
-          image: "quay.io/jetstack/cert-manager-cainjector:v0.11.0"
-          imagePullPolicy: IfNotPresent
-          args:
-          - --v=2
-          - --leader-election-namespace=kube-system
-          env:
-          - name: POD_NAMESPACE
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.namespace
-          resources:
-            {}
-
+      - name: cainjector
+        image: "quay.io/jetstack/cert-manager-cainjector:v0.11.0"
+        imagePullPolicy: IfNotPresent
+        args:
+        - --v=2
+        - --leader-election-namespace=kube-system
+        env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        resources: {}
 ---
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -55,31 +52,29 @@ spec:
     spec:
       serviceAccountName: cert-manager
       containers:
-        - name: cert-manager
-          image: "quay.io/jetstack/cert-manager-controller:v0.11.0"
-          imagePullPolicy: IfNotPresent
-          args:
-          - --v=2
-          - --cluster-resource-namespace=$(POD_NAMESPACE)
-          - --leader-election-namespace=kube-system
-          - --webhook-namespace=$(POD_NAMESPACE)
-          - --webhook-ca-secret=cert-manager-webhook-ca
-          - --webhook-serving-secret=cert-manager-webhook-tls
-          - --webhook-dns-names=cert-manager-webhook,cert-manager-webhook.$(namespace),cert-manager-webhook.$(namespace).svc
-          ports:
-          - containerPort: 9402
-          env:
-          - name: POD_NAMESPACE
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.namespace
-          resources:
-            requests:
-              cpu: 10m
-              memory: 32Mi
-
+      - name: cert-manager
+        image: "quay.io/jetstack/cert-manager-controller:v0.11.0"
+        imagePullPolicy: IfNotPresent
+        args:
+        - --v=2
+        - --cluster-resource-namespace=$(POD_NAMESPACE)
+        - --leader-election-namespace=kube-system
+        - --webhook-namespace=$(POD_NAMESPACE)
+        - --webhook-ca-secret=cert-manager-webhook-ca
+        - --webhook-serving-secret=cert-manager-webhook-tls
+        - --webhook-dns-names=cert-manager-webhook,cert-manager-webhook.$(namespace),cert-manager-webhook.$(namespace).svc
+        ports:
+        - containerPort: 9402
+        env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
 ---
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -99,25 +94,23 @@ spec:
     spec:
       serviceAccountName: cert-manager-webhook
       containers:
-        - name: cert-manager
-          image: "quay.io/jetstack/cert-manager-webhook:v0.11.0"
-          imagePullPolicy: IfNotPresent
-          args:
-          - --v=2
-          - --secure-port=6443
-          - --tls-cert-file=/certs/tls.crt
-          - --tls-private-key-file=/certs/tls.key
-          env:
-          - name: POD_NAMESPACE
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.namespace
-          resources:
-            {}
-
-          volumeMounts:
-          - name: certs
-            mountPath: /certs
+      - name: cert-manager
+        image: "quay.io/jetstack/cert-manager-webhook:v0.11.0"
+        imagePullPolicy: IfNotPresent
+        args:
+        - --v=2
+        - --secure-port=6443
+        - --tls-cert-file=/certs/tls.crt
+        - --tls-private-key-file=/certs/tls.key
+        env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        resources: {}
+        volumeMounts:
+        - name: certs
+          mountPath: /certs
       volumes:
       - name: certs
         secret:

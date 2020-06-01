@@ -19,7 +19,8 @@ spec:
   descriptor:
     type: aws-alb-ingress-controller
     version: v1beta1
-    description: Application Load Balancer (ALB) Ingress Controller Deployment Manifest provides sensible defaults for deploying an ALB Ingress Controller
+    description: Application Load Balancer (ALB) Ingress Controller Deployment Manifest
+      provides sensible defaults for deploying an ALB Ingress Controller
     maintainers:
     - name: Jiaxin Shan
       email: shjiaxin@amazon.com
@@ -27,10 +28,9 @@ spec:
     - name: Jiaxin Shan
       email: shjiaxin@amazon.com
     keywords:
-     - aws
-     - kubeflow
+    - aws
+    - kubeflow
     links:
     - description: About
       url: https://github.com/kubernetes-sigs/aws-alb-ingress-controller
   addOwnerRef: true
-

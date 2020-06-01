@@ -14,26 +14,21 @@ istio:
   enabled: true
   gateway: kubeflow/kubeflow-gateway
   tlsMode: ""
-
 # ## Install with Cert Manager
 # See installation page in documentation for more information
 certManager:
   enabled: true
-
 # ## Install with limited namespace visibility
 # If you want to ensure seldon-core-controller can only have visibility
 #   to specifci namespaces you can set the controllerId
 controllerId: ""
-
 # Whether to create the webhook service, and webhookconfigurations on startup
 createResources: false
-
 # Default user id to add to all Pod Security Context as the default
 # Use this to ensure all container run as non-root by default
 # For openshift leave blank as usually this will be injected automatically on an openshift cluster
 # to all pods.
 defaultUserID: ""
-
 # ## Service Orchestrator (Executor)
 # The executor is the default service orchestrator which has superceeded the "Java Engine"
 executor:
@@ -51,10 +46,9 @@ executor:
   serviceAccount:
     name: default
   user: 8888
-# If you want to make available your own request logger for ELK integration you can set this
-# For more information see the Production Integration for Payload Request Logging with ELK in the docs
+  # If you want to make available your own request logger for ELK integration you can set this
+  # For more information see the Production Integration for Payload Request Logging with ELK in the docs
   defaultRequestLoggerEndpointPrefix: 'http://default-broker.'
-
 # ## Seldon Core Controller Manager Options
 image:
   pullPolicy: IfNotPresent
@@ -84,7 +78,6 @@ usageMetrics:
   enabled: false
 webhook:
   port: 443
-
 # ## Predictive Unit Values
 predictiveUnit:
   port: 9000
@@ -123,12 +116,10 @@ predictor_servers:
     rest:
       defaultImageVersion: "0.3"
       image: seldonio/xgboostserver_rest
-
 # ## Other
 # You can choose the crds to not be installed if you already installed them
 crd:
   create: true
-
 # Warning: credentials will be depricated soon, please use defaultEnvSecretRefName above
 # For more info please check the documentation 
 credentials:
@@ -137,9 +128,7 @@ credentials:
   s3:
     s3AccessKeyIDName: awsAccessKeyID
     s3SecretAccessKeyName: awsSecretAccessKey
-
 kubeflow: true
-
 # ## Engine parameters
 # Warning: Engine is being depricated in favour of Orchestrator
 # FOr more information please read the Upgrading section in the documentation

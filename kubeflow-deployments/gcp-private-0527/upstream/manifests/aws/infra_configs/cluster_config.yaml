@@ -15,14 +15,14 @@ metadata:
 # NodeGroup holds all configuration attributes that are specific to a nodegroup
 # You can have several node group in your cluster.
 nodeGroups:
-  - name: cpu-nodegroup
-    instanceType: m5.xlarge
-    desiredCapacity: 2
-    minSize: 0
-    maxSize: 3
-    volumeSize: 30
-
+- name: cpu-nodegroup
+  instanceType: m5.xlarge
+  desiredCapacity: 2
+  minSize: 0
+  maxSize: 3
+  volumeSize: 30
   # Example of GPU node group
+
 #   - name: gpu-nodegroup
 #     instanceType: p3.2xlarge
 #     ami: auto

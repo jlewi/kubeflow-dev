@@ -4,7 +4,6 @@ bases:
 - ../../base
 resources:
 - virtual-service.yaml
-
 configMapGenerator:
 - name: dex-parameters
   behavior: merge

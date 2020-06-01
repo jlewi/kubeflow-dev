@@ -31,11 +31,10 @@ spec:
     description: injects volume, volume mounts, env vars into PodDefault
     maintainers: []
     owners: []
-    keywords: 
-     - admission-webhook
-     - kubeflow
+    keywords:
+    - admission-webhook
+    - kubeflow
     links:
     - description: About
       url: https://github.com/kubeflow/kubeflow/tree/master/components/admission-webhook
   addOwnerRef: true
-

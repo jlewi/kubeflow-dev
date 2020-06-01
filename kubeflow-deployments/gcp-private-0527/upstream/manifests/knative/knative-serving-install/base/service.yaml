@@ -1,4 +1,3 @@
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -9,22 +8,21 @@ metadata:
   namespace: knative-serving
 spec:
   ports:
-    - name: http
-      port: 80
-      protocol: TCP
-      targetPort: 8012
-    - name: http2
-      port: 81
-      protocol: TCP
-      targetPort: 8013
-    - name: http-metrics
-      port: 9090
-      protocol: TCP
-      targetPort: 9090
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8012
+  - name: http2
+    port: 81
+    protocol: TCP
+    targetPort: 8013
+  - name: http-metrics
+    port: 9090
+    protocol: TCP
+    targetPort: 9090
   selector:
     app: activator
   type: ClusterIP
-
 ---
 apiVersion: v1
 kind: Service
@@ -36,13 +34,12 @@ metadata:
   namespace: knative-serving
 spec:
   ports:
-    - name: http-metrics
-      port: 9090
-      protocol: TCP
-      targetPort: 9090
+  - name: http-metrics
+    port: 9090
+    protocol: TCP
+    targetPort: 9090
   selector:
     app: controller
-
 ---
 apiVersion: v1
 kind: Service
@@ -54,9 +51,9 @@ metadata:
   namespace: knative-serving
 spec:
   ports:
-    - name: https-webhook
-      port: 443
-      targetPort: 8443
+  - name: https-webhook
+    port: 443
+    targetPort: 8443
   selector:
     role: webhook
 ---
@@ -70,17 +67,17 @@ metadata:
   namespace: knative-serving
 spec:
   ports:
-    - name: http
-      port: 8080
-      protocol: TCP
-      targetPort: 8080
-    - name: http-metrics
-      port: 9090
-      protocol: TCP
-      targetPort: 9090
-    - name: https-custom-metrics
-      port: 443
-      protocol: TCP
-      targetPort: 8443
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  - name: http-metrics
+    port: 9090
+    protocol: TCP
+    targetPort: 9090
+  - name: https-custom-metrics
+    port: 443
+    protocol: TCP
+    targetPort: 8443
   selector:
     app: autoscaler

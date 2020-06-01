@@ -3,33 +3,33 @@ kind: ClusterRole
 metadata:
   name: alb-ingress-controller
 rules:
-  - apiGroups:
-      - ""
-      - extensions
-    resources:
-      - configmaps
-      - endpoints
-      - events
-      - ingresses
-      - ingresses/status
-      - services
-    verbs:
-      - create
-      - get
-      - list
-      - update
-      - watch
-      - patch
-  - apiGroups:
-      - ""
-      - extensions
-    resources:
-      - nodes
-      - pods
-      - secrets
-      - services
-      - namespaces
-    verbs:
-      - get
-      - list
-      - watch
+- apiGroups:
+  - ""
+  - extensions
+  resources:
+  - configmaps
+  - endpoints
+  - events
+  - ingresses
+  - ingresses/status
+  - services
+  verbs:
+  - create
+  - get
+  - list
+  - update
+  - watch
+  - patch
+- apiGroups:
+  - ""
+  - extensions
+  resources:
+  - nodes
+  - pods
+  - secrets
+  - services
+  - namespaces
+  verbs:
+  - get
+  - list
+  - watch

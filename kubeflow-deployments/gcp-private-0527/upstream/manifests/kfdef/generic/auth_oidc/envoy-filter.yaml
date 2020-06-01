@@ -5,7 +5,7 @@ metadata:
   namespace: kubeflow
 spec:
   workloadLabels:
-  #include namespace in the label to avoid clashes across namespaces
+    #include namespace in the label to avoid clashes across namespaces
     istio: ingressgateway
   filters:
   - filterConfig:
@@ -15,7 +15,7 @@ spec:
           cluster: outbound|8080||authservice.istio-system.svc.cluster.local
           failureModeAllow: false
           timeout: 10s
-        authorizationRequest: 
+        authorizationRequest:
           allowedHeaders:
             patterns:
             - exact: "cookie"

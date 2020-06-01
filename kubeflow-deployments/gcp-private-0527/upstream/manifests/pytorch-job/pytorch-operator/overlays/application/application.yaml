@@ -25,7 +25,8 @@ spec:
   descriptor:
     type: "pytorch-operator"
     version: "v1"
-    description: "Pytorch-operator allows users to create and manage the \"PyTorchJob\" custom resource."
+    description: "Pytorch-operator allows users to create and manage the \"PyTorchJob\"
+      custom resource."
     maintainers:
     - name: Johnu George
       email: johnugeo@cisco.com

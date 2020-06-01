@@ -14,5 +14,3 @@ spec:
     namespace: knative-serving
   version: v1beta1
   versionPriority: 100
-
-

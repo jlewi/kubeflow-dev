@@ -4,7 +4,6 @@ bases:
 - ../../base
 patchesStrategicMerge:
 - kf-istio-resources.yaml
-
 configMapGenerator:
 - name: istio-parameters
   behavior: merge

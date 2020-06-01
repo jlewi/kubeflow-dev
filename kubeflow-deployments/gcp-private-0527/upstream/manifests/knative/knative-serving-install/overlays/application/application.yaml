@@ -23,8 +23,8 @@ spec:
     maintainers: []
     owners: []
     keywords:
-     - knative-serving-install
-     - kubeflow
+    - knative-serving-install
+    - kubeflow
     links:
     - description: About
       url: ""

@@ -1,0 +1,42 @@
+images:
+- gcr.io/gcp-private-dev/metacontroller/metacontroller:v0.3.0
+- gcr.io/gcp-private-dev/quay.io/jetstack/cert-manager-cainjector:v0.11.0
+- gcr.io/gcp-private-dev/quay.io/jetstack/cert-manager-controller:v0.11.0
+- gcr.io/gcp-private-dev/quay.io/jetstack/cert-manager-webhook:v0.11.0
+steps:
+- args:
+  - build
+  - -t
+  - gcr.io/gcp-private-dev/metacontroller/metacontroller:v0.3.0
+  - --build-arg=INPUT_IMAGE=metacontroller/metacontroller:v0.3.0
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/gcp-private-dev/quay.io/jetstack/cert-manager-cainjector:v0.11.0
+  - --build-arg=INPUT_IMAGE=quay.io/jetstack/cert-manager-cainjector:v0.11.0
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/gcp-private-dev/quay.io/jetstack/cert-manager-controller:v0.11.0
+  - --build-arg=INPUT_IMAGE=quay.io/jetstack/cert-manager-controller:v0.11.0
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/gcp-private-dev/quay.io/jetstack/cert-manager-webhook:v0.11.0
+  - --build-arg=INPUT_IMAGE=quay.io/jetstack/cert-manager-webhook:v0.11.0
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'

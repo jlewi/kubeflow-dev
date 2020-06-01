@@ -157,7 +157,7 @@ clean-build:
 # because they might get vars conflicts. Also order is important when applying them.
 .PHONY: hydrate
 hydrate: clean-build hydrate-gcp hydrate-asm hydrate-kubeflow
-	
+	#kpt fn run $(BUILD_DIR) --image=gcr.io/kubeflow-images-public/kustomize-fns/image-prefix@sha256:7c5b8e0834fc06a2a254307046a32266b0f22256ab34fc12e4beda827b02b628
 
 # Make sure the name isn't too long.
 .PHONY: check-name
@@ -189,6 +189,9 @@ create-ctxt:
 delete-gcp:
 	kubectl	--context=$(MGMTCTXT) delete -f $(BUILD_DIR)/gcp_config
 
+delete-kubeflow:
+	kubectl --context=$(KFCTXT) delete namespace kubeflow
+	
 #----------------------------------------------------------------------------------------------------------------------
 # Oneoff for quick development
 .PHONY: set-values
@@ -199,6 +202,8 @@ set-values:
 	kpt cfg set ./upstream/manifests/gcp gcloud.core.project gcp-private-dev
 	kpt cfg set ./upstream/manifests/gcp  gcloud.compute.zone us-central1-f
 	kpt cfg set ./upstream/manifests/gcp location us-central1
+
+	kpt cfg set ./upstream/manifests "image-prefix.kubeflow.org" '{"quay.io/jetstack": "gcr.io/gcp-project-dev/quay.io/jetstack"}'
 
 	kpt cfg set ./instance name gcp-private-0527   
 	kpt cfg set ./instance location us-central1

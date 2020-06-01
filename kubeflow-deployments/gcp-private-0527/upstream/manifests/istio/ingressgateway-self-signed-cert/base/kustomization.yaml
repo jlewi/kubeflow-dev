@@ -3,13 +3,11 @@ kind: Kustomization
 namespace: istio-system
 resources:
 - certificate.yaml
-
 configMapGenerator:
 - name: ingressgateway-self-signed-cert-parameters
   env: params.env
 generatorOptions:
   disableNameSuffixHash: true
-
 vars:
 - name: domain
   objref:

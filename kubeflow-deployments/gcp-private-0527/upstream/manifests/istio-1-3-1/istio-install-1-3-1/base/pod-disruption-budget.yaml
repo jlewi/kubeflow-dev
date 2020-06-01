@@ -11,9 +11,7 @@ spec:
     matchLabels:
       app: galley
       istio: galley
-
 ---
-
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
@@ -27,9 +25,7 @@ spec:
     matchLabels:
       app: istio-ingressgateway
       istio: ingressgateway
-
 ---
-
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
@@ -43,9 +39,7 @@ spec:
     matchLabels:
       app: pilot
       istio: pilot
-
 ---
-
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
@@ -62,9 +56,7 @@ spec:
       app: policy
       istio: mixer
       istio-mixer-type: policy
-
 ---
-
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
@@ -78,9 +70,7 @@ spec:
     matchLabels:
       app: sidecarInjectorWebhook
       istio: sidecar-injector
-
 ---
-
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:

@@ -5,5 +5,3 @@ metadata:
     istio-injection: enabled
     serving.knative.dev/release: "v0.11.1"
   name: knative-serving
-
-

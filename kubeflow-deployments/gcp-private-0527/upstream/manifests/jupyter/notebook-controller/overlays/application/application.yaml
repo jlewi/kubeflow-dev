@@ -12,16 +12,17 @@ spec:
       app.kubernetes.io/part-of: kubeflow
       app.kubernetes.io/version: v1.0.0
   componentKinds:
-    - group: core
-      kind: Service
-    - group: apps
-      kind: Deployment
-    - group: core
-      kind: ServiceAccount
+  - group: core
+    kind: Service
+  - group: apps
+    kind: Deployment
+  - group: core
+    kind: ServiceAccount
   descriptor:
     type: notebook-controller
     version: v1beta1
-    description: Notebooks controller allows users to create a custom resource \"Notebook\" (jupyter notebook).
+    description: Notebooks controller allows users to create a custom resource \"Notebook\"
+      (jupyter notebook).
     maintainers:
     - name: Lun-kai Hsu
       email: lunkai@google.com
@@ -29,10 +30,10 @@ spec:
     - name: Lun-kai Hsu
       email: lunkai@gogle.com
     keywords:
-     - jupyter
-     - notebook
-     - notebook-controller
-     - jupyterhub
+    - jupyter
+    - notebook
+    - notebook-controller
+    - jupyterhub
     links:
     - description: About
       url: "https://github.com/kubeflow/kubeflow/tree/master/components/notebook-controller"

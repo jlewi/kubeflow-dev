@@ -5,16 +5,16 @@ metadata:
 spec:
   template:
     spec:
-        containers:
-          - name: centraldashboard
-            env:
-            - name: USERID_HEADER
-              valueFrom:
-                configMapKeyRef:
-                  name: kubeflow-config
-                  key: userid-header
-            - name: USERID_PREFIX
-              valueFrom:
-                configMapKeyRef:
-                  name: kubeflow-config
-                  key: userid-prefix
+      containers:
+      - name: centraldashboard
+        env:
+        - name: USERID_HEADER
+          valueFrom:
+            configMapKeyRef:
+              name: kubeflow-config
+              key: userid-header
+        - name: USERID_PREFIX
+          valueFrom:
+            configMapKeyRef:
+              name: kubeflow-config
+              key: userid-prefix

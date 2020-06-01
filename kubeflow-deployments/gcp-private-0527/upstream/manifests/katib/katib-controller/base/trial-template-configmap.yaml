@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: trial-template
 data:
-  defaultTrialTemplate.yaml : |-
+  defaultTrialTemplate.yaml: |-
     apiVersion: batch/v1
     kind: Job
     metadata:

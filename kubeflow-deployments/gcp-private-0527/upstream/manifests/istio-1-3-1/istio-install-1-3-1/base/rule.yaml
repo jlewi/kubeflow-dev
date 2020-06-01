@@ -16,9 +16,7 @@ spec:
         number: 15004
       tls:
         mode: ISTIO_MUTUAL
-
 ---
-
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
@@ -37,9 +35,7 @@ spec:
         number: 15004
       tls:
         mode: ISTIO_MUTUAL
-
 ---
-
 apiVersion: config.istio.io/v1alpha2
 kind: rule
 metadata:
@@ -51,9 +47,7 @@ spec:
   - handler: kubernetesenv
     instances:
     - attributes
-
 ---
-
 apiVersion: config.istio.io/v1alpha2
 kind: rule
 metadata:
@@ -71,9 +65,7 @@ spec:
   match: (context.protocol == "http" || context.protocol == "grpc") && (match((request.useragent
     | "-"), "kube-probe*") == false) && (match((request.useragent | "-"), "Prometheus*")
     == false)
-
 ---
-
 apiVersion: config.istio.io/v1alpha2
 kind: rule
 metadata:
@@ -87,9 +79,7 @@ spec:
     - tcpbytesent
     - tcpbytereceived
   match: context.protocol == "tcp"
-
 ---
-
 apiVersion: config.istio.io/v1alpha2
 kind: rule
 metadata:
@@ -102,9 +92,7 @@ spec:
     instances:
     - tcpconnectionsclosed
   match: context.protocol == "tcp" && ((connection.event | "na") == "close")
-
 ---
-
 apiVersion: config.istio.io/v1alpha2
 kind: rule
 metadata:
@@ -117,9 +105,7 @@ spec:
     instances:
     - tcpconnectionsopened
   match: context.protocol == "tcp" && ((connection.event | "na") == "open")
-
 ---
-
 apiVersion: config.istio.io/v1alpha2
 kind: rule
 metadata:

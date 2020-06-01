@@ -45,10 +45,9 @@ spec:
     - name: Adhita Selvaraj
       email: adhita94@gmail.com
     keywords:
-     - centraldashboard
-     - kubeflow
+    - centraldashboard
+    - kubeflow
     links:
     - description: About
       url: https://github.com/kubeflow/kubeflow/tree/master/components/centraldashboard
   addOwnerRef: true
-

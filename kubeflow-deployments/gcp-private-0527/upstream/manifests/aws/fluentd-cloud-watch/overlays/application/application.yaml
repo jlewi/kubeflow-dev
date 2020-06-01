@@ -21,7 +21,8 @@ spec:
   descriptor:
     type: aws-fluentd-cloud-watch
     version: v1.7.3-debian-cloudwatch-1.0
-    description: A Fluentd DaemonSet which collects logs from Kubenertes and ship to CloudWatch.
+    description: A Fluentd DaemonSet which collects logs from Kubenertes and ship
+      to CloudWatch.
     maintainers:
     - name: Jiaxin Shan
       email: shjiaxin@amazon.com
@@ -29,11 +30,10 @@ spec:
     - name: Jiaxin Shan
       email: shjiaxin@amazon.com
     keywords:
-     - aws
-     - logs
-     - kubeflow
+    - aws
+    - logs
+    - kubeflow
     links:
     - description: About
       url: https://github.com/fluent/fluentd-kubernetes-daemonset
   addOwnerRef: true
-

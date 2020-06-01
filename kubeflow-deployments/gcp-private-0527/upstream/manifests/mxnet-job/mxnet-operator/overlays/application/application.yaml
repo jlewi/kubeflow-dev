@@ -21,7 +21,8 @@ spec:
   descriptor:
     type: "mxnet-operator"
     version: "v1beta1"
-    description: "mxnet-operator allows users to create and manage the \"MXJob\" custom resource."
+    description: "mxnet-operator allows users to create and manage the \"MXJob\" custom
+      resource."
     maintainers:
     - name: Lei Su
       email: suleisl2000@hotmail.com

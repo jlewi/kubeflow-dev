@@ -10,9 +10,9 @@ spec:
   selector:
     istio: cluster-local-gateway
   servers:
-    - hosts:
-        - '*'
-      port:
-        name: http
-        number: 80
-        protocol: HTTP
+  - hosts:
+    - '*'
+    port:
+      name: http
+      number: 80
+      protocol: HTTP

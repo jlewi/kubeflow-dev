@@ -50,8 +50,8 @@ spec:
                   description: Name of the object being referenced.
                   type: string
               required:
-                - kind
-                - name
+              - kind
+              - name
               type: object
             plugins:
               items:
@@ -115,8 +115,8 @@ spec:
                               type: string
                             type: array
                         required:
-                          - operator
-                          - scopeName
+                        - operator
+                        - scopeName
                         type: object
                       type: array
                   type: object
@@ -148,9 +148,9 @@ spec:
       type: object
   version: v1
   versions:
-    - name: v1
-      served: true
-      storage: true
-    - name: v1beta1
-      served: true
-      storage: false
+  - name: v1
+    served: true
+    storage: true
+  - name: v1beta1
+    served: true
+    storage: false

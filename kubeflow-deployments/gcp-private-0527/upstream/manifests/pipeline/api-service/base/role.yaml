@@ -34,4 +34,3 @@ rules:
   - pods
   verbs:
   - delete
-

@@ -19,7 +19,7 @@ spec:
       - name: dex-k8s-authenticator
         image: "mintel/dex-k8s-authenticator:1.2.0"
         imagePullPolicy: Always
-        args: [ "--config", "config.yaml" ]
+        args: ["--config", "config.yaml"]
         ports:
         - name: http
           containerPort: 5555
@@ -42,9 +42,7 @@ spec:
         - name: k8s-ca
           subPath: k8s_ca.pem
           mountPath: /app/k8s_ca.pem
-        resources:
-          {}
-
+        resources: {}
       volumes:
       - name: config
         configMap:

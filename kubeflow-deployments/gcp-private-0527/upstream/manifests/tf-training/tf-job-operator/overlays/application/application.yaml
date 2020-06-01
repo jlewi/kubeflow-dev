@@ -23,7 +23,8 @@ spec:
   descriptor:
     type: "tf-job-operator"
     version: "v1"
-    description: "Tf-operator allows users to create and manage the \"TFJob\" custom resource."
+    description: "Tf-operator allows users to create and manage the \"TFJob\" custom
+      resource."
     maintainers:
     - name: Richard Liu
       email: ricliu@google.com

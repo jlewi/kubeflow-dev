@@ -27,12 +27,11 @@ spec:
     - name: Jiaxin Shan
       email: shjiaxin@amazon.com
     keywords:
-     - aws
-     - istio
-     - mixer
-     - adaptor
+    - aws
+    - istio
+    - mixer
+    - adaptor
     links:
     - description: About
       url: https://github.com/istio/istio/tree/master/mixer/adapter
   addOwnerRef: true
-

@@ -6,8 +6,8 @@ spec:
   match:
     # Policy applies to all resources
     kinds:
-      - apiGroups: ["*"]
-        kinds: ["*"]
+    - apiGroups: ["*"]
+      kinds: ["*"]
   parameters:
     # Fill in the service account name
     usernames: ["system:serviceaccount:(NAMESPACE):(SERVICEACCOUNT)"]

@@ -19,10 +19,11 @@ spec:
     kind: ServiceAccount
   - group: xgboostjob.kubeflow.org
     kind: XGBoostJob
-  descriptor: 
+  descriptor:
     type: xgboostjob
     version: v1alpha1
-    description: XGBoost is an optimized distributed gradient boosting library designed to be highly efficient, flexible and portable
+    description: XGBoost is an optimized distributed gradient boosting library designed
+      to be highly efficient, flexible and portable
     maintainers:
     - name: Yuan Tang
       email: terrytangyuan@gmail.com
@@ -32,7 +33,7 @@ spec:
     - name: Yuan Tang
       email: terrytangyuan@gmail.com
     keywords:
-     - xgboost
+    - xgboost
     links:
     - description: About
       url: "https://xgboost.ai/about"

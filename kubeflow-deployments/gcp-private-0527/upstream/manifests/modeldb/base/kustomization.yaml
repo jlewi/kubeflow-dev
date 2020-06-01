@@ -1,5 +1,4 @@
 namePrefix: modeldb-
-
 resources:
 - artifact-store-deployment.yaml
 - artifact-store-service.yaml
@@ -14,7 +13,6 @@ resources:
 - secret.yaml
 - webapp-deplyment.yaml
 - webapp-service.yaml
-
 commonLabels:
   kustomize.component: modeldb
 images:

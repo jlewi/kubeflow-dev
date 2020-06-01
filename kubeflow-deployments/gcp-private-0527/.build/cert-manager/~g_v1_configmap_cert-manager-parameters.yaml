@@ -1,0 +1,13 @@
+apiVersion: v1
+data:
+  namespace: cert-manager
+kind: ConfigMap
+metadata:
+  annotations:
+    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-project-dev/quay.io/jetstack"}'
+  labels:
+    app.kubernetes.io/component: cert-manager
+    app.kubernetes.io/name: cert-manager
+    kustomize.component: cert-manager
+  name: cert-manager-parameters
+  namespace: cert-manager

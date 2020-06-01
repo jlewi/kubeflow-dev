@@ -1,0 +1,13 @@
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeRouterNAT
+metadata:
+  labels:
+    kf-name: gcp-private-0527
+  name: gcp-private-0527
+  namespace: gcp-private-dev
+spec:
+  natIpAllocateOption: AUTO_ONLY
+  region: us-central1
+  routerRef:
+    name: gcp-private-0527
+  sourceSubnetworkIpRangesToNat: ALL_SUBNETWORKS_ALL_IP_RANGES

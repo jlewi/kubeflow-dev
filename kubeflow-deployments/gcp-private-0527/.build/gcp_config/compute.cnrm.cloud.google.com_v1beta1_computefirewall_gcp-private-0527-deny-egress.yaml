@@ -1,0 +1,20 @@
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeFirewall
+metadata:
+  labels:
+    kf-name: gcp-private-0527
+  name: gcp-private-0527-deny-egress
+  namespace: gcp-private-dev
+spec:
+  deny:
+  - ports:
+    - 0-65535
+    protocol: tcp
+  description: Deny all internet traffic by default
+  destinationRanges:
+  - 0.0.0.0/0
+  direction: EGRESS
+  enableLogging: false
+  networkRef:
+    name: gcp-private-0527
+  priority: 1100

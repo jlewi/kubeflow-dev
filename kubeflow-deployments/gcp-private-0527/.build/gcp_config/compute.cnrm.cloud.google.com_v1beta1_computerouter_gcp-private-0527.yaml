@@ -1,0 +1,12 @@
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeRouter
+metadata:
+  labels:
+    kf-name: gcp-private-0527
+  name: gcp-private-0527
+  namespace: gcp-private-dev
+spec:
+  description: Router to allow outbound internet access
+  networkRef:
+    name: gcp-private-0527
+  region: us-central1

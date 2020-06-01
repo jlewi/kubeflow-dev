@@ -4,6 +4,7 @@ data:
   namespace: kubeflow
 kind: ConfigMap
 metadata:
+  annotations: {}
   labels:
     app: admission-webhook
     app.kubernetes.io/component: poddefaults

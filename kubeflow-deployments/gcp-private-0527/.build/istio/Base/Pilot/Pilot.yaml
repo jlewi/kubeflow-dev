@@ -1,3 +1,5 @@
+# Resources for Pilot component
+
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
@@ -18,7 +20,10 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: istio-pilot
+
 ---
+
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -59,11 +64,13 @@ rules:
   verbs: ["create", "get", "watch", "list", "update", "delete"]
 - apiGroups: ["certificates.k8s.io"]
   resources:
-  - "certificatesigningrequests"
-  - "certificatesigningrequests/approval"
-  - "certificatesigningrequests/status"
+    - "certificatesigningrequests"
+    - "certificatesigningrequests/approval"
+    - "certificatesigningrequests/status"
   verbs: ["update", "create", "get", "delete"]
 ---
+
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -76,10 +83,12 @@ roleRef:
   kind: ClusterRole
   name: istio-pilot-istio-system
 subjects:
-- kind: ServiceAccount
-  name: istio-pilot-service-account
-  namespace: istio-system
+  - kind: ServiceAccount
+    name: istio-pilot-service-account
+    namespace: istio-system
 ---
+
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -307,6 +316,8 @@ data:
                               cluster: out.galley.15019
                               timeout: 0.000s
 ---
+
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -315,9 +326,11 @@ metadata:
   labels:
     release: istio
 data:
+
   meshNetworks: |-
     # Network config
     networks: {}
+
   values.yaml: |-
     appNamespaces: []
     autoscaleEnabled: true
@@ -357,6 +370,7 @@ data:
     tolerations: []
     traceSampling: 1
     useMCP: true
+
   mesh: |-
     # Set enableTracing to false to disable request tracing.
     enableTracing: true
@@ -469,6 +483,8 @@ data:
       # Address where istio Pilot service is running
       discoveryAddress: istio-pilot.istio-system:15011
 ---
+
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -648,7 +664,10 @@ spec:
       - configMap:
           name: pilot-envoy-config
         name: pilot-envoy-config
+
 ---
+
+
 apiVersion: "authentication.istio.io/v1alpha1"
 kind: "MeshPolicy"
 metadata:
@@ -660,6 +679,8 @@ spec:
   - mtls:
       mode: PERMISSIVE
 ---
+
+
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
@@ -677,6 +698,8 @@ spec:
       release: istio
       istio: pilot
 ---
+
+
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
@@ -705,12 +728,16 @@ rules:
   verbs:
   - get
 ---
+
+
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: promsd
   namespace: istio-system
 ---
+
+
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
@@ -727,6 +754,8 @@ subjects:
   name: promsd
   namespace: istio-system
 ---
+
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -754,6 +783,8 @@ data:
         action: keep
         regex: istio-pilot;http-monitoring
 ---
+
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -776,6 +807,8 @@ data:
             + pilot_eds_no_instances + pilot_endpoint_not_ready
             + pilot_total_xds_internal_errors + pilot_total_xds_rejects
 ---
+
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -795,6 +828,8 @@ data:
     - metric: pilot_errors_internal
       type: counter
 ---
+
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -812,6 +847,8 @@ spec:
   selector:
     app: promsd
 ---
+
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -955,6 +992,8 @@ spec:
                 values:
                 - s390x
 ---
+
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -977,6 +1016,8 @@ spec:
   selector:
     istio: pilot
 ---
+
+
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -986,6 +1027,8 @@ metadata:
     app: pilot
     release: istio
 ---
+
+
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
@@ -993,27 +1036,29 @@ metadata:
   namespace: istio-system
 spec:
   configPatches:
-  - applyTo: HTTP_FILTER
-    match:
-      context: ANY # inbound, outbound, and gateway
-      proxy:
-        proxyVersion: '1\.4.*'
-      listener:
-        filterChain:
-          filter:
-            name: "envoy.http_connection_manager"
-    patch:
-      operation: INSERT_BEFORE
-      value:
-        name: envoy.filters.http.wasm
-        config:
+    - applyTo: HTTP_FILTER
+      match:
+        context: ANY # inbound, outbound, and gateway
+        proxy:
+          proxyVersion: '1\.4.*'
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.http_connection_manager"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: envoy.filters.http.wasm
           config:
-            configuration: envoy.wasm.metadata_exchange
-            vm_config:
-              runtime: envoy.wasm.runtime.null
-              code:
-                inline_string: envoy.wasm.metadata_exchange
+            config:
+              configuration: envoy.wasm.metadata_exchange
+              vm_config:
+                runtime: envoy.wasm.runtime.null
+                code:
+                  inline_string: envoy.wasm.metadata_exchange
 ---
+
+
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
@@ -1021,78 +1066,79 @@ metadata:
   namespace: istio-system
 spec:
   configPatches:
-  - applyTo: HTTP_FILTER
-    match:
-      context: SIDECAR_OUTBOUND
-      proxy:
-        proxyVersion: '1\.4.*'
-      listener:
-        filterChain:
-          filter:
-            name: "envoy.http_connection_manager"
-            subFilter:
-              name: "envoy.router"
-    patch:
-      operation: INSERT_BEFORE
-      value:
-        name: envoy.filters.http.wasm
-        config:
+    - applyTo: HTTP_FILTER
+      match:
+        context: SIDECAR_OUTBOUND
+        proxy:
+          proxyVersion: '1\.4.*'
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.http_connection_manager"
+              subFilter:
+                name: "envoy.router"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: envoy.filters.http.wasm
           config:
-            root_id: stackdriver_outbound
-            configuration: |
-              {"enable_mesh_edges_reporting": true, "disable_server_access_logging": false, "meshEdgesReportingDuration": "600s"}
-            vm_config:
-              vm_id: stackdriver_outbound
-              runtime: envoy.wasm.runtime.null
-              code:
-                inline_string: envoy.wasm.null.stackdriver
-  - applyTo: HTTP_FILTER
-    match:
-      context: SIDECAR_INBOUND
-      proxy:
-        proxyVersion: '1\.4.*'
-      listener:
-        filterChain:
-          filter:
-            name: "envoy.http_connection_manager"
-            subFilter:
-              name: "envoy.router"
-    patch:
-      operation: INSERT_BEFORE
-      value:
-        name: envoy.filters.http.wasm
-        config:
+            config:
+              root_id: stackdriver_outbound
+              configuration: |
+                {"enable_mesh_edges_reporting": true, "disable_server_access_logging": false, "meshEdgesReportingDuration": "600s"}
+              vm_config:
+                vm_id: stackdriver_outbound
+                runtime: envoy.wasm.runtime.null
+                code:
+                  inline_string: envoy.wasm.null.stackdriver
+    - applyTo: HTTP_FILTER
+      match:
+        context: SIDECAR_INBOUND
+        proxy:
+          proxyVersion: '1\.4.*'
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.http_connection_manager"
+              subFilter:
+                name: "envoy.router"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: envoy.filters.http.wasm
           config:
-            root_id: stackdriver_inbound
-            configuration: |
-              {"enable_mesh_edges_reporting": true, "disable_server_access_logging": false, "meshEdgesReportingDuration": "600s"}
-            vm_config:
-              vm_id: stackdriver_inbound
-              runtime: envoy.wasm.runtime.null
-              code:
-                inline_string: envoy.wasm.null.stackdriver
-  - applyTo: HTTP_FILTER
-    match:
-      context: GATEWAY
-      proxy:
-        proxyVersion: '1\.4.*'
-      listener:
-        filterChain:
-          filter:
-            name: "envoy.http_connection_manager"
-            subFilter:
-              name: "envoy.router"
-    patch:
-      operation: INSERT_BEFORE
-      value:
-        name: envoy.filters.http.wasm
-        config:
+            config:
+              root_id: stackdriver_inbound
+              configuration: |
+                {"enable_mesh_edges_reporting": true, "disable_server_access_logging": false, "meshEdgesReportingDuration": "600s"}
+              vm_config:
+                vm_id: stackdriver_inbound
+                runtime: envoy.wasm.runtime.null
+                code:
+                  inline_string: envoy.wasm.null.stackdriver
+    - applyTo: HTTP_FILTER
+      match:
+        context: GATEWAY
+        proxy:
+          proxyVersion: '1\.4.*'
+        listener:
+          filterChain:
+            filter:
+              name: "envoy.http_connection_manager"
+              subFilter:
+                name: "envoy.router"
+      patch:
+        operation: INSERT_BEFORE
+        value:
+          name: envoy.filters.http.wasm
           config:
-            root_id: stackdriver_outbound
-            configuration: |
-              {"enable_mesh_edges_reporting": true, "disable_server_access_logging": false, "meshEdgesReportingDuration": "600s", "disable_host_header_fallback": true}
-            vm_config:
-              vm_id: stackdriver_outbound
-              runtime: envoy.wasm.runtime.null
-              code:
-                inline_string: envoy.wasm.null.stackdriver
+            config:
+              root_id: stackdriver_outbound
+              configuration: |
+                {"enable_mesh_edges_reporting": true, "disable_server_access_logging": false, "meshEdgesReportingDuration": "600s", "disable_host_header_fallback": true}
+              vm_config:
+                vm_id: stackdriver_outbound
+                runtime: envoy.wasm.runtime.null
+                code:
+                  inline_string: envoy.wasm.null.stackdriver
+---

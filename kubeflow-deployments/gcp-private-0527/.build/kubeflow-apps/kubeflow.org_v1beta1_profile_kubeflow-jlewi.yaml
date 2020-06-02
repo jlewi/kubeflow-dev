@@ -1,6 +1,9 @@
 apiVersion: kubeflow.org/v1beta1
 kind: Profile
 metadata:
+  annotations:
+    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
   name: kubeflow-jlewi
   namespace: kubeflow
 spec:

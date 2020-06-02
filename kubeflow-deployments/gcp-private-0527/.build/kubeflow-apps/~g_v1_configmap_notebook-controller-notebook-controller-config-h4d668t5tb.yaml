@@ -4,6 +4,9 @@ data:
   USE_ISTIO: "true"
 kind: ConfigMap
 metadata:
+  annotations:
+    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
   labels:
     app: notebook-controller
     app.kubernetes.io/component: notebook-controller

@@ -1,0 +1,11 @@
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeNetwork
+metadata:
+  labels:
+    kf-name: gcp-private-0527
+  name: jl-0601
+  namespace: gcp-private-dev
+spec:
+  autoCreateSubnetworks: false
+  deleteDefaultRoutesOnCreate: true
+  routingMode: GLOBAL

@@ -1,5 +1,3 @@
-# Resources for Galley component
-
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -7,49 +5,39 @@ metadata:
   labels:
     release: istio
 rules:
-  # For reading Istio resources
-  - apiGroups: [
-    "authentication.istio.io",
-    "config.istio.io",
-    "networking.istio.io",
-    "rbac.istio.io",
-    "security.istio.io"]
-    resources: ["*"]
-    verbs: ["get", "list", "watch"]
-    # For updating Istio resource statuses
-  - apiGroups: [
-    "authentication.istio.io",
-    "config.istio.io",
-    "networking.istio.io",
-    "rbac.istio.io",
-    "security.istio.io"]
-    resources: ["*/status"]
-    verbs: ["update"]
-  - apiGroups: ["admissionregistration.k8s.io"]
-    resources: ["validatingwebhookconfigurations"]
-    verbs: ["*"]
-  - apiGroups: ["extensions","apps"]
-    resources: ["deployments"]
-    resourceNames: ["istio-galley"]
-    verbs: ["get"]
-  - apiGroups: [""]
-    resources: ["pods", "nodes", "services", "endpoints", "namespaces"]
-    verbs: ["get", "list", "watch"]
-  - apiGroups: ["extensions"]
-    resources: ["ingresses"]
-    verbs: ["get", "list", "watch"]
-  - apiGroups: [""]
-    resources: ["namespaces/finalizers"]
-    verbs: ["update"]
-  - apiGroups: ["apiextensions.k8s.io"]
-    resources: ["customresourcedefinitions"]
-    verbs: ["get", "list", "watch"]
-  - apiGroups: ["rbac.authorization.k8s.io"]
-    resources: ["clusterroles"]
-    verbs: ["get", "list", "watch"]
+# For reading Istio resources
+- apiGroups: ["authentication.istio.io", "config.istio.io", "networking.istio.io",
+    "rbac.istio.io", "security.istio.io"]
+  resources: ["*"]
+  verbs: ["get", "list", "watch"]
+  # For updating Istio resource statuses
+- apiGroups: ["authentication.istio.io", "config.istio.io", "networking.istio.io",
+    "rbac.istio.io", "security.istio.io"]
+  resources: ["*/status"]
+  verbs: ["update"]
+- apiGroups: ["admissionregistration.k8s.io"]
+  resources: ["validatingwebhookconfigurations"]
+  verbs: ["*"]
+- apiGroups: ["extensions", "apps"]
+  resources: ["deployments"]
+  resourceNames: ["istio-galley"]
+  verbs: ["get"]
+- apiGroups: [""]
+  resources: ["pods", "nodes", "services", "endpoints", "namespaces"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["extensions"]
+  resources: ["ingresses"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["namespaces/finalizers"]
+  verbs: ["update"]
+- apiGroups: ["apiextensions.k8s.io"]
+  resources: ["customresourcedefinitions"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: ["clusterroles"]
+  verbs: ["get", "list", "watch"]
 ---
-
-
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -61,12 +49,10 @@ roleRef:
   kind: ClusterRole
   name: istio-galley-istio-system
 subjects:
-  - kind: ServiceAccount
-    name: istio-galley-service-account
-    namespace: istio-system
+- kind: ServiceAccount
+  name: istio-galley-service-account
+  namespace: istio-system
 ---
-
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -189,8 +175,6 @@ data:
                           stat_prefix: sdsstat
             require_client_certificate: true
 ---
-
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -202,8 +186,6 @@ data:
   mesh: |-
     {}
 ---
-
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -212,7 +194,7 @@ metadata:
   labels:
     release: istio
 data:
-  validatingwebhookconfiguration.yaml: |-    
+  validatingwebhookconfiguration.yaml: |-
     apiVersion: admissionregistration.k8s.io/v1beta1
     kind: ValidatingWebhookConfiguration
     metadata:
@@ -338,8 +320,6 @@ data:
         failurePolicy: Fail
         sideEffects: None
 ---
-
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -534,10 +514,7 @@ spec:
       - configMap:
           name: istio-mesh-galley
         name: mesh-config
-
 ---
-
-
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
@@ -555,8 +532,6 @@ spec:
       release: istio
       istio: galley
 ---
-
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -580,8 +555,6 @@ spec:
   selector:
     istio: galley
 ---
-
-
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -590,4 +563,3 @@ metadata:
   labels:
     app: galley
     release: istio
----

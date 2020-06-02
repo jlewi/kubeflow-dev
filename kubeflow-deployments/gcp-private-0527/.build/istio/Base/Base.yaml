@@ -1,5 +1,3 @@
-# Resources for Base component
-
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -23,8 +21,6 @@ rules:
   resources: ["replicasets"]
   verbs: ["get", "list", "watch"]
 ---
-
-
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -37,12 +33,10 @@ roleRef:
   kind: ClusterRole
   name: istio-reader-istio-system
 subjects:
-  - kind: ServiceAccount
-    name: istio-reader-service-account
-    namespace: istio-system
+- kind: ServiceAccount
+  name: istio-reader-service-account
+  namespace: istio-system
 ---
-
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -115,8 +109,6 @@ spec:
     served: true
     storage: true
 ---
-
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -199,8 +191,6 @@ spec:
     served: true
     storage: true
 ---
-
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -965,8 +955,6 @@ spec:
     served: true
     storage: true
 ---
-
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -1258,8 +1246,6 @@ spec:
     served: true
     storage: true
 ---
-
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -1404,8 +1390,6 @@ spec:
     served: true
     storage: true
 ---
-
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -1495,8 +1479,6 @@ spec:
     served: true
     storage: true
 ---
-
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -1704,8 +1686,6 @@ spec:
     served: true
     storage: true
 ---
-
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -2433,8 +2413,6 @@ spec:
     served: true
     storage: true
 ---
-
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -3161,8 +3139,6 @@ spec:
     served: true
     storage: true
 ---
-
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -3239,8 +3215,6 @@ spec:
     served: true
     storage: true
 ---
-
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -3321,8 +3295,6 @@ spec:
     served: true
     storage: true
 ---
-
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -3407,8 +3379,6 @@ spec:
     served: true
     storage: true
 ---
-
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -3560,8 +3530,6 @@ spec:
     served: true
     storage: true
 ---
-
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -3702,8 +3670,6 @@ spec:
     served: true
     storage: true
 ---
-
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -3900,8 +3866,6 @@ spec:
     served: true
     storage: true
 ---
-
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -4009,8 +3973,6 @@ spec:
     served: true
     storage: true
 ---
-
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -4717,8 +4679,6 @@ spec:
     served: true
     storage: true
 ---
-
-
 kind: CustomResourceDefinition
 apiVersion: apiextensions.k8s.io/v1beta1
 metadata:
@@ -4743,12 +4703,10 @@ spec:
   subresources:
     status: {}
   versions:
-    - name: v1alpha2
-      served: true
-      storage: true
+  - name: v1alpha2
+    served: true
+    storage: true
 ---
-
-
 kind: CustomResourceDefinition
 apiVersion: apiextensions.k8s.io/v1beta1
 metadata:
@@ -4773,12 +4731,10 @@ spec:
   subresources:
     status: {}
   versions:
-    - name: v1alpha2
-      served: true
-      storage: true
+  - name: v1alpha2
+    served: true
+    storage: true
 ---
-
-
 kind: CustomResourceDefinition
 apiVersion: apiextensions.k8s.io/v1beta1
 metadata:
@@ -4803,12 +4759,10 @@ spec:
   subresources:
     status: {}
   versions:
-    - name: v1alpha2
-      served: true
-      storage: true
+  - name: v1alpha2
+    served: true
+    storage: true
 ---
-
-
 kind: CustomResourceDefinition
 apiVersion: apiextensions.k8s.io/v1beta1
 metadata:
@@ -4833,12 +4787,10 @@ spec:
   subresources:
     status: {}
   versions:
-    - name: v1alpha2
-      served: true
-      storage: true
+  - name: v1alpha2
+    served: true
+    storage: true
 ---
-
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -4958,8 +4910,6 @@ spec:
     served: true
     storage: true
 ---
-
-
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -5094,8 +5044,6 @@ spec:
     served: true
     storage: true
 ---
-
-
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -5104,8 +5052,6 @@ metadata:
     istio-operator-managed: Reconcile
     istio-injection: disabled
 ---
-
-
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -5114,4 +5060,3 @@ metadata:
   labels:
     app: istio-reader
     release: istio
----

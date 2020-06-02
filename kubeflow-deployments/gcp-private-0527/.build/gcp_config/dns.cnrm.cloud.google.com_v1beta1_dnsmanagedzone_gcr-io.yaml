@@ -11,5 +11,5 @@ spec:
   privateVisibilityConfig:
     networks:
     - networkRef:
-        name: gcp-private-0527
+        name: jl-0601
   visibility: private

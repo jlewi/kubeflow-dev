@@ -1,6 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  annotations:
+    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
   labels:
     app: jupyter-web-app
     kustomize.component: jupyter-web-app
@@ -15,6 +18,8 @@ spec:
   template:
     metadata:
       annotations:
+        image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+          "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
         sidecar.istio.io/inject: "false"
       labels:
         app: jupyter-web-app

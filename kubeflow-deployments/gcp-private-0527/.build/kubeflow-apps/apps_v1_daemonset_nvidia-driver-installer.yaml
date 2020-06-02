@@ -1,6 +1,9 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
+  annotations:
+    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
   labels:
     app.kubernetes.io/component: gpu-driver
     app.kubernetes.io/name: gpu-driver
@@ -16,6 +19,9 @@ spec:
       kustomize.component: gpu-driver
   template:
     metadata:
+      annotations:
+        image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+          "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
       labels:
         app.kubernetes.io/component: gpu-driver
         app.kubernetes.io/name: gpu-driver

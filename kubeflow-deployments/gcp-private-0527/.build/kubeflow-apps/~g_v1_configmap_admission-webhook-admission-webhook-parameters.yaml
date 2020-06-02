@@ -4,7 +4,9 @@ data:
   namespace: kubeflow
 kind: ConfigMap
 metadata:
-  annotations: {}
+  annotations:
+    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
   labels:
     app: admission-webhook
     app.kubernetes.io/component: poddefaults

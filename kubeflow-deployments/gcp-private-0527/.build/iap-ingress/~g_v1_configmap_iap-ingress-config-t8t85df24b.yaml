@@ -1,0 +1,16 @@
+apiVersion: v1
+data:
+  appName: jl-0601
+  hostname: jl-0601.endpoints.gcp-private-dev.cloud.goog
+  ingressName: envoy-ingress
+  ipName: jl-0601-ip
+  istioNamespace: istio-system
+  oauthSecretName: kubeflow-oauth
+  project: gcp-private-dev
+  tlsSecretName: envoy-ingress-tls
+kind: ConfigMap
+metadata:
+  labels:
+    kustomize.component: iap-ingress
+  name: iap-ingress-config-t8t85df24b
+  namespace: istio-system

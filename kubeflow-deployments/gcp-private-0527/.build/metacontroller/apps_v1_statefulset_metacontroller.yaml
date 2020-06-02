@@ -1,6 +1,9 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
+  annotations:
+    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
   labels:
     app: metacontroller
     kustomize.component: metacontroller
@@ -16,6 +19,8 @@ spec:
   template:
     metadata:
       annotations:
+        image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+          "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
         sidecar.istio.io/inject: "false"
       labels:
         app: metacontroller
@@ -27,7 +32,7 @@ spec:
         - --logtostderr
         - -v=4
         - --discovery-interval=20s
-        image: metacontroller/metacontroller:v0.3.0
+        image: gcr.io/gcp-private-dev/metacontroller/metacontroller:v0.3.0
         imagePullPolicy: Always
         name: metacontroller
         ports:

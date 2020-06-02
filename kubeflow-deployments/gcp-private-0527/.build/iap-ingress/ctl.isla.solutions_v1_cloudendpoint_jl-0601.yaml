@@ -1,0 +1,12 @@
+apiVersion: ctl.isla.solutions/v1
+kind: CloudEndpoint
+metadata:
+  labels:
+    kustomize.component: iap-ingress
+  name: jl-0601
+  namespace: istio-system
+spec:
+  project: gcp-private-dev
+  targetIngress:
+    name: envoy-ingress
+    namespace: istio-system

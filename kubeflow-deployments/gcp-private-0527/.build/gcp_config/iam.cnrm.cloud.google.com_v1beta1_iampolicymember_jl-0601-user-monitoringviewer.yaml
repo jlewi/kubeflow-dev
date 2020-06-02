@@ -1,0 +1,14 @@
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  labels:
+    kf-name: gcp-private-0527
+  name: jl-0601-user-monitoringviewer
+  namespace: gcp-private-dev
+spec:
+  member: serviceAccount:jl-0601-user@gcp-private-dev.iam.gserviceaccount.com
+  resourceRef:
+    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+    external: projects/gcp-private-dev
+    kind: Project
+  role: roles/monitoring.viewer

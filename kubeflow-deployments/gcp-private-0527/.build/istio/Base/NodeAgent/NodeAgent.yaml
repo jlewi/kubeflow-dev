@@ -1,5 +1,3 @@
-# Resources for NodeAgent component
-
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -12,8 +10,6 @@ rules:
   resources: ["configmaps"]
   verbs: ["get"]
 ---
-
-
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -26,12 +22,10 @@ roleRef:
   kind: ClusterRole
   name: istio-nodeagent-istio-system
 subjects:
-  - kind: ServiceAccount
-    name: istio-nodeagent-service-account
-    namespace: istio-system
+- kind: ServiceAccount
+  name: istio-nodeagent-service-account
+  namespace: istio-system
 ---
-
-
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -56,35 +50,35 @@ spec:
     spec:
       serviceAccountName: istio-nodeagent-service-account
       containers:
-        - name: nodeagent
-          image: "gcr.io/gke-release/asm/node-agent-k8s:1.4.7-asm.0"
-          imagePullPolicy: IfNotPresent
-          args:
-          volumeMounts:
-            - mountPath: /var/run/sds
-              name: sdsudspath
-          env:
-            - name: CA_ADDR
-              value: "meshca.googleapis.com:443"
-            - name: CA_PROVIDER
-              value: "GoogleCA"
-            - name: GKE_CLUSTER_URL
-              value: "https://container.googleapis.com/v1/projects/gcp-private-dev/locations/us-central1/clusters/gcp-private-0527"
-            - name: PLUGINS
-              value: "GoogleTokenExchange"
-            - name: VALID_TOKEN
-              value: "true"
-            - name: "TRUST_DOMAIN"
-              value: "gcp-private-dev.svc.id.goog"
-            - name: NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
+      - name: nodeagent
+        image: "gcr.io/gke-release/asm/node-agent-k8s:1.4.7-asm.0"
+        imagePullPolicy: IfNotPresent
+        args:
+        volumeMounts:
+        - mountPath: /var/run/sds
+          name: sdsudspath
+        env:
+        - name: CA_ADDR
+          value: "meshca.googleapis.com:443"
+        - name: CA_PROVIDER
+          value: "GoogleCA"
+        - name: GKE_CLUSTER_URL
+          value: "https://container.googleapis.com/v1/projects/gcp-private-dev/locations/us-central1/clusters/jl-0601"
+        - name: PLUGINS
+          value: "GoogleTokenExchange"
+        - name: VALID_TOKEN
+          value: "true"
+        - name: "TRUST_DOMAIN"
+          value: "gcp-private-dev.svc.id.goog"
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
       volumes:
-        - name: sdsudspath
-          hostPath:
-            path: /var/run/sds
-      affinity:      
+      - name: sdsudspath
+        hostPath:
+          path: /var/run/sds
+      affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
@@ -116,12 +110,10 @@ spec:
               - key: beta.kubernetes.io/arch
                 operator: In
                 values:
-                - s390x      
+                - s390x
   updateStrategy:
     type: RollingUpdate
 ---
-
-
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -130,4 +122,3 @@ metadata:
   labels:
     app: istio-nodeagent
     release: istio
----

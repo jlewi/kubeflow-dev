@@ -1,0 +1,20 @@
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeFirewall
+metadata:
+  labels:
+    kf-name: gcp-private-0527
+  name: jl-0601-cm
+  namespace: gcp-private-dev
+spec:
+  allow:
+  - ports:
+    - "443"
+    - "6443"
+    protocol: tcp
+  description: Allow traffic to cert manager webhook
+  direction: INGRESS
+  enableLogging: true
+  networkRef:
+    name: jl-0601
+  sourceRanges:
+  - 172.16.0.32/28

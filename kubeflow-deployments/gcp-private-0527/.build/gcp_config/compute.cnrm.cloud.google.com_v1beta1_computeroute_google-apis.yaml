@@ -8,5 +8,5 @@ metadata:
 spec:
   destRange: 199.36.153.4/30
   networkRef:
-    name: gcp-private-0527
+    name: jl-0601
   nextHopGateway: default-internet-gateway

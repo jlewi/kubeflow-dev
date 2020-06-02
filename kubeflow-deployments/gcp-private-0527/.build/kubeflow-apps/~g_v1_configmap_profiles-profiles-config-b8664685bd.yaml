@@ -4,6 +4,9 @@ data:
   gcp-sa: jl-stack-0409-204015-user@jlewi-dev.iam.gserviceaccount.com
 kind: ConfigMap
 metadata:
+  annotations:
+    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
   labels:
     kustomize.component: profiles
   name: profiles-profiles-config-b8664685bd

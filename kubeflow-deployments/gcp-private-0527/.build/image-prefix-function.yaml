@@ -1,15 +1,15 @@
 # Define a transform to change all the image prefixes to use images from a different registry
-apiVersion: v1alpha1
+apiVersion: v1alpha1 # Define a transform to change all the image prefixes to use images from a different registry
 kind: ImagePrefix
 metadata:
+  name: use-mirror-images-gcr
   annotations:
     config.kubernetes.io/function: |
       container:
         image: gcr.io/kubeflow-images-public/kpt-fns:v1.0-rc.3-58-g616f986-dirty
-  name: use-mirror-images-gcr
 spec:
   imageMappings:
-    - src: quay.io/jetstack
-      dest: gcr.io/gcp-private-dev/jetstack  # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
-    - src: gcr.io/kubeflow-images-public
-      dest: gcr.io/gcp-private-dev  # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+  - src: quay.io/jetstack
+    dest: gcr.io/gcp-private-dev/jetstack # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+  - src: gcr.io/kubeflow-images-public
+    dest: gcr.io/gcp-private-dev # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}

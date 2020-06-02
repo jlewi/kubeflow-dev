@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    kustomize.component: iap-ingress
   name: iap-enabler
   namespace: istio-system
+  labels:
+    kustomize.component: iap-ingress
 spec:
   replicas: 1
   selector:
@@ -13,11 +13,15 @@ spec:
   template:
     metadata:
       labels:
-        kustomize.component: iap-ingress
         service: iap-enabler
+        kustomize.component: iap-ingress
     spec:
+      restartPolicy: Always
+      serviceAccountName: kf-admin
       containers:
-      - command:
+      - name: iap
+        image: gcr.io/gcp-private-dev/ingress-setup:latest
+        command:
         - bash
         - /var/envoy-config/setup_backend.sh
         env:
@@ -31,14 +35,10 @@ spec:
           value: http://localhost:8001
         - name: USE_ISTIO
           value: "true"
-        image: gcr.io/kubeflow-images-public/ingress-setup:latest
-        name: iap
         volumeMounts:
-        - mountPath: /var/envoy-config/
-          name: config-volume
-      restartPolicy: Always
-      serviceAccountName: kf-admin
+        - name: config-volume
+          mountPath: /var/envoy-config/
       volumes:
-      - configMap:
+      - name: config-volume
+        configMap:
           name: envoy-config
-        name: config-volume

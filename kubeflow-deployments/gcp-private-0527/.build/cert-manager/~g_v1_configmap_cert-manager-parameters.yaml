@@ -1,14 +1,14 @@
 apiVersion: v1
-data:
-  namespace: cert-manager
 kind: ConfigMap
 metadata:
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
+  name: cert-manager-parameters
+  namespace: cert-manager
   labels:
     app.kubernetes.io/component: cert-manager
     app.kubernetes.io/name: cert-manager
     kustomize.component: cert-manager
-  name: cert-manager-parameters
+  annotations:
+    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
+data:
   namespace: cert-manager

@@ -1,17 +1,17 @@
-aggregationRule:
-  clusterRoleSelectors:
-  - matchLabels:
-      rbac.authorization.kubeflow.org/aggregate-to-kubeflow-tfjobs-admin: "true"
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
+  name: kubeflow-tfjobs-admin
   labels:
     app.kubernetes.io/component: tfjob
     app.kubernetes.io/name: tf-job-operator
     kustomize.component: tf-job-operator
     rbac.authorization.kubeflow.org/aggregate-to-kubeflow-admin: "true"
-  name: kubeflow-tfjobs-admin
+  annotations:
+    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
+aggregationRule:
+  clusterRoleSelectors:
+  - matchLabels:
+      rbac.authorization.kubeflow.org/aggregate-to-kubeflow-tfjobs-admin: "true"
 rules: []

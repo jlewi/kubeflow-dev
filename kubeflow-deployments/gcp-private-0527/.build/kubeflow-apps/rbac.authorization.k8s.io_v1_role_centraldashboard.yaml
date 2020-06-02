@@ -1,31 +1,31 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
+  name: centraldashboard
+  namespace: kubeflow
   labels:
     app: centraldashboard
     app.kubernetes.io/component: centraldashboard
     app.kubernetes.io/name: centraldashboard
-  name: centraldashboard
-  namespace: kubeflow
+  annotations:
+    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 rules:
-- apiGroups:
-  - ""
-  - app.k8s.io
-  resources:
+- resources:
   - applications
   - pods
   - pods/exec
   - pods/log
+  apiGroups:
+  - ""
+  - app.k8s.io
   verbs:
   - get
   - list
   - watch
-- apiGroups:
-  - ""
-  resources:
+- resources:
   - secrets
+  apiGroups:
+  - ""
   verbs:
   - get

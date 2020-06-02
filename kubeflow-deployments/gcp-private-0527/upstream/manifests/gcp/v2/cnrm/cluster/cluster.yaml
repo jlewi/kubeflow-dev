@@ -17,10 +17,10 @@
 apiVersion: container.cnrm.cloud.google.com/v1beta1
 kind: ContainerCluster
 metadata:
-  clusterName: "gcp-private-dev/us-central1-f/gcp-private-0527" # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"},{"name":"name","value":"gcp-private-0527"},{"name":"gcloud.compute.zone","value":"us-central1-f"}]}}
+  clusterName: "gcp-private-dev/us-central1-f/jl-0601" # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"},{"name":"name","value":"jl-0601"},{"name":"gcloud.compute.zone","value":"us-central1-f"}]}}
   labels:
-    mesh_id: "gcp-private-dev_us-central1-f_gcp-private-0527" # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"},{"name":"name","value":"gcp-private-0527"},{"name":"gcloud.compute.zone","value":"us-central1-f"}]}}
-  name: gcp-private-0527 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}
+    mesh_id: "gcp-private-dev_us-central1-f_jl-0601" # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"},{"name":"name","value":"jl-0601"},{"name":"gcloud.compute.zone","value":"us-central1-f"}]}}
+  name: jl-0601 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"jl-0601"}}}
 spec:
   initialNodeCount: 2
   clusterAutoscaling:
@@ -31,7 +31,7 @@ spec:
       - https://www.googleapis.com/auth/monitoring
       - https://www.googleapis.com/auth/devstorage.read_only
       serviceAccountRef:
-        name: gcp-private-0527-vm # {"type":"string","x-kustomize":{"partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
+        name: jl-0601-vm # {"type":"string","x-kustomize":{"partialSetters":[{"name":"name","value":"jl-0601"}]}}
     resourceLimits:
     - resourceType: cpu
       maximum: 128
@@ -55,6 +55,6 @@ spec:
     - https://www.googleapis.com/auth/monitoring
     - https://www.googleapis.com/auth/devstorage.read_only
     serviceAccountRef:
-      name: gcp-private-0527-vm # {"type":"string","x-kustomize":{"partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
+      name: jl-0601-vm # {"type":"string","x-kustomize":{"partialSetters":[{"name":"name","value":"jl-0601"}]}}
     workloadMetadataConfig:
       nodeMetadata: GKE_METADATA_SERVER

@@ -15,7 +15,7 @@
 apiVersion: install.istio.io/v1alpha2
 kind: IstioControlPlane
 metadata:
-  clusterName: "gcp-private-dev/us-central1/gcp-private-0527" # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"},{"name":"name","value":"gcp-private-0527"},{"name":"location","value":"us-central1"}]}}
+  clusterName: "gcp-private-dev/us-central1/jl-0601" # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"},{"name":"name","value":"jl-0601"},{"name":"location","value":"us-central1"}]}}
 spec:
   profile: asm
   hub: gcr.io/gke-release/asm
@@ -25,14 +25,14 @@ spec:
       istio-ingressgateway:
         type: NodePort
     global:
-      meshID: "gcp-private-dev_us-central1_gcp-private-0527" # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"},{"name":"name","value":"gcp-private-0527"},{"name":"location","value":"us-central1"}]}}
+      meshID: "gcp-private-dev_us-central1_jl-0601" # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"},{"name":"name","value":"jl-0601"},{"name":"location","value":"us-central1"}]}}
       trustDomain: "gcp-private-dev.svc.id.goog" # {"type":"string","x-kustomize":{"partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
       sds:
         token:
           aud: "gcp-private-dev.svc.id.goog" # {"type":"string","x-kustomize":{"partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
       proxy:
         env:
-          GCP_METADATA: "gcp-private-dev|81261038828|gcp-private-0527|us-central1-f" # {"type":"string","x-kustomize":{"partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"},{"name":"gcloud.project.projectNumber","value":"81261038828"},{"name":"name","value":"gcp-private-0527"},{"name":"gcloud.compute.zone","value":"us-central1-f"}]}}
+          GCP_METADATA: "gcp-private-dev|81261038828|jl-0601|us-central1-f" # {"type":"string","x-kustomize":{"partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"},{"name":"gcloud.project.projectNumber","value":"81261038828"},{"name":"name","value":"jl-0601"},{"name":"gcloud.compute.zone","value":"us-central1-f"}]}}
     nodeagent:
       env:
-        GKE_CLUSTER_URL: "https://container.googleapis.com/v1/projects/gcp-private-dev/locations/us-central1/clusters/gcp-private-0527" # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"},{"name":"name","value":"gcp-private-0527"},{"name":"location","value":"us-central1"}]}}
+        GKE_CLUSTER_URL: "https://container.googleapis.com/v1/projects/gcp-private-dev/locations/us-central1/clusters/jl-0601" # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"},{"name":"name","value":"jl-0601"},{"name":"location","value":"us-central1"}]}}

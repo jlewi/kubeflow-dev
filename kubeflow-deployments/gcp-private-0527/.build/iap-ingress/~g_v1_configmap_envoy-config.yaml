@@ -1,4 +1,10 @@
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: envoy-config
+  namespace: istio-system
+  labels:
+    kustomize.component: iap-ingress
 data:
   healthcheck_route.yaml: |
     apiVersion: networking.istio.io/v1alpha3
@@ -120,9 +126,3 @@ data:
     --port=${STATUS_NODE_PORT}\n  fi      \n}\n\nwhile true; do\n  set_health_check\n
     \ echo \"Backend updated successfully. Waiting 1 hour before updating again.\"\n
     \ sleep 3600\ndone\n"
-kind: ConfigMap
-metadata:
-  labels:
-    kustomize.component: iap-ingress
-  name: envoy-config
-  namespace: istio-system

@@ -1,54 +1,54 @@
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
+  name: cert-manager-controller-ingress-shim
   labels:
     app: cert-manager
     app.kubernetes.io/component: cert-manager
     app.kubernetes.io/name: cert-manager
     kustomize.component: cert-manager
-  name: cert-manager-controller-ingress-shim
+  annotations:
+    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 rules:
-- apiGroups:
-  - cert-manager.io
-  resources:
+- resources:
   - certificates
   - certificaterequests
+  apiGroups:
+  - cert-manager.io
   verbs:
   - create
   - update
   - delete
-- apiGroups:
-  - cert-manager.io
-  resources:
+- resources:
   - certificates
   - certificaterequests
   - issuers
   - clusterissuers
+  apiGroups:
+  - cert-manager.io
   verbs:
   - get
   - list
   - watch
-- apiGroups:
-  - networking.k8s.io/v1
-  resources:
+- resources:
   - ingresses
+  apiGroups:
+  - networking.k8s.io/v1
   verbs:
   - get
   - list
   - watch
-- apiGroups:
-  - networking.k8s.io/v1
-  resources:
+- resources:
   - ingresses/finalizers
+  apiGroups:
+  - networking.k8s.io/v1
   verbs:
   - update
-- apiGroups:
-  - ""
-  resources:
+- resources:
   - events
+  apiGroups:
+  - ""
   verbs:
   - create
   - patch

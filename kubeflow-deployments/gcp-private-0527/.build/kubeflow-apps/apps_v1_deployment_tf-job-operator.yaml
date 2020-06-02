@@ -1,15 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
+  name: tf-job-operator
+  namespace: kubeflow
   labels:
     app.kubernetes.io/component: tfjob
     app.kubernetes.io/name: tf-job-operator
     kustomize.component: tf-job-operator
-  name: tf-job-operator
-  namespace: kubeflow
+  annotations:
+    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 spec:
   replicas: 1
   selector:
@@ -19,18 +19,21 @@ spec:
       kustomize.component: tf-job-operator
   template:
     metadata:
+      labels:
+        name: tf-job-operator
+        app.kubernetes.io/component: tfjob
+        app.kubernetes.io/name: tf-job-operator
+        kustomize.component: tf-job-operator
       annotations:
         image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
           "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
         sidecar.istio.io/inject: "false"
-      labels:
-        app.kubernetes.io/component: tfjob
-        app.kubernetes.io/name: tf-job-operator
-        kustomize.component: tf-job-operator
-        name: tf-job-operator
     spec:
+      serviceAccountName: tf-job-operator
       containers:
-      - args:
+      - name: tf-job-operator
+        image: gcr.io/gcp-private-dev/tf_operator:vmaster-gd455e6ef
+        args:
         - --alsologtostderr
         - -v=1
         - --monitoring-port=8443
@@ -43,6 +46,3 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        image: gcr.io/kubeflow-images-public/tf_operator:vmaster-gd455e6ef
-        name: tf-job-operator
-      serviceAccountName: tf-job-operator

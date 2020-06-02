@@ -1,11 +1,11 @@
 apiVersion: container.cnrm.cloud.google.com/v1beta1
 kind: ContainerNodePool
 metadata:
-  clusterName: "gcp-private-dev/us-central1/gcp-private-0527" # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"},{"name":"name","value":"gcp-private-0527"},{"name":"location","value":"us-central1"}]}}
-  name: gcp-private-0527-cpu-pool-v1 # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
+  clusterName: "gcp-private-dev/us-central1/jl-0601" # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"},{"name":"name","value":"jl-0601"},{"name":"location","value":"us-central1"}]}}
+  name: jl-0601-cpu-pool-v1 # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"jl-0601"}]}}
 spec:
   nodeConfig:
     serviceAccountRef:
-      name: gcp-private-0527-vm@gcp-private-dev.iam.gserviceaccount.com # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"gcp-private-0527"},{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+      name: jl-0601-vm@gcp-private-dev.iam.gserviceaccount.com # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"jl-0601"},{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
   clusterRef:
-    name: gcp-private-0527 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"gcp-private-0527"}}}
+    name: jl-0601 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"jl-0601"}}}

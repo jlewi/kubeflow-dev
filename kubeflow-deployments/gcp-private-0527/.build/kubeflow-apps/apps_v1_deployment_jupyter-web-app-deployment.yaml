@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
+  name: jupyter-web-app-deployment
+  namespace: kubeflow
   labels:
     app: jupyter-web-app
     kustomize.component: jupyter-web-app
-  name: jupyter-web-app-deployment
-  namespace: kubeflow
+  annotations:
+    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 spec:
   replicas: 1
   selector:
@@ -17,35 +17,35 @@ spec:
       kustomize.component: jupyter-web-app
   template:
     metadata:
+      labels:
+        app: jupyter-web-app
+        kustomize.component: jupyter-web-app
       annotations:
         image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
           "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
         sidecar.istio.io/inject: "false"
-      labels:
-        app: jupyter-web-app
-        kustomize.component: jupyter-web-app
     spec:
+      serviceAccountName: jupyter-web-app-service-account
       containers:
-      - env:
+      - name: jupyter-web-app
+        image: gcr.io/gcp-private-dev/jupyter-web-app:vmaster-gd9be4b9e
+        ports:
+        - containerPort: 5000
+        env:
         - name: USERID_HEADER
           valueFrom:
             configMapKeyRef:
-              key: userid-header
               name: kubeflow-config-988m2m9m87
+              key: userid-header
         - name: USERID_PREFIX
           valueFrom:
             configMapKeyRef:
-              key: userid-prefix
               name: kubeflow-config-988m2m9m87
-        image: gcr.io/kubeflow-images-public/jupyter-web-app:vmaster-gd9be4b9e
-        name: jupyter-web-app
-        ports:
-        - containerPort: 5000
+              key: userid-prefix
         volumeMounts:
-        - mountPath: /etc/config
-          name: config-volume
-      serviceAccountName: jupyter-web-app-service-account
+        - name: config-volume
+          mountPath: /etc/config
       volumes:
-      - configMap:
+      - name: config-volume
+        configMap:
           name: jupyter-web-app-jupyter-web-app-config-m7hk699mdm
-        name: config-volume

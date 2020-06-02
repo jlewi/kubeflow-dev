@@ -1,28 +1,37 @@
 apiVersion: app.k8s.io/v1beta1
 kind: Application
 metadata:
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
+  name: pytorch-operator
+  namespace: kubeflow
   labels:
     app.kubernetes.io/component: pytorch
     app.kubernetes.io/name: pytorch-operator
-  name: pytorch-operator
-  namespace: kubeflow
+  annotations:
+    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: pytorch
+      app.kubernetes.io/instance: pytorch-operator-v0.7.0
+      app.kubernetes.io/managed-by: kfctl
+      app.kubernetes.io/name: pytorch-operator
+      app.kubernetes.io/part-of: kubeflow
+      app.kubernetes.io/version: v0.7.0
   addOwnerRef: true
   componentKinds:
-  - group: core
-    kind: Service
-  - group: apps
-    kind: Deployment
-  - group: core
-    kind: ConfigMap
-  - group: core
-    kind: ServiceAccount
-  - group: kubeflow.org
-    kind: PyTorchJob
+  - kind: Service
+    group: core
+  - kind: Deployment
+    group: apps
+  - kind: ConfigMap
+    group: core
+  - kind: ServiceAccount
+    group: core
+  - kind: PyTorchJob
+    group: kubeflow.org
   descriptor:
+    type: pytorch-operator
     description: Pytorch-operator allows users to create and manage the "PyTorchJob"
       custom resource.
     keywords:
@@ -35,18 +44,9 @@ spec:
     - description: Docs
       url: https://www.kubeflow.org/docs/reference/pytorchjob/v1/pytorch/
     maintainers:
-    - email: johnugeo@cisco.com
-      name: Johnu George
+    - name: Johnu George
+      email: johnugeo@cisco.com
     owners:
-    - email: johnugeo@cisco.com
-      name: Johnu George
-    type: pytorch-operator
+    - name: Johnu George
+      email: johnugeo@cisco.com
     version: v1
-  selector:
-    matchLabels:
-      app.kubernetes.io/component: pytorch
-      app.kubernetes.io/instance: pytorch-operator-v0.7.0
-      app.kubernetes.io/managed-by: kfctl
-      app.kubernetes.io/name: pytorch-operator
-      app.kubernetes.io/part-of: kubeflow
-      app.kubernetes.io/version: v0.7.0

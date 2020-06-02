@@ -1,10 +1,10 @@
 apiVersion: ctl.isla.solutions/v1
 kind: CloudEndpoint
 metadata:
-  labels:
-    kustomize.component: iap-ingress
   name: jl-0601
   namespace: istio-system
+  labels:
+    kustomize.component: iap-ingress
 spec:
   project: gcp-private-dev
   targetIngress:

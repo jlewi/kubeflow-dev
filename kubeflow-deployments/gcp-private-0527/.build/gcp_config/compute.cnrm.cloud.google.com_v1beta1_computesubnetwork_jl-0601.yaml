@@ -1,17 +1,17 @@
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeSubnetwork
 metadata:
-  labels:
-    kf-name: gcp-private-0527
   name: jl-0601
   namespace: gcp-private-dev
+  labels:
+    kf-name: gcp-private-0527
 spec:
   description: kubeflow private subnet
   ipCidrRange: 10.10.10.0/24
   logConfig:
+    metadata: INCLUDE_ALL_METADATA
     aggregationInterval: INTERVAL_10_MIN
     flowSampling: 0.5
-    metadata: INCLUDE_ALL_METADATA
   networkRef:
     name: jl-0601
   privateIpGoogleAccess: true

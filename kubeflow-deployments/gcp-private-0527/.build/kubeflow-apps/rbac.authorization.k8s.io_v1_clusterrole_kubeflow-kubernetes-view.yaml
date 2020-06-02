@@ -1,16 +1,14 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
+  name: kubeflow-kubernetes-view
+  labels:
+    rbac.authorization.kubeflow.org/aggregate-to-kubeflow-view: "true"
   annotations:
     image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
       "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
-  labels:
-    rbac.authorization.kubeflow.org/aggregate-to-kubeflow-view: "true"
-  name: kubeflow-kubernetes-view
 rules:
-- apiGroups:
-  - ""
-  resources:
+- resources:
   - configmaps
   - endpoints
   - persistentvolumeclaims
@@ -21,13 +19,13 @@ rules:
   - serviceaccounts
   - services
   - services/status
+  apiGroups:
+  - ""
   verbs:
   - get
   - list
   - watch
-- apiGroups:
-  - ""
-  resources:
+- resources:
   - bindings
   - events
   - limitranges
@@ -37,21 +35,21 @@ rules:
   - replicationcontrollers/status
   - resourcequotas
   - resourcequotas/status
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
+  apiGroups:
   - ""
-  resources:
-  - namespaces
   verbs:
   - get
   - list
   - watch
-- apiGroups:
-  - apps
-  resources:
+- resources:
+  - namespaces
+  apiGroups:
+  - ""
+  verbs:
+  - get
+  - list
+  - watch
+- resources:
   - controllerrevisions
   - daemonsets
   - daemonsets/status
@@ -64,33 +62,33 @@ rules:
   - statefulsets
   - statefulsets/scale
   - statefulsets/status
+  apiGroups:
+  - apps
   verbs:
   - get
   - list
   - watch
-- apiGroups:
-  - autoscaling
-  resources:
+- resources:
   - horizontalpodautoscalers
   - horizontalpodautoscalers/status
+  apiGroups:
+  - autoscaling
   verbs:
   - get
   - list
   - watch
-- apiGroups:
-  - batch
-  resources:
+- resources:
   - cronjobs
   - cronjobs/status
   - jobs
   - jobs/status
+  apiGroups:
+  - batch
   verbs:
   - get
   - list
   - watch
-- apiGroups:
-  - extensions
-  resources:
+- resources:
   - daemonsets
   - daemonsets/status
   - deployments
@@ -103,25 +101,27 @@ rules:
   - replicasets/scale
   - replicasets/status
   - replicationcontrollers/scale
+  apiGroups:
+  - extensions
   verbs:
   - get
   - list
   - watch
-- apiGroups:
-  - policy
-  resources:
+- resources:
   - poddisruptionbudgets
   - poddisruptionbudgets/status
+  apiGroups:
+  - policy
   verbs:
   - get
   - list
   - watch
-- apiGroups:
-  - networking.k8s.io
-  resources:
+- resources:
   - ingresses
   - ingresses/status
   - networkpolicies
+  apiGroups:
+  - networking.k8s.io
   verbs:
   - get
   - list

@@ -1,26 +1,35 @@
 apiVersion: app.k8s.io/v1beta1
 kind: Application
 metadata:
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
+  name: webhook
+  namespace: kubeflow
   labels:
     app.kubernetes.io/component: poddefaults
     app.kubernetes.io/name: poddefaults
-  name: webhook
-  namespace: kubeflow
+  annotations:
+    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: bootstrap
+      app.kubernetes.io/instance: webhook-v1.0.0
+      app.kubernetes.io/managed-by: kfctl
+      app.kubernetes.io/name: webhook
+      app.kubernetes.io/part-of: webhook
+      app.kubernetes.io/version: v1.0.0
   addOwnerRef: true
   componentKinds:
-  - group: core
-    kind: ConfigMap
-  - group: apps
-    kind: StatefulSet
-  - group: core
-    kind: Service
-  - group: core
-    kind: ServiceAccount
+  - kind: ConfigMap
+    group: core
+  - kind: StatefulSet
+    group: apps
+  - kind: Service
+    group: core
+  - kind: ServiceAccount
+    group: core
   descriptor:
+    type: bootstrap
     description: injects volume, volume mounts, env vars into PodDefault
     keywords:
     - admission-webhook
@@ -30,13 +39,4 @@ spec:
       url: https://github.com/kubeflow/kubeflow/tree/master/components/admission-webhook
     maintainers: []
     owners: []
-    type: bootstrap
     version: v1beta1
-  selector:
-    matchLabels:
-      app.kubernetes.io/component: bootstrap
-      app.kubernetes.io/instance: webhook-v1.0.0
-      app.kubernetes.io/managed-by: kfctl
-      app.kubernetes.io/name: webhook
-      app.kubernetes.io/part-of: webhook
-      app.kubernetes.io/version: v1.0.0

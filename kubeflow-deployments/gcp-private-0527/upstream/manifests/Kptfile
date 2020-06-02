@@ -5,7 +5,7 @@ metadata:
 upstream:
     type: git
     git:
-        commit: c1cc311135a727d9bb29e2b4881a9c38f4995a1b
+        commit: 82bfeabc2e13e0c067168bcffaaf65af993e942a
         repo: https://github.com/jlewi/manifests
         directory: /
         ref: private

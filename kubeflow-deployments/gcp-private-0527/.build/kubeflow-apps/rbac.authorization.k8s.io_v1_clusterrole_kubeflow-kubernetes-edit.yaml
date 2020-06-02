@@ -1,49 +1,47 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
+  name: kubeflow-kubernetes-edit
+  labels:
+    rbac.authorization.kubeflow.org/aggregate-to-kubeflow-edit: "true"
   annotations:
     image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
       "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
-  labels:
-    rbac.authorization.kubeflow.org/aggregate-to-kubeflow-edit: "true"
-  name: kubeflow-kubernetes-edit
 rules:
-- apiGroups:
-  - ""
-  resources:
+- resources:
   - pods/attach
   - pods/exec
   - pods/portforward
   - pods/proxy
   - secrets
   - services/proxy
+  apiGroups:
+  - ""
   verbs:
   - get
   - list
   - watch
-- apiGroups:
-  - ""
-  resources:
+- resources:
   - serviceaccounts
+  apiGroups:
+  - ""
   verbs:
   - impersonate
-- apiGroups:
-  - ""
-  resources:
+- resources:
   - pods
   - pods/attach
   - pods/exec
   - pods/portforward
   - pods/proxy
+  apiGroups:
+  - ""
   verbs:
   - create
   - delete
   - deletecollection
   - patch
   - update
-- apiGroups:
-  - ""
-  resources:
+- resources:
   - configmaps
   - endpoints
   - persistentvolumeclaims
@@ -53,15 +51,15 @@ rules:
   - serviceaccounts
   - services
   - services/proxy
+  apiGroups:
+  - ""
   verbs:
   - create
   - delete
   - deletecollection
   - patch
   - update
-- apiGroups:
-  - apps
-  resources:
+- resources:
   - daemonsets
   - deployments
   - deployments/rollback
@@ -70,36 +68,36 @@ rules:
   - replicasets/scale
   - statefulsets
   - statefulsets/scale
+  apiGroups:
+  - apps
   verbs:
   - create
   - delete
   - deletecollection
   - patch
   - update
-- apiGroups:
-  - autoscaling
-  resources:
+- resources:
   - horizontalpodautoscalers
+  apiGroups:
+  - autoscaling
   verbs:
   - create
   - delete
   - deletecollection
   - patch
   - update
-- apiGroups:
-  - batch
-  resources:
+- resources:
   - cronjobs
   - jobs
+  apiGroups:
+  - batch
   verbs:
   - create
   - delete
   - deletecollection
   - patch
   - update
-- apiGroups:
-  - extensions
-  resources:
+- resources:
   - daemonsets
   - deployments
   - deployments/rollback
@@ -109,27 +107,29 @@ rules:
   - replicasets
   - replicasets/scale
   - replicationcontrollers/scale
+  apiGroups:
+  - extensions
   verbs:
   - create
   - delete
   - deletecollection
   - patch
   - update
-- apiGroups:
-  - policy
-  resources:
+- resources:
   - poddisruptionbudgets
+  apiGroups:
+  - policy
   verbs:
   - create
   - delete
   - deletecollection
   - patch
   - update
-- apiGroups:
-  - networking.k8s.io
-  resources:
+- resources:
   - ingresses
   - networkpolicies
+  apiGroups:
+  - networking.k8s.io
   verbs:
   - create
   - delete

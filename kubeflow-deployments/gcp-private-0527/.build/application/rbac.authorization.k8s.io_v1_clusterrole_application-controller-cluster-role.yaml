@@ -3,9 +3,9 @@ kind: ClusterRole
 metadata:
   name: application-controller-cluster-role
 rules:
-- apiGroups:
+- resources:
   - '*'
-  resources:
+  apiGroups:
   - '*'
   verbs:
   - get
@@ -13,9 +13,9 @@ rules:
   - update
   - patch
   - watch
-- apiGroups:
-  - app.k8s.io
-  resources:
+- resources:
   - '*'
+  apiGroups:
+  - app.k8s.io
   verbs:
   - '*'

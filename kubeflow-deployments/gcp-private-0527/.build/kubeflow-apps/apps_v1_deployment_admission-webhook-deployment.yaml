@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
+  name: admission-webhook-deployment
+  namespace: kubeflow
   labels:
     app: admission-webhook
     app.kubernetes.io/component: poddefaults
     app.kubernetes.io/name: poddefaults
     kustomize.component: admission-webhook
-  name: admission-webhook-deployment
-  namespace: kubeflow
+  annotations:
+    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 spec:
   selector:
     matchLabels:
@@ -20,27 +20,27 @@ spec:
       kustomize.component: admission-webhook
   template:
     metadata:
-      annotations:
-        image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-          "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
-        sidecar.istio.io/inject: "false"
       labels:
         app: admission-webhook
         app.kubernetes.io/component: poddefaults
         app.kubernetes.io/name: poddefaults
         kustomize.component: admission-webhook
+      annotations:
+        image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+          "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
+        sidecar.istio.io/inject: "false"
     spec:
+      serviceAccountName: admission-webhook-service-account
       containers:
-      - args:
+      - name: admission-webhook
+        image: gcr.io/gcp-private-dev/admission-webhook:vmaster-gaf96e4e3
+        args:
         - --tlsCertFile=/etc/webhook/certs/tls.crt
         - --tlsKeyFile=/etc/webhook/certs/tls.key
-        image: gcr.io/kubeflow-images-public/admission-webhook:vmaster-gaf96e4e3
-        name: admission-webhook
         volumeMounts:
-        - mountPath: /etc/webhook/certs
-          name: webhook-cert
+        - name: webhook-cert
           readOnly: true
-      serviceAccountName: admission-webhook-service-account
+          mountPath: /etc/webhook/certs
       volumes:
       - name: webhook-cert
         secret:

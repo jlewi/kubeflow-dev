@@ -1,16 +1,16 @@
 apiVersion: v1
-data:
-  ISTIO_GATEWAY: kubeflow/kubeflow-gateway
-  USE_ISTIO: "true"
 kind: ConfigMap
 metadata:
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
+  name: notebook-controller-notebook-controller-config-h4d668t5tb
+  namespace: kubeflow
   labels:
     app: notebook-controller
     app.kubernetes.io/component: notebook-controller
     app.kubernetes.io/name: notebook-controller
     kustomize.component: notebook-controller
-  name: notebook-controller-notebook-controller-config-h4d668t5tb
-  namespace: kubeflow
+  annotations:
+    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
+data:
+  ISTIO_GATEWAY: kubeflow/kubeflow-gateway
+  USE_ISTIO: "true"

@@ -1,37 +1,40 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
+  name: pytorch-operator
+  namespace: kubeflow
   labels:
     app.kubernetes.io/component: pytorch
     app.kubernetes.io/name: pytorch-operator
     kustomize.component: pytorch-operator
-  name: pytorch-operator
-  namespace: kubeflow
+  annotations:
+    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 spec:
   replicas: 1
   selector:
     matchLabels:
+      name: pytorch-operator
       app.kubernetes.io/component: pytorch
       app.kubernetes.io/name: pytorch-operator
       kustomize.component: pytorch-operator
-      name: pytorch-operator
   template:
     metadata:
+      labels:
+        name: pytorch-operator
+        app.kubernetes.io/component: pytorch
+        app.kubernetes.io/name: pytorch-operator
+        kustomize.component: pytorch-operator
       annotations:
         image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
           "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
         sidecar.istio.io/inject: "false"
-      labels:
-        app.kubernetes.io/component: pytorch
-        app.kubernetes.io/name: pytorch-operator
-        kustomize.component: pytorch-operator
-        name: pytorch-operator
     spec:
+      serviceAccountName: pytorch-operator
       containers:
-      - command:
+      - name: pytorch-operator
+        image: gcr.io/gcp-private-dev/pytorch-operator:vmaster-g047cf0f
+        command:
         - /pytorch-operator.v1
         - --alsologtostderr
         - -v=1
@@ -45,6 +48,3 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        image: gcr.io/kubeflow-images-public/pytorch-operator:vmaster-g047cf0f
-        name: pytorch-operator
-      serviceAccountName: pytorch-operator

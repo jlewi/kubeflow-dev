@@ -1,18 +1,18 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
+  name: jupyter-web-app-cluster-role-binding
   labels:
     app: jupyter-web-app
     kustomize.component: jupyter-web-app
-  name: jupyter-web-app-cluster-role-binding
+  annotations:
+    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
   name: jupyter-web-app-cluster-role
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
 subjects:
-- kind: ServiceAccount
-  name: jupyter-web-app-service-account
+- name: jupyter-web-app-service-account
   namespace: kubeflow
+  kind: ServiceAccount

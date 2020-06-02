@@ -1,20 +1,20 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
+  name: admission-webhook-cluster-role-binding
   labels:
     app: admission-webhook
     app.kubernetes.io/component: poddefaults
     app.kubernetes.io/name: poddefaults
     kustomize.component: admission-webhook
-  name: admission-webhook-cluster-role-binding
+  annotations:
+    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
   name: admission-webhook-cluster-role
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
 subjects:
-- kind: ServiceAccount
-  name: admission-webhook-service-account
+- name: admission-webhook-service-account
   namespace: kubeflow
+  kind: ServiceAccount

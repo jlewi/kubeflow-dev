@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    kustomize.component: iap-ingress
   name: whoami-app
   namespace: istio-system
+  labels:
+    kustomize.component: iap-ingress
 spec:
   replicas: 1
   selector:
@@ -17,18 +17,18 @@ spec:
         kustomize.component: iap-ingress
     spec:
       containers:
-      - env:
-        - name: PORT
-          value: "8081"
+      - name: app
         image: gcr.io/cloud-solutions-group/esp-sample-app:1.0.0
-        name: app
         ports:
         - containerPort: 8081
+        env:
+        - name: PORT
+          value: "8081"
         readinessProbe:
           failureThreshold: 2
           httpGet:
-            path: /healthz
             port: 8081
+            path: /healthz
             scheme: HTTP
           periodSeconds: 10
           successThreshold: 1

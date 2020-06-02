@@ -6,6 +6,9 @@ resources:
 - crd.yaml
 - service-account.yaml
 - stateful-set.yaml
+commonAnnotations:
+  "image-prefix.kubeflow.org": '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+    "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}' # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"image-prefix.kubeflow.org","value":"{\"quay.io/jetstack\": \"gcr.io/gcp-private-dev/quay.io/jetstack\", \"metacontroller\": \"gcr.io/gcp-private-dev/metacontroller\"}"}]}}
 commonLabels:
   kustomize.component: metacontroller
 images:

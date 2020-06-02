@@ -1,42 +1,42 @@
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: Role
 metadata:
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
+  name: jupyter-web-app-jupyter-notebook-role
+  namespace: kubeflow
   labels:
     app: jupyter-web-app
     kustomize.component: jupyter-web-app
-  name: jupyter-web-app-jupyter-notebook-role
-  namespace: kubeflow
+  annotations:
+    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 rules:
-- apiGroups:
-  - ""
-  resources:
+- resources:
   - pods
   - pods/log
   - secrets
   - services
+  apiGroups:
+  - ""
   verbs:
   - '*'
-- apiGroups:
+- resources:
+  - deployments
+  - replicasets
+  apiGroups:
   - ""
   - apps
   - extensions
-  resources:
-  - deployments
-  - replicasets
   verbs:
   - '*'
-- apiGroups:
+- resources:
+  - '*'
+  apiGroups:
   - kubeflow.org
-  resources:
-  - '*'
   verbs:
   - '*'
-- apiGroups:
-  - batch
-  resources:
+- resources:
   - jobs
+  apiGroups:
+  - batch
   verbs:
   - '*'

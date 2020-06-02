@@ -1,20 +1,20 @@
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
+  name: tf-job-operator
   labels:
     app: tf-job-operator
     app.kubernetes.io/component: tfjob
     app.kubernetes.io/name: tf-job-operator
     kustomize.component: tf-job-operator
-  name: tf-job-operator
+  annotations:
+    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 roleRef:
-  apiGroup: rbac.authorization.k8s.io
+  name: tf-job-operator
   kind: ClusterRole
-  name: tf-job-operator
+  apiGroup: rbac.authorization.k8s.io
 subjects:
-- kind: ServiceAccount
-  name: tf-job-operator
+- name: tf-job-operator
   namespace: kubeflow
+  kind: ServiceAccount

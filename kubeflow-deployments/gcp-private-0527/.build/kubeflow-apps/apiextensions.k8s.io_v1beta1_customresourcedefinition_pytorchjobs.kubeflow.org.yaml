@@ -1,21 +1,21 @@
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
+  name: pytorchjobs.kubeflow.org
   labels:
     app.kubernetes.io/component: pytorch
     app.kubernetes.io/name: pytorch-job-crds
-  name: pytorchjobs.kubeflow.org
+  annotations:
+    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 spec:
   additionalPrinterColumns:
-  - JSONPath: .status.conditions[-1:].type
-    name: State
+  - name: State
     type: string
-  - JSONPath: .metadata.creationTimestamp
-    name: Age
+    JSONPath: .status.conditions[-1:].type
+  - name: Age
     type: date
+    JSONPath: .metadata.creationTimestamp
   group: kubeflow.org
   names:
     kind: PyTorchJob
@@ -34,14 +34,14 @@ spec:
                 Master:
                   properties:
                     replicas:
+                      type: integer
                       maximum: 1
                       minimum: 1
-                      type: integer
                 Worker:
                   properties:
                     replicas:
-                      minimum: 1
                       type: integer
+                      minimum: 1
   versions:
   - name: v1
     served: true

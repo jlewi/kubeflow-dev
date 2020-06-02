@@ -1,14 +1,14 @@
 apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
 metadata:
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
+  name: admission-webhook-cert
+  namespace: kubeflow
   labels:
     app.kubernetes.io/component: poddefaults
     app.kubernetes.io/name: poddefaults
-  name: admission-webhook-cert
-  namespace: kubeflow
+  annotations:
+    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 spec:
   commonName: admission-webhook-service.kubeflow.svc
   dnsNames:
@@ -16,6 +16,6 @@ spec:
   - admission-webhook-service.kubeflow.svc.cluster.local
   isCA: true
   issuerRef:
-    kind: ClusterIssuer
     name: kubeflow-self-signing-issuer
+    kind: ClusterIssuer
   secretName: webhook-certs

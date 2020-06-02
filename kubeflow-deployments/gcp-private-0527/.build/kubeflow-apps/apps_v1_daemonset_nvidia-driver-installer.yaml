@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
+  name: nvidia-driver-installer
+  namespace: kubeflow
   labels:
     app.kubernetes.io/component: gpu-driver
     app.kubernetes.io/name: gpu-driver
     k8s-app: nvidia-driver-installer
     kustomize.component: gpu-driver
-  name: nvidia-driver-installer
-  namespace: kubeflow
+  annotations:
+    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 spec:
   selector:
     matchLabels:
@@ -19,16 +19,54 @@ spec:
       kustomize.component: gpu-driver
   template:
     metadata:
-      annotations:
-        image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-          "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
       labels:
+        name: nvidia-driver-installer
         app.kubernetes.io/component: gpu-driver
         app.kubernetes.io/name: gpu-driver
         k8s-app: nvidia-driver-installer
         kustomize.component: gpu-driver
-        name: nvidia-driver-installer
+      annotations:
+        image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+          "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
     spec:
+      hostNetwork: true
+      hostPID: true
+      initContainers:
+      - name: nvidia-driver-installer
+        image: cos-nvidia-installer:fixed
+        env:
+        - name: NVIDIA_INSTALL_DIR_HOST
+          value: /home/kubernetes/bin/nvidia
+        - name: NVIDIA_INSTALL_DIR_CONTAINER
+          value: /usr/local/nvidia
+        - name: ROOT_MOUNT_DIR
+          value: /root
+        resources:
+          requests:
+            cpu: 0.15
+        volumeMounts:
+        - name: nvidia-install-dir-host
+          mountPath: /usr/local/nvidia
+        - name: dev
+          mountPath: /dev
+        - name: root-mount
+          mountPath: /root
+        imagePullPolicy: Never
+        securityContext:
+          privileged: true
+      containers:
+      - name: pause
+        image: gcr.io/google-containers/pause:2.0
+      volumes:
+      - name: dev
+        hostPath:
+          path: /dev
+      - name: nvidia-install-dir-host
+        hostPath:
+          path: /home/kubernetes/bin/nvidia
+      - name: root-mount
+        hostPath:
+          path: /
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -36,43 +74,5 @@ spec:
             - matchExpressions:
               - key: cloud.google.com/gke-accelerator
                 operator: Exists
-      containers:
-      - image: gcr.io/google-containers/pause:2.0
-        name: pause
-      hostNetwork: true
-      hostPID: true
-      initContainers:
-      - env:
-        - name: NVIDIA_INSTALL_DIR_HOST
-          value: /home/kubernetes/bin/nvidia
-        - name: NVIDIA_INSTALL_DIR_CONTAINER
-          value: /usr/local/nvidia
-        - name: ROOT_MOUNT_DIR
-          value: /root
-        image: cos-nvidia-installer:fixed
-        imagePullPolicy: Never
-        name: nvidia-driver-installer
-        resources:
-          requests:
-            cpu: 0.15
-        securityContext:
-          privileged: true
-        volumeMounts:
-        - mountPath: /usr/local/nvidia
-          name: nvidia-install-dir-host
-        - mountPath: /dev
-          name: dev
-        - mountPath: /root
-          name: root-mount
       tolerations:
       - operator: Exists
-      volumes:
-      - hostPath:
-          path: /dev
-        name: dev
-      - hostPath:
-          path: /home/kubernetes/bin/nvidia
-        name: nvidia-install-dir-host
-      - hostPath:
-          path: /
-        name: root-mount

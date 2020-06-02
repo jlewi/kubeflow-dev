@@ -1,10 +1,10 @@
 apiVersion: authentication.istio.io/v1alpha1
 kind: Policy
 metadata:
-  labels:
-    kustomize.component: iap-ingress
   name: ingress-jwt
   namespace: istio-system
+  labels:
+    kustomize.component: iap-ingress
 spec:
   origins:
   - jwt:

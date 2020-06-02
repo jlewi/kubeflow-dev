@@ -3,4 +3,4 @@
 mgmt-ctxt: gcp-private-dev-mgmt # {"type":"string","x-kustomize":{"partialSetters":[{"name":"mgmt-ctxt","value":"gcp-private-dev-mgmt"}]}}
 project: gcp-private-dev # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
 location: us-central1 # {"type":"string","x-kustomize":{"partialSetters":[{"name":"location","value":"us-central1"}]}}
-name: gcp-private-0527 # {"type":"string","x-kustomize":{"partialSetters":[{"name":"name","value":"gcp-private-0527"}]}}
+name: jl-0601 # {"type":"string","x-kustomize":{"partialSetters":[{"name":"name","value":"jl-0601"}]}}

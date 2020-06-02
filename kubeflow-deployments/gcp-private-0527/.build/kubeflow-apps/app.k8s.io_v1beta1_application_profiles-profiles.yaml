@@ -1,25 +1,34 @@
 apiVersion: app.k8s.io/v1beta1
 kind: Application
 metadata:
+  name: profiles-profiles
+  namespace: kubeflow
+  labels:
+    kustomize.component: profiles
   annotations:
     image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
       "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
-  labels:
-    kustomize.component: profiles
-  name: profiles-profiles
-  namespace: kubeflow
 spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: profiles
+      app.kubernetes.io/instance: profiles-v1.0.0
+      app.kubernetes.io/managed-by: kfctl
+      app.kubernetes.io/name: profiles
+      app.kubernetes.io/part-of: kubeflow
+      app.kubernetes.io/version: v1.0.0
   addOwnerRef: true
   componentKinds:
-  - group: apps
-    kind: Deployment
-  - group: core
-    kind: ServiceAccount
-  - group: core
-    kind: Service
-  - group: kubeflow.org
-    kind: Profile
+  - kind: Deployment
+    group: apps
+  - kind: ServiceAccount
+    group: core
+  - kind: Service
+    group: core
+  - kind: Profile
+    group: kubeflow.org
   descriptor:
+    type: profiles
     description: ""
     keywords:
     - profiles
@@ -30,18 +39,9 @@ spec:
     - description: kfam
       url: https://github.com/kubeflow/kubeflow/tree/master/components/access-management
     maintainers:
-    - email: kunming@google.com
-      name: Kunming Qu
+    - name: Kunming Qu
+      email: kunming@google.com
     owners:
-    - email: kunming@google.com
-      name: Kunming Qu
-    type: profiles
+    - name: Kunming Qu
+      email: kunming@google.com
     version: v1
-  selector:
-    matchLabels:
-      app.kubernetes.io/component: profiles
-      app.kubernetes.io/instance: profiles-v1.0.0
-      app.kubernetes.io/managed-by: kfctl
-      app.kubernetes.io/name: profiles
-      app.kubernetes.io/part-of: kubeflow
-      app.kubernetes.io/version: v1.0.0

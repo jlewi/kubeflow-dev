@@ -49,17 +49,17 @@ get-pkg:
 	rm -rf $(MANIFESTS_DIR)/common/ambassador
 		
 .PHONY: apply-gcp
-apply-gcp: hydrate-gcp
+apply-gcp: hydrate
 	# Apply management resources
 	kubectl --context=$(MGMTCTXT) apply -f ./$(BUILD_DIR)/gcp_config
 
 .PHONY: apply-services
-apply-services: hydrate-gcp
+apply-services: hydrate
 	# Apply management resources
 	anthoscli apply --project=$(PROJECT) -f ./instance/gcp_config/enable-services.yaml
 
 .PHONY: apply-asm
-apply-asm: hydrate-asm
+apply-asm: hydrate
 	# We need to apply the CRD definitions first
 	kubectl --context=${KFCTXT} apply --recursive=true -f ./$(BUILD_DIR)/istio/Base/Base.yaml
 	kubectl --context=${KFCTXT} apply --recursive=true -f ./$(BUILD_DIR)/istio/Base
@@ -69,7 +69,7 @@ apply-asm: hydrate-asm
 	# anthoscli apply -f ./manifests/gcp/v2/asm/istio-operator.yaml 
 
 .PHONY: apply-kubeflow
-apply-kubeflow: hydrate-kubeflow
+apply-kubeflow: hydrate
 	# Apply kubeflow apps
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/namespaces
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kubeflow-istio
@@ -86,11 +86,15 @@ apply-kubeflow: hydrate-kubeflow
 	# Create the kubeflow-issuer last to give cert-manager time deploy
 	kubectl --context=$(KFCTXT) apply -f ./$(BUILD_DIR)/kubeflow-issuer
 
+apply-endpoint:
+	/home/jlewi/git_cloud-endpoints-controller/controller --context=$(KFCTXT) -f $(BUILD_DIR)/iap-ingress/ctl.isla.solutions_v1_cloudendpoint_$(NAME).yaml 
+
 # TODO(jlewi): If we use prune does that give us a complete upgrade solution?
 # TODO(jlewi): Should we insert appropriate wait statements to wait for various services to
 # be available before continuing?
 .PHONY: apply
-apply: clean-build check-name check-iap apply-gcp wait-gcp create-ctxt apply-asm apply-kubeflow iap-secret
+apply: clean-build check-name check-iap apply-gcp wait-gcp create-ctxt apply-asm apply-kubeflow iap-secret apply-endpoint	
+	
 
 .PHONY: hydrate-gcp
 hydrate-gcp:
@@ -157,7 +161,11 @@ clean-build:
 # because they might get vars conflicts. Also order is important when applying them.
 .PHONY: hydrate
 hydrate: clean-build hydrate-gcp hydrate-asm hydrate-kubeflow
-	#kpt fn run $(BUILD_DIR) --image=gcr.io/kubeflow-images-public/kustomize-fns/image-prefix@sha256:7c5b8e0834fc06a2a254307046a32266b0f22256ab34fc12e4beda827b02b628
+	# ignore error per https://github.com/kubeflow/gcp-blueprints/issues/37
+	-kpt fn run $(BUILD_DIR) --image=gcr.io/kubeflow-images-public/kustomize-fns/image-prefix@sha256:7c5b8e0834fc06a2a254307046a32266b0f22256ab34fc12e4beda827b02b628
+
+set-image-prefix:
+	kpt cfg set ./upstream/manifests "image-prefix.kubeflow.org" '{"quay.io/jetstack": "gcr.io/$(PROJECT)/quay.io/jetstack", "metacontroller": "gcr.io/$(PROJECT)/metacontroller"}'
 
 # Make sure the name isn't too long.
 .PHONY: check-name
@@ -198,14 +206,13 @@ delete-kubeflow:
 set-values:
 	kpt cfg set ./instance mgmt-ctxt gcp-private-dev-mgmt
 
-	kpt cfg set ./upstream/manifests/gcp  name gcp-private-0527
+	kpt cfg set ./upstream/manifests/gcp  name jl-0601
 	kpt cfg set ./upstream/manifests/gcp gcloud.core.project gcp-private-dev
 	kpt cfg set ./upstream/manifests/gcp  gcloud.compute.zone us-central1-f
 	kpt cfg set ./upstream/manifests/gcp location us-central1
+	kpt cfg set ./upstream/manifests/gcp log-firewalls true
 
-	kpt cfg set ./upstream/manifests "image-prefix.kubeflow.org" '{"quay.io/jetstack": "gcr.io/gcp-project-dev/quay.io/jetstack"}'
-
-	kpt cfg set ./instance name gcp-private-0527   
+	kpt cfg set ./instance name jl-0601
 	kpt cfg set ./instance location us-central1
 	kpt cfg set ./instance gcloud.compute.region us-central1
 	kpt cfg set ./instance gcloud.core.project gcp-private-dev
@@ -214,3 +221,4 @@ reset:
 	rm -rf upstream
 	make get-pkg
 	make set-values
+	make set-image-prefix

@@ -1,37 +1,37 @@
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: MutatingWebhookConfiguration
 metadata:
-  annotations:
-    cert-manager.io/inject-apiserver-ca: "true"
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
+  name: cert-manager-webhook
   labels:
     app: webhook
     app.kubernetes.io/component: cert-manager
     app.kubernetes.io/name: cert-manager
     kustomize.component: cert-manager
-  name: cert-manager-webhook
+  annotations:
+    cert-manager.io/inject-apiserver-ca: "true"
+    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 webhooks:
-- clientConfig:
-    caBundle: ""
+- name: webhook.cert-manager.io
+  clientConfig:
     service:
       name: kubernetes
       namespace: default
       path: /apis/webhook.cert-manager.io/v1beta1/mutations
+    caBundle: ""
   failurePolicy: Fail
-  name: webhook.cert-manager.io
   rules:
-  - apiGroups:
-    - cert-manager.io
-    apiVersions:
-    - v1alpha2
-    operations:
-    - CREATE
-    - UPDATE
-    resources:
+  - resources:
     - certificates
     - issuers
     - clusterissuers
     - orders
     - challenges
     - certificaterequests
+    apiGroups:
+    - cert-manager.io
+    apiVersions:
+    - v1alpha2
+    operations:
+    - CREATE
+    - UPDATE

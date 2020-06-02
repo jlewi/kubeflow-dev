@@ -1,66 +1,66 @@
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
+  name: cert-manager-controller-orders
   labels:
     app: cert-manager
     app.kubernetes.io/component: cert-manager
     app.kubernetes.io/name: cert-manager
     kustomize.component: cert-manager
-  name: cert-manager-controller-orders
+  annotations:
+    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
+      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 rules:
-- apiGroups:
-  - acme.cert-manager.io
-  resources:
+- resources:
   - orders
   - orders/status
+  apiGroups:
+  - acme.cert-manager.io
   verbs:
   - update
-- apiGroups:
-  - acme.cert-manager.io
-  resources:
+- resources:
   - orders
   - challenges
+  apiGroups:
+  - acme.cert-manager.io
   verbs:
   - get
   - list
   - watch
-- apiGroups:
-  - cert-manager.io
-  resources:
+- resources:
   - clusterissuers
   - issuers
+  apiGroups:
+  - cert-manager.io
   verbs:
   - get
   - list
   - watch
-- apiGroups:
-  - acme.cert-manager.io
-  resources:
+- resources:
   - challenges
+  apiGroups:
+  - acme.cert-manager.io
   verbs:
   - create
   - delete
-- apiGroups:
-  - acme.cert-manager.io
-  resources:
+- resources:
   - orders/finalizers
+  apiGroups:
+  - acme.cert-manager.io
   verbs:
   - update
-- apiGroups:
-  - ""
-  resources:
+- resources:
   - secrets
+  apiGroups:
+  - ""
   verbs:
   - get
   - list
   - watch
-- apiGroups:
-  - ""
-  resources:
+- resources:
   - events
+  apiGroups:
+  - ""
   verbs:
   - create
   - patch

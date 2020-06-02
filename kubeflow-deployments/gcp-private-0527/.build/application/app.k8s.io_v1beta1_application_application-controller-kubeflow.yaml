@@ -4,27 +4,6 @@ metadata:
   name: application-controller-kubeflow
   namespace: kubeflow
 spec:
-  addOwnerRef: true
-  componentKinds:
-  - group: app.k8s.io
-    kind: Application
-  descriptor:
-    description: application that aggregates all kubeflow applications
-    keywords:
-    - kubeflow
-    links:
-    - description: About
-      url: https://kubeflow.org
-    maintainers:
-    - email: jlewi@google.com
-      name: Jeremy Lewi
-    - email: kam.d.kasravi@intel.com
-      name: Kam Kasravi
-    owners:
-    - email: jlewi@google.com
-      name: Jeremy Lewi
-    type: kubeflow
-    version: v1beta1
   selector:
     matchLabels:
       app.kubernetes.io/component: kubeflow
@@ -33,3 +12,24 @@ spec:
       app.kubernetes.io/name: kubeflow
       app.kubernetes.io/part-of: kubeflow
       app.kubernetes.io/version: v0.7.0
+  addOwnerRef: true
+  componentKinds:
+  - kind: Application
+    group: app.k8s.io
+  descriptor:
+    type: kubeflow
+    description: application that aggregates all kubeflow applications
+    keywords:
+    - kubeflow
+    links:
+    - description: About
+      url: https://kubeflow.org
+    maintainers:
+    - name: Jeremy Lewi
+      email: jlewi@google.com
+    - name: Kam Kasravi
+      email: kam.d.kasravi@intel.com
+    owners:
+    - name: Jeremy Lewi
+      email: jlewi@google.com
+    version: v1beta1

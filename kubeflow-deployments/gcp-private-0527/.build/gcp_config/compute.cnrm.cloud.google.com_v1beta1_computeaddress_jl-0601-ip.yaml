@@ -1,11 +1,11 @@
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeAddress
 metadata:
+  name: jl-0601-ip
+  namespace: gcp-private-dev
   labels:
     kf-name: gcp-private-0527
     label-one: value-one
-  name: jl-0601-ip
-  namespace: gcp-private-dev
 spec:
   addressType: EXTERNAL
   description: Static IP for Kubeflow ingress.

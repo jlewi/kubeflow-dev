@@ -1,63 +1,223 @@
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+apiVersion: v1
+kind: ServiceAccount
 metadata:
-  name: istio-galley-istio-system
-  labels:
-    release: istio
-rules:
-# For reading Istio resources
-- apiGroups: ["authentication.istio.io", "config.istio.io", "networking.istio.io",
-    "rbac.istio.io", "security.istio.io"]
-  resources: ["*"]
-  verbs: ["get", "list", "watch"]
-  # For updating Istio resource statuses
-- apiGroups: ["authentication.istio.io", "config.istio.io", "networking.istio.io",
-    "rbac.istio.io", "security.istio.io"]
-  resources: ["*/status"]
-  verbs: ["update"]
-- apiGroups: ["admissionregistration.k8s.io"]
-  resources: ["validatingwebhookconfigurations"]
-  verbs: ["*"]
-- apiGroups: ["extensions", "apps"]
-  resources: ["deployments"]
-  resourceNames: ["istio-galley"]
-  verbs: ["get"]
-- apiGroups: [""]
-  resources: ["pods", "nodes", "services", "endpoints", "namespaces"]
-  verbs: ["get", "list", "watch"]
-- apiGroups: ["extensions"]
-  resources: ["ingresses"]
-  verbs: ["get", "list", "watch"]
-- apiGroups: [""]
-  resources: ["namespaces/finalizers"]
-  verbs: ["update"]
-- apiGroups: ["apiextensions.k8s.io"]
-  resources: ["customresourcedefinitions"]
-  verbs: ["get", "list", "watch"]
-- apiGroups: ["rbac.authorization.k8s.io"]
-  resources: ["clusterroles"]
-  verbs: ["get", "list", "watch"]
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: istio-galley-admin-role-binding-istio-system
-  labels:
-    release: istio
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: istio-galley-istio-system
-subjects:
-- kind: ServiceAccount
   name: istio-galley-service-account
   namespace: istio-system
+  labels:
+    app: galley
+    release: istio
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: istio-galley
+  namespace: istio-system
+  labels:
+    app: galley
+    istio: galley
+    release: istio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      istio: galley
+  template:
+    metadata:
+      labels:
+        app: galley
+        chart: galley
+        heritage: Tiller
+        istio: galley
+        release: istio
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      serviceAccountName: istio-galley-service-account
+      containers:
+      - name: galley
+        image: gcr.io/gke-release/asm/galley:1.4.7-asm.0
+        command:
+        - /usr/local/bin/galley
+        - server
+        - --meshConfigFile=/etc/mesh-config/mesh
+        - --livenessProbeInterval=1s
+        - --livenessProbePath=/tmp/healthliveness
+        - --readinessProbePath=/tmp/healthready
+        - --readinessProbeInterval=1s
+        - --insecure=true
+        - --enable-validation=true
+        - --enable-reconcileWebhookConfiguration=true
+        - --enable-server=true
+        - --deployment-namespace=istio-system
+        - --validation-webhook-config-file
+        - /etc/config/validatingwebhookconfiguration.yaml
+        - --monitoringPort=15014
+        - --validation-port=9443
+        - --log_output_level=default:info
+        - --validation.tls.clientCertificate=/etc/dnscerts/cert-chain.pem
+        - --validation.tls.privateKey=/etc/dnscerts/key.pem
+        - --validation.tls.caCertificates=/etc/dnscerts/root-cert.pem
+        ports:
+        - containerPort: 9443
+        - containerPort: 15014
+        - containerPort: 15019
+        - containerPort: 9901
+        resources:
+          requests:
+            cpu: 100m
+        volumeMounts:
+        - name: dnscerts
+          readOnly: true
+          mountPath: /etc/dnscerts
+        - name: config
+          readOnly: true
+          mountPath: /etc/config
+        - name: mesh-config
+          readOnly: true
+          mountPath: /etc/mesh-config
+        livenessProbe:
+          exec:
+            command:
+            - /usr/local/bin/galley
+            - probe
+            - --probe-path=/tmp/healthliveness
+            - --interval=10s
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - /usr/local/bin/galley
+            - probe
+            - --probe-path=/tmp/healthready
+            - --interval=10s
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        imagePullPolicy: IfNotPresent
+      - name: istio-proxy
+        image: gcr.io/gke-release/asm/proxyv2:1.4.7-asm.0
+        args:
+        - proxy
+        - --serviceCluster
+        - istio-galley
+        - --templateFile
+        - /var/lib/istio/galley/envoy/envoy.yaml.tmpl
+        - --controlPlaneAuthPolicy
+        - MUTUAL_TLS
+        - --trust-domain=gcp-private-dev.svc.id.goog
+        ports:
+        - containerPort: 9902
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+        - name: INSTANCE_IP
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.podIP
+        - name: SDS_ENABLED
+          value: "true"
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 1024Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        volumeMounts:
+        - name: envoy-config
+          mountPath: /var/lib/istio/galley/envoy
+        - name: sds-uds-path
+          readOnly: true
+          mountPath: /var/run/sds
+        - name: istio-token
+          mountPath: /var/run/secrets/tokens
+        imagePullPolicy: IfNotPresent
+      volumes:
+      - name: sds-uds-path
+        hostPath:
+          path: /var/run/sds
+      - name: istio-token
+        projected:
+          sources:
+          - serviceAccountToken:
+              audience: gcp-private-dev.svc.id.goog
+              expirationSeconds: 43200
+              path: istio-token
+      - name: dnscerts
+        secret:
+          secretName: dns.istio-galley-service-account
+      - name: envoy-config
+        configMap:
+          name: galley-envoy-config
+      - name: config
+        configMap:
+          name: istio-galley-configuration
+      - name: mesh-config
+        configMap:
+          name: istio-mesh-galley
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - preference:
+              matchExpressions:
+              - key: beta.kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+            weight: 2
+          - preference:
+              matchExpressions:
+              - key: beta.kubernetes.io/arch
+                operator: In
+                values:
+                - ppc64le
+            weight: 2
+          - preference:
+              matchExpressions:
+              - key: beta.kubernetes.io/arch
+                operator: In
+                values:
+                - s390x
+            weight: 2
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: beta.kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+                - ppc64le
+                - s390x
+  strategy:
+    rollingUpdate:
+      maxSurge: 100%
+      maxUnavailable: 25%
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  name: istio-mesh-galley
   namespace: istio-system
+  labels:
+    release: istio
+data:
+  mesh: |-
+    {}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
   name: galley-envoy-config
+  namespace: istio-system
   labels:
     app: galley
     istio: galley
@@ -175,16 +335,60 @@ data:
                           stat_prefix: sdsstat
             require_client_certificate: true
 ---
-apiVersion: v1
-kind: ConfigMap
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
 metadata:
-  name: istio-mesh-galley
-  namespace: istio-system
+  name: istio-galley-admin-role-binding-istio-system
   labels:
     release: istio
-data:
-  mesh: |-
-    {}
+roleRef:
+  name: istio-galley-istio-system
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- name: istio-galley-service-account
+  namespace: istio-system
+  kind: ServiceAccount
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: istio-galley-istio-system
+  labels:
+    release: istio
+rules:
+- resources: ["*"]
+  # For reading Istio resources
+  apiGroups: ["authentication.istio.io", "config.istio.io", "networking.istio.io",
+    "rbac.istio.io", "security.istio.io"]
+  verbs: ["get", "list", "watch"]
+  # For updating Istio resource statuses
+- resources: ["*/status"]
+  apiGroups: ["authentication.istio.io", "config.istio.io", "networking.istio.io",
+    "rbac.istio.io", "security.istio.io"]
+  verbs: ["update"]
+- resources: ["validatingwebhookconfigurations"]
+  apiGroups: ["admissionregistration.k8s.io"]
+  verbs: ["*"]
+- resources: ["deployments"]
+  apiGroups: ["extensions", "apps"]
+  resourceNames: ["istio-galley"]
+  verbs: ["get"]
+- resources: ["pods", "nodes", "services", "endpoints", "namespaces"]
+  apiGroups: [""]
+  verbs: ["get", "list", "watch"]
+- resources: ["ingresses"]
+  apiGroups: ["extensions"]
+  verbs: ["get", "list", "watch"]
+- resources: ["namespaces/finalizers"]
+  apiGroups: [""]
+  verbs: ["update"]
+- resources: ["customresourcedefinitions"]
+  apiGroups: ["apiextensions.k8s.io"]
+  verbs: ["get", "list", "watch"]
+- resources: ["clusterroles"]
+  apiGroups: ["rbac.authorization.k8s.io"]
+  verbs: ["get", "list", "watch"]
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -320,201 +524,6 @@ data:
         failurePolicy: Fail
         sideEffects: None
 ---
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  labels:
-    app: galley
-    istio: galley
-    release: istio
-  name: istio-galley
-  namespace: istio-system
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      istio: galley
-  strategy:
-    rollingUpdate:
-      maxSurge: 100%
-      maxUnavailable: 25%
-  template:
-    metadata:
-      annotations:
-        sidecar.istio.io/inject: "false"
-      labels:
-        app: galley
-        chart: galley
-        heritage: Tiller
-        istio: galley
-        release: istio
-    spec:
-      affinity:
-        nodeAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - preference:
-              matchExpressions:
-              - key: beta.kubernetes.io/arch
-                operator: In
-                values:
-                - amd64
-            weight: 2
-          - preference:
-              matchExpressions:
-              - key: beta.kubernetes.io/arch
-                operator: In
-                values:
-                - ppc64le
-            weight: 2
-          - preference:
-              matchExpressions:
-              - key: beta.kubernetes.io/arch
-                operator: In
-                values:
-                - s390x
-            weight: 2
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: beta.kubernetes.io/arch
-                operator: In
-                values:
-                - amd64
-                - ppc64le
-                - s390x
-      containers:
-      - command:
-        - /usr/local/bin/galley
-        - server
-        - --meshConfigFile=/etc/mesh-config/mesh
-        - --livenessProbeInterval=1s
-        - --livenessProbePath=/tmp/healthliveness
-        - --readinessProbePath=/tmp/healthready
-        - --readinessProbeInterval=1s
-        - --insecure=true
-        - --enable-validation=true
-        - --enable-reconcileWebhookConfiguration=true
-        - --enable-server=true
-        - --deployment-namespace=istio-system
-        - --validation-webhook-config-file
-        - /etc/config/validatingwebhookconfiguration.yaml
-        - --monitoringPort=15014
-        - --validation-port=9443
-        - --log_output_level=default:info
-        - --validation.tls.clientCertificate=/etc/dnscerts/cert-chain.pem
-        - --validation.tls.privateKey=/etc/dnscerts/key.pem
-        - --validation.tls.caCertificates=/etc/dnscerts/root-cert.pem
-        image: gcr.io/gke-release/asm/galley:1.4.7-asm.0
-        imagePullPolicy: IfNotPresent
-        livenessProbe:
-          exec:
-            command:
-            - /usr/local/bin/galley
-            - probe
-            - --probe-path=/tmp/healthliveness
-            - --interval=10s
-          initialDelaySeconds: 5
-          periodSeconds: 5
-        name: galley
-        ports:
-        - containerPort: 9443
-        - containerPort: 15014
-        - containerPort: 15019
-        - containerPort: 9901
-        readinessProbe:
-          exec:
-            command:
-            - /usr/local/bin/galley
-            - probe
-            - --probe-path=/tmp/healthready
-            - --interval=10s
-          initialDelaySeconds: 5
-          periodSeconds: 5
-        resources:
-          requests:
-            cpu: 100m
-        volumeMounts:
-        - mountPath: /etc/dnscerts
-          name: dnscerts
-          readOnly: true
-        - mountPath: /etc/config
-          name: config
-          readOnly: true
-        - mountPath: /etc/mesh-config
-          name: mesh-config
-          readOnly: true
-      - args:
-        - proxy
-        - --serviceCluster
-        - istio-galley
-        - --templateFile
-        - /var/lib/istio/galley/envoy/envoy.yaml.tmpl
-        - --controlPlaneAuthPolicy
-        - MUTUAL_TLS
-        - --trust-domain=gcp-private-dev.svc.id.goog
-        env:
-        - name: POD_NAME
-          valueFrom:
-            fieldRef:
-              apiVersion: v1
-              fieldPath: metadata.name
-        - name: POD_NAMESPACE
-          valueFrom:
-            fieldRef:
-              apiVersion: v1
-              fieldPath: metadata.namespace
-        - name: INSTANCE_IP
-          valueFrom:
-            fieldRef:
-              apiVersion: v1
-              fieldPath: status.podIP
-        - name: SDS_ENABLED
-          value: "true"
-        image: gcr.io/gke-release/asm/proxyv2:1.4.7-asm.0
-        imagePullPolicy: IfNotPresent
-        name: istio-proxy
-        ports:
-        - containerPort: 9902
-        resources:
-          limits:
-            cpu: 2000m
-            memory: 1024Mi
-          requests:
-            cpu: 100m
-            memory: 128Mi
-        volumeMounts:
-        - mountPath: /var/lib/istio/galley/envoy
-          name: envoy-config
-        - mountPath: /var/run/sds
-          name: sds-uds-path
-          readOnly: true
-        - mountPath: /var/run/secrets/tokens
-          name: istio-token
-      serviceAccountName: istio-galley-service-account
-      volumes:
-      - hostPath:
-          path: /var/run/sds
-        name: sds-uds-path
-      - name: istio-token
-        projected:
-          sources:
-          - serviceAccountToken:
-              audience: gcp-private-dev.svc.id.goog
-              expirationSeconds: 43200
-              path: istio-token
-      - name: dnscerts
-        secret:
-          secretName: dns.istio-galley-service-account
-      - configMap:
-          name: galley-envoy-config
-        name: envoy-config
-      - configMap:
-          name: istio-galley-configuration
-        name: config
-      - configMap:
-          name: istio-mesh-galley
-        name: mesh-config
----
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
@@ -522,15 +531,15 @@ metadata:
   namespace: istio-system
   labels:
     app: galley
-    release: istio
     istio: galley
+    release: istio
 spec:
-  minAvailable: 1
   selector:
     matchLabels:
       app: galley
-      release: istio
       istio: galley
+      release: istio
+  minAvailable: 1
 ---
 apiVersion: v1
 kind: Service
@@ -542,24 +551,15 @@ metadata:
     istio: galley
     release: istio
 spec:
-  ports:
-  - port: 443
-    name: https-validation
-    targetPort: 9443
-  - port: 15014
-    name: http-monitoring
-  - port: 9901
-    name: grpc-mcp
-  - port: 15019
-    name: grpc-tls-mcp
   selector:
     istio: galley
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: istio-galley-service-account
-  namespace: istio-system
-  labels:
-    app: galley
-    release: istio
+  ports:
+  - name: https-validation
+    port: 443
+    targetPort: 9443
+  - name: http-monitoring
+    port: 15014
+  - name: grpc-mcp
+    port: 9901
+  - name: grpc-tls-mcp
+    port: 15019

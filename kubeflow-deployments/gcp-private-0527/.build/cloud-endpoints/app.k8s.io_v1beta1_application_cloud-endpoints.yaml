@@ -1,19 +1,28 @@
 apiVersion: app.k8s.io/v1beta1
 kind: Application
 metadata:
+  name: cloud-endpoints
+  namespace: kubeflow
   labels:
     app.kubernetes.io/component: cloud-endpoints
     app.kubernetes.io/name: cloud-endpoints
-  name: cloud-endpoints
-  namespace: kubeflow
 spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: cloud-endpoints
+      app.kubernetes.io/instance: cloud-endpoints-v0.7.0
+      app.kubernetes.io/managed-by: kfctl
+      app.kubernetes.io/name: cloud-endpoints
+      app.kubernetes.io/part-of: kubeflow
+      app.kubernetes.io/version: v0.7.0
   addOwnerRef: true
   componentKinds:
-  - group: core
-    kind: ConfigMap
-  - group: apps
-    kind: Deployment
+  - kind: ConfigMap
+    group: core
+  - kind: Deployment
+    group: apps
   descriptor:
+    type: cloud-endpoints
     description: ""
     keywords:
     - cloud-endpoints
@@ -23,13 +32,4 @@ spec:
       url: ""
     maintainers: []
     owners: []
-    type: cloud-endpoints
     version: v1beta1
-  selector:
-    matchLabels:
-      app.kubernetes.io/component: cloud-endpoints
-      app.kubernetes.io/instance: cloud-endpoints-v0.7.0
-      app.kubernetes.io/managed-by: kfctl
-      app.kubernetes.io/name: cloud-endpoints
-      app.kubernetes.io/part-of: kubeflow
-      app.kubernetes.io/version: v0.7.0

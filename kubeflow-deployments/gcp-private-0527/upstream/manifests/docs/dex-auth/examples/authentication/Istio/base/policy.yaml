@@ -10,7 +10,7 @@ spec:
   origins:
   - jwt:
       audiences:
-      - $(client_id)
+        - $(client_id)
       issuer: $(issuer)
       jwksUri: $(jwks_uri)
   principalBinding: USE_ORIGIN

@@ -6,9 +6,6 @@ metadata:
   labels:
     app: jupyter-web-app
     kustomize.component: jupyter-web-app
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 spec:
   replicas: 1
   selector:
@@ -21,14 +18,12 @@ spec:
         app: jupyter-web-app
         kustomize.component: jupyter-web-app
       annotations:
-        image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-          "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
         sidecar.istio.io/inject: "false"
     spec:
       serviceAccountName: jupyter-web-app-service-account
       containers:
       - name: jupyter-web-app
-        image: gcr.io/gcp-private-dev/jupyter-web-app:vmaster-gd9be4b9e
+        image: gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/jupyter-web-app:vmaster-gd9be4b9e
         ports:
         - containerPort: 5000
         env:
@@ -48,4 +43,4 @@ spec:
       volumes:
       - name: config-volume
         configMap:
-          name: jupyter-web-app-jupyter-web-app-config-m7hk699mdm
+          name: jupyter-web-app-jupyter-web-app-config-dhcbh64467

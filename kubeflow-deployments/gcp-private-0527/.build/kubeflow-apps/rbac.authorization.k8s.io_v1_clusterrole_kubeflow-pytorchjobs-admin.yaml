@@ -7,9 +7,6 @@ metadata:
     app.kubernetes.io/name: pytorch-operator
     kustomize.component: pytorch-operator
     rbac.authorization.kubeflow.org/aggregate-to-kubeflow-admin: "true"
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 aggregationRule:
   clusterRoleSelectors:
   - matchLabels:

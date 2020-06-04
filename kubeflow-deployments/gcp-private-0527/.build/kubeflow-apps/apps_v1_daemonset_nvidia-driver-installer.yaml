@@ -8,9 +8,6 @@ metadata:
     app.kubernetes.io/name: gpu-driver
     k8s-app: nvidia-driver-installer
     kustomize.component: gpu-driver
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 spec:
   selector:
     matchLabels:
@@ -25,9 +22,6 @@ spec:
         app.kubernetes.io/name: gpu-driver
         k8s-app: nvidia-driver-installer
         kustomize.component: gpu-driver
-      annotations:
-        image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-          "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
     spec:
       hostNetwork: true
       hostPID: true

@@ -134,7 +134,9 @@ spec:
       valueType: STRING
     source.user:
       valueType: STRING
+
 ---
+
 apiVersion: config.istio.io/v1alpha2
 kind: attributemanifest
 metadata:

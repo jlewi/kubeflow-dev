@@ -9,8 +9,6 @@ metadata:
     kustomize.component: cert-manager
   annotations:
     cert-manager.io/inject-ca-from-secret: cert-manager/cert-manager-webhook-tls
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 spec:
   service:
     name: cert-manager-webhook

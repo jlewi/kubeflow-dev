@@ -5,6 +5,6 @@ bases:
 patchesStrategicMerge:
 - statefulset.yaml
 images:
-- name: busybox
-  newTag: "latest"
-  newName: busybox
+  - name: busybox
+    newTag: "latest"
+    newName: busybox

@@ -7,6 +7,7 @@ metadata:
 spec:
   subjects:
   - user: "*"
+
   roleRef:
     kind: ServiceRole
     name: "istio-ingressgateway"

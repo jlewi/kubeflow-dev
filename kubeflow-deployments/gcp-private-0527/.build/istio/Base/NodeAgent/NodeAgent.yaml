@@ -1,3 +1,25 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: istio-nodeagent-service-account
+  namespace: istio-system
+  labels:
+    app: istio-nodeagent
+    release: istio
+---
+# Resources for NodeAgent component
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: istio-nodeagent-istio-system
+  labels:
+    app: istio-nodeagent
+    release: istio
+rules:
+- resources: ["configmaps"]
+  apiGroups: [""]
+  verbs: ["get"]
+---
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -85,27 +107,6 @@ spec:
                 - s390x
   updateStrategy:
     type: RollingUpdate
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: istio-nodeagent-istio-system
-  labels:
-    app: istio-nodeagent
-    release: istio
-rules:
-- resources: ["configmaps"]
-  apiGroups: [""]
-  verbs: ["get"]
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: istio-nodeagent-service-account
-  namespace: istio-system
-  labels:
-    app: istio-nodeagent
-    release: istio
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding

@@ -4,9 +4,6 @@ metadata:
   name: profiles-cluster-role-binding
   labels:
     kustomize.component: profiles
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 roleRef:
   name: cluster-admin
   kind: ClusterRole

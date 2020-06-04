@@ -47,7 +47,9 @@ rules:
   - deployments
   verbs:
   - '*'
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -59,7 +61,9 @@ aggregationRule:
   - matchLabels:
       rbac.authorization.kubeflow.org/aggregate-to-kubeflow-mxjobs-admin: "true"
 rules: []
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -82,7 +86,9 @@ rules:
   - deletecollection
   - patch
   - update
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -93,9 +99,9 @@ rules:
 - apiGroups:
   - kubeflow.org
   resources:
-  - mxjobs
-  - mxjobs/status
+    - mxjobs
+    - mxjobs/status
   verbs:
-  - get
-  - list
-  - watch
+    - get
+    - list
+    - watch

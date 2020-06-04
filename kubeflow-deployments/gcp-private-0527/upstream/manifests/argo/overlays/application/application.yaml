@@ -21,14 +21,14 @@ spec:
   descriptor:
     type: argo
     version: v1beta1
-    description: Argo Workflows is an open source container-native workflow engine
-      for orchestrating parallel jobs on Kubernetes
+    description: Argo Workflows is an open source container-native workflow engine for orchestrating parallel jobs on Kubernetes
     maintainers: []
     owners: []
     keywords:
-    - argo
-    - kubeflow
+     - argo
+     - kubeflow
     links:
     - description: About
       url: https://github.com/argoproj/argo
   addOwnerRef: true
+

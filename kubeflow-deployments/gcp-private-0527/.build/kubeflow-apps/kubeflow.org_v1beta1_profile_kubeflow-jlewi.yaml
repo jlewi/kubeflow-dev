@@ -3,9 +3,6 @@ kind: Profile
 metadata:
   name: kubeflow-jlewi
   namespace: kubeflow
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 spec:
   owner:
     name: jlewi@google.com

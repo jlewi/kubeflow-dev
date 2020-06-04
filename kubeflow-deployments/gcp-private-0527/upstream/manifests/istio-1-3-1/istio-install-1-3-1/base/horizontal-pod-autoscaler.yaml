@@ -17,7 +17,9 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: istio-ingressgateway
+
 ---
+
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
@@ -36,7 +38,9 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: istio-pilot
+
 ---
+
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
@@ -55,7 +59,9 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: istio-policy
+
 ---
+
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:

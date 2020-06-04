@@ -7,9 +7,6 @@ metadata:
     app.kubernetes.io/component: notebook-controller
     app.kubernetes.io/name: notebook-controller
     kustomize.component: notebook-controller
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 roleRef:
   name: notebook-controller-role
   kind: ClusterRole

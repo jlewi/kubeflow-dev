@@ -25,8 +25,7 @@ spec:
   descriptor:
     type: "spark-operator"
     version: "v1"
-    description: "Spark-operator allows users to create and manage the \"SparkApplication\"
-      custom resource."
+    description: "Spark-operator allows users to create and manage the \"SparkApplication\" custom resource."
     maintainers:
     - name: Holden Karau
       email: holden@pigscanfly.ca

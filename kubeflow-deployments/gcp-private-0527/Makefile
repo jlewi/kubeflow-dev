@@ -53,6 +53,9 @@ apply-gcp: hydrate
 	# Apply management resources
 	kubectl --context=$(MGMTCTXT) apply -f ./$(BUILD_DIR)/gcp_config
 
+
+# TODO(https://github.com/kubeflow/gcp-blueprints/issues/31): We should use CNRM to
+# apply services not anthos CLI.
 .PHONY: apply-services
 apply-services: hydrate
 	# Apply management resources
@@ -94,7 +97,10 @@ apply-endpoint:
 # be available before continuing?
 .PHONY: apply
 apply: clean-build check-name check-iap apply-gcp wait-gcp create-ctxt apply-asm apply-kubeflow iap-secret apply-endpoint	
-	
+	# Kick the IAP pod because we will reset the policy and need to patch it.
+	# TODO(https://github.com/kubeflow/gcp-blueprints/issues/14)
+	kubectl --context=$(KFCTXT) -n istio-system delete pods -l service=iap-enabler
+
 
 .PHONY: hydrate-gcp
 hydrate-gcp:
@@ -137,6 +143,13 @@ hydrate-kubeflow:
 	mkdir -p $(BUILD_DIR)/kubeflow-issuer
 	kustomize build --load_restrictor none -o $(BUILD_DIR)/kubeflow-issuer $(KF_DIR)/kubeflow-issuer
 
+hydrate-mirror:
+	kfctl alpha mirror build $(MANIFESTS_DIR)/experimental/mirror-images/gcp_template.yaml -d ./instance/kustomize -V -o $(BUILD_DIR)/mirror-pipeline.yaml --gcb
+	mv cloudbuild.yaml $(BUILD_DIR)/
+
+apply-mirror: hydrate-mirror
+	gcloud builds submit --async gs://kubeflow-examples/image-replicate/replicate-context.tar.gz --project $(PROJECT) --config $(BUILD_DIR)/cloudbuild.yaml	
+
 #*****************************************************************************************
 # Hydrate ACM repos
 # These commands copy the configs to the appropriate acm repo
@@ -161,11 +174,9 @@ clean-build:
 # because they might get vars conflicts. Also order is important when applying them.
 .PHONY: hydrate
 hydrate: clean-build hydrate-gcp hydrate-asm hydrate-kubeflow
+	cp $(MANIFESTS_DIR)/gcp/v2/privateGKE/kustomize-fns/image_prefix.yaml $(BUILD_DIR)/
 	# ignore error per https://github.com/kubeflow/gcp-blueprints/issues/37
-	-kpt fn run $(BUILD_DIR) --image=gcr.io/kubeflow-images-public/kustomize-fns/image-prefix@sha256:7c5b8e0834fc06a2a254307046a32266b0f22256ab34fc12e4beda827b02b628
-
-set-image-prefix:
-	kpt cfg set ./upstream/manifests "image-prefix.kubeflow.org" '{"quay.io/jetstack": "gcr.io/$(PROJECT)/quay.io/jetstack", "metacontroller": "gcr.io/$(PROJECT)/metacontroller"}'
+	-kpt fn run $(BUILD_DIR) 
 
 # Make sure the name isn't too long.
 .PHONY: check-name
@@ -184,7 +195,7 @@ iap-secret: check-iap
 
 .PHONY: wait-gcp
 wait-gcp:
-	#kubectl --context=$(MGMTCTXT) wait --for=condition=Ready --timeout=600s  containercluster $(NAME)
+	#-kubectl --context=$(MGMTCTXT) wait --for=condition=Ready --timeout=600s  containercluster $(NAME)
 
 # Create a kubeconfig context for the kubeflow cluster
 .PHONY: create-ctxt
@@ -199,16 +210,16 @@ delete-gcp:
 
 delete-kubeflow:
 	kubectl --context=$(KFCTXT) delete namespace kubeflow
-	
+
 #----------------------------------------------------------------------------------------------------------------------
 # Oneoff for quick development
 .PHONY: set-values
 set-values:
 	kpt cfg set ./instance mgmt-ctxt gcp-private-dev-mgmt
 
-	kpt cfg set ./upstream/manifests/gcp  name jl-0601
+	kpt cfg set ./upstream/manifests/gcp name jl-0601
 	kpt cfg set ./upstream/manifests/gcp gcloud.core.project gcp-private-dev
-	kpt cfg set ./upstream/manifests/gcp  gcloud.compute.zone us-central1-f
+	kpt cfg set ./upstream/manifests/gcp gcloud.compute.zone us-central1-f
 	kpt cfg set ./upstream/manifests/gcp location us-central1
 	kpt cfg set ./upstream/manifests/gcp log-firewalls true
 
@@ -217,8 +228,8 @@ set-values:
 	kpt cfg set ./instance gcloud.compute.region us-central1
 	kpt cfg set ./instance gcloud.core.project gcp-private-dev
 
-reset:
+.PHONE: update
+update:
 	rm -rf upstream
 	make get-pkg
 	make set-values
-	make set-image-prefix

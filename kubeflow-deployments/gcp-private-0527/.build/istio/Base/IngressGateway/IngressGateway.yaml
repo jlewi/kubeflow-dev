@@ -1,3 +1,22 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: ingressgateway
+  namespace: istio-system
+  labels:
+    release: istio
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      name: http
+      protocol: HTTP
+      number: 80
+    hosts:
+    - "*"
+    # Additional ports in gateaway for the ingressPorts - apps using dedicated port instead of hostname
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -19,40 +38,24 @@ metadata:
     app: istio-ingressgateway
     release: istio
 ---
-apiVersion: networking.istio.io/v1alpha3
-kind: Gateway
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
 metadata:
   name: ingressgateway
   namespace: istio-system
   labels:
+    app: istio-ingressgateway
+    istio: ingressgateway
     release: istio
 spec:
   selector:
-    istio: ingressgateway
-  servers:
-  - port:
-      name: http
-      protocol: HTTP
-      number: 80
-    hosts:
-    - "*"
-    # Additional ports in gateaway for the ingressPorts - apps using dedicated port instead of hostname
+    matchLabels:
+      app: istio-ingressgateway
+      istio: ingressgateway
+      release: istio
+  minAvailable: 1
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: istio-ingressgateway-sds
-  namespace: istio-system
-  labels:
-    release: istio
-roleRef:
-  name: istio-ingressgateway-sds
-  kind: Role
-  apiGroup: rbac.authorization.k8s.io
-subjects:
-- name: istio-ingressgateway-service-account
-  kind: ServiceAccount
----
+# Resources for IngressGateway component
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
@@ -75,23 +78,6 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
 ---
-apiVersion: policy/v1beta1
-kind: PodDisruptionBudget
-metadata:
-  name: ingressgateway
-  namespace: istio-system
-  labels:
-    app: istio-ingressgateway
-    istio: ingressgateway
-    release: istio
-spec:
-  selector:
-    matchLabels:
-      app: istio-ingressgateway
-      istio: ingressgateway
-      release: istio
-  minAvailable: 1
----
 apiVersion: networking.istio.io/v1alpha3
 kind: Sidecar
 metadata:
@@ -103,6 +89,21 @@ spec:
   egress:
   - hosts:
     - "*/*"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: istio-ingressgateway-sds
+  namespace: istio-system
+  labels:
+    release: istio
+roleRef:
+  name: istio-ingressgateway-sds
+  kind: Role
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- name: istio-ingressgateway-service-account
+  kind: ServiceAccount
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -249,7 +250,7 @@ spec:
         - name: ISTIO_META_ROUTER_MODE
           value: sni-dnat
         - name: GCP_METADATA
-          value: gcp-private-dev|81261038828|jl-0601|us-central1-f
+          value: gcp-private-dev|147474701642|jl-0601|us-central1-f
         - name: ISTIO_METAJSON_LABELS
           value: |
             {"app":"istio-ingressgateway","istio":"ingressgateway"}

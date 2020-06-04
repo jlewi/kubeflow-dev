@@ -1,3 +1,5 @@
+---
+
 aggregationRule:
   clusterRoleSelectors:
   - matchLabels:
@@ -7,7 +9,9 @@ kind: ClusterRole
 metadata:
   name: kubeflow-admin
 rules: []
+
 ---
+
 aggregationRule:
   clusterRoleSelectors:
   - matchLabels:
@@ -19,7 +23,9 @@ metadata:
   labels:
     rbac.authorization.kubeflow.org/aggregate-to-kubeflow-admin: "true"
 rules: []
+
 ---
+
 aggregationRule:
   clusterRoleSelectors:
   - matchLabels:
@@ -31,7 +37,9 @@ metadata:
   labels:
     rbac.authorization.kubeflow.org/aggregate-to-kubeflow-edit: "true"
 rules: []
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -59,7 +67,9 @@ rules:
   - patch
   - update
   - watch
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -195,7 +205,9 @@ rules:
   - deletecollection
   - patch
   - update
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:

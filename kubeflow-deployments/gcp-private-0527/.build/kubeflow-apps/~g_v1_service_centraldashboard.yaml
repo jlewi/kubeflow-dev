@@ -16,8 +16,6 @@ metadata:
       prefix: /
       rewrite: /
       service: centraldashboard.$(namespace)
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 spec:
   type: ClusterIP
   selector:

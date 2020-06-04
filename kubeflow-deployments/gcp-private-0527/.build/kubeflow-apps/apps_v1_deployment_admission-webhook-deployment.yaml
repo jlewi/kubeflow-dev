@@ -8,9 +8,6 @@ metadata:
     app.kubernetes.io/component: poddefaults
     app.kubernetes.io/name: poddefaults
     kustomize.component: admission-webhook
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 spec:
   selector:
     matchLabels:
@@ -26,14 +23,12 @@ spec:
         app.kubernetes.io/name: poddefaults
         kustomize.component: admission-webhook
       annotations:
-        image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-          "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
         sidecar.istio.io/inject: "false"
     spec:
       serviceAccountName: admission-webhook-service-account
       containers:
       - name: admission-webhook
-        image: gcr.io/gcp-private-dev/admission-webhook:vmaster-gaf96e4e3
+        image: gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/admission-webhook:vmaster-gaf96e4e3
         args:
         - --tlsCertFile=/etc/webhook/certs/tls.crt
         - --tlsKeyFile=/etc/webhook/certs/tls.key

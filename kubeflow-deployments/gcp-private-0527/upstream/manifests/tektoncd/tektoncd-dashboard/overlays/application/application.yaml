@@ -14,7 +14,7 @@ spec:
     kind: Pipeline
   - group: tekton.dev
     kind: Task
-  descriptor:
+  descriptor: 
     type: tektoncd-dashboard
     version: v1beta1
     description: installs tektoncd pipeline dashboard
@@ -25,8 +25,8 @@ spec:
     - name: Kam Kasravi
       email: kam.d.kasravi@intel.com
     keywords:
-    - tektoncd-dashboard
-    - kubeflow
+     - tektoncd-dashboard
+     - kubeflow
     links:
     - description: About
       url: "https://kubeflow.org"

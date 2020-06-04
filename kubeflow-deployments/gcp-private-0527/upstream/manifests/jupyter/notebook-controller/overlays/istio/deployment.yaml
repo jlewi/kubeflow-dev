@@ -8,7 +8,7 @@ spec:
       containers:
       - name: manager
         env:
-        - name: USE_ISTIO
-          value: $(USE_ISTIO)
-        - name: ISTIO_GATEWAY
-          value: $(ISTIO_GATEWAY)
+          - name: USE_ISTIO
+            value: $(USE_ISTIO)
+          - name: ISTIO_GATEWAY
+            value: $(ISTIO_GATEWAY)

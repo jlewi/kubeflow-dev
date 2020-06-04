@@ -7,9 +7,6 @@ metadata:
     app.kubernetes.io/component: cert-manager
     app.kubernetes.io/name: cert-manager
     kustomize.component: cert-manager
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 roleRef:
   name: cert-manager-cainjector
   kind: ClusterRole

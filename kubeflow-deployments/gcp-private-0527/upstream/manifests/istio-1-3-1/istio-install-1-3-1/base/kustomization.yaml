@@ -3,6 +3,7 @@
 configMapGenerator:
 - name: istio-install-parameters
   env: params.env
+
 # Images modify the tags for images without
 # creating patches.
 images:
@@ -24,6 +25,7 @@ images:
   newTag: release-1.3-latest-daily
 - name: gcr.io/istio-release/sidecar_injector
   newTag: release-1.3-latest-daily
+
 resources:
 - namespace.yaml
 - attribute-manifest.yaml
@@ -45,6 +47,7 @@ resources:
 - service-account.yaml
 - service-role.yaml
 - service-role-binding.yaml
+
 vars:
 - name: namespace
   objref:
@@ -53,5 +56,6 @@ vars:
     apiVersion: v1
   fieldref:
     fieldpath: data.namespace
+
 configurations:
 - params.yaml

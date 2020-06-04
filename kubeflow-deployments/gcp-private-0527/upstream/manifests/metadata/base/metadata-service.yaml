@@ -24,6 +24,6 @@ spec:
     component: grpc-server
   type: ClusterIP
   ports:
-  - port: 8080
-    protocol: TCP
-    name: grpc-backendapi
+    - port: 8080
+      protocol: TCP
+      name: grpc-backendapi

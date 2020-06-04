@@ -1,16 +1,13 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: jupyter-web-app-jupyter-web-app-config-m7hk699mdm
+  name: jupyter-web-app-jupyter-web-app-config-dhcbh64467
   namespace: kubeflow
   labels:
     app: jupyter-web-app
     kustomize.component: jupyter-web-app
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 data:
-  spawner_ui_config.yaml: |
+  spawner_ui_config.yaml: |-
     # Configuration file for the Jupyter UI.
     #
     # Each Jupyter UI option is configured by two keys: 'value' and 'readOnly'
@@ -34,10 +31,10 @@ data:
         value: gcr.io/kubeflow-images-public/tensorflow-1.15.2-notebook-cpu:1.0.0
         # The list of available standard container Images
         options:
-        - gcr.io/kubeflow-images-public/tensorflow-1.15.2-notebook-cpu:1.0.0
-        - gcr.io/kubeflow-images-public/tensorflow-1.15.2-notebook-gpu:1.0.0
-        - gcr.io/kubeflow-images-public/tensorflow-2.1.0-notebook-cpu:1.0.0
-        - gcr.io/kubeflow-images-public/tensorflow-2.1.0-notebook-gpu:1.0.0
+          - gcr.io/kubeflow-images-public/tensorflow-1.15.2-notebook-cpu:1.0.0
+          - gcr.io/kubeflow-images-public/tensorflow-1.15.2-notebook-gpu:1.0.0
+          - gcr.io/kubeflow-images-public/tensorflow-2.1.0-notebook-cpu:1.0.0
+          - gcr.io/kubeflow-images-public/tensorflow-2.1.0-notebook-gpu:1.0.0
         # By default, custom container Images are allowed
         # Uncomment the following line to only enable standard container Images
         readOnly: false
@@ -124,8 +121,8 @@ data:
           num: "none"
           # Determines what the UI will show and send to the backend
           vendors:
-          - limitsKey: "nvidia.com/gpu"
-            uiName: "NVIDIA"
+            - limitsKey: "nvidia.com/gpu"
+              uiName: "NVIDIA"
           # Values: "" or a `limits-key` from the vendors list
           vendor: ""
         readOnly: false

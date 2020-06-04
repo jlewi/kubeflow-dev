@@ -25,6 +25,6 @@ spec:
     args:
     - apply
     - -f
-    - ${inputs.params.pathToResourceFiles}/${inputs.params.apply-directory}
+    - ${inputs.params.pathToResourceFiles}/${inputs.params.apply-directory} 
     - -n
     - ${inputs.params.target-namespace}

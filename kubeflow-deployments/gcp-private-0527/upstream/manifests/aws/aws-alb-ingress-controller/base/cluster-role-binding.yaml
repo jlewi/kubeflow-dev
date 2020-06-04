@@ -7,5 +7,5 @@ roleRef:
   kind: ClusterRole
   name: alb-ingress-controller
 subjects:
-- kind: ServiceAccount
-  name: alb-ingress-controller
+  - kind: ServiceAccount
+    name: alb-ingress-controller

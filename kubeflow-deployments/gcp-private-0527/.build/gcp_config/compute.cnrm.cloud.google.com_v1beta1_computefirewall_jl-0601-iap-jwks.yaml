@@ -1,0 +1,20 @@
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeFirewall
+metadata:
+  name: jl-0601-iap-jwks
+  namespace: gcp-private-dev
+  labels:
+    kf-name: gcp-private-0527
+spec:
+  allow:
+  - ports:
+    - "443"
+    protocol: tcp
+  description: Allow traffic to www.gstatic.com to get IAP JWKs
+  destinationRanges:
+  - 172.217.212.94
+  - 172.217.204.94
+  direction: EGRESS
+  enableLogging: true
+  networkRef:
+    name: jl-0601

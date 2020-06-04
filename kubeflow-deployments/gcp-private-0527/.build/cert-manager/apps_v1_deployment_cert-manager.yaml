@@ -8,9 +8,6 @@ metadata:
     app.kubernetes.io/component: cert-manager
     app.kubernetes.io/name: cert-manager
     kustomize.component: cert-manager
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 spec:
   replicas: 1
   selector:
@@ -27,8 +24,6 @@ spec:
         app.kubernetes.io/name: cert-manager
         kustomize.component: cert-manager
       annotations:
-        image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-          "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
         prometheus.io/path: /metrics
         prometheus.io/port: "9402"
         prometheus.io/scrape: "true"
@@ -36,7 +31,7 @@ spec:
       serviceAccountName: cert-manager
       containers:
       - name: cert-manager
-        image: gcr.io/gcp-private-dev/quay.io/jetstack/cert-manager-controller:v0.11.0
+        image: gcr.io/gcp-private-dev/mirror/quay.io/jetstack/cert-manager-controller:v0.11.0
         args:
         - --v=2
         - --cluster-resource-namespace=$(POD_NAMESPACE)

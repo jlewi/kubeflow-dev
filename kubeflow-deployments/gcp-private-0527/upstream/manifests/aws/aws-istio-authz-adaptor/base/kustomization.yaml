@@ -16,8 +16,8 @@ images:
   newName: seedjeffwan/istio-adapter
   newTag: "0.1"
 configMapGenerator:
-- name: aws-authzadaptor-parameters
-  env: params.env
+  - name: aws-authzadaptor-parameters
+    env: params.env
 generatorOptions:
   disableNameSuffixHash: true
 vars:

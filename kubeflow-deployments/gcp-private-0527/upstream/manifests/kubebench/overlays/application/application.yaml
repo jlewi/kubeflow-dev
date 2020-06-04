@@ -19,13 +19,12 @@ spec:
   descriptor:
     type: kubebench
     version: v1beta1
-    description: "Makes it easy to run benchmark jobs on Kubeflow with various system
-      and model settings"
+    description: "Makes it easy to run benchmark jobs on Kubeflow with various system and model settings"
     maintainers: []
     owners: []
     keywords:
-    - kubebench
-    - kubeflow
+     - kubebench
+     - kubeflow
     links:
     - description: About
       url: https://github.com/kubeflow/kubebench

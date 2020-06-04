@@ -23,8 +23,8 @@ spec:
     maintainers: []
     owners: []
     keywords:
-    - kfserving-crds
-    - kubeflow
+     - kfserving-crds
+     - kubeflow
     links:
     - description: About
       url: ""

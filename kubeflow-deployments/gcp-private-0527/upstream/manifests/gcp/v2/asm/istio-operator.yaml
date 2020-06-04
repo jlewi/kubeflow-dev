@@ -32,7 +32,7 @@ spec:
           aud: "gcp-private-dev.svc.id.goog" # {"type":"string","x-kustomize":{"partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
       proxy:
         env:
-          GCP_METADATA: "gcp-private-dev|81261038828|jl-0601|us-central1-f" # {"type":"string","x-kustomize":{"partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"},{"name":"gcloud.project.projectNumber","value":"81261038828"},{"name":"name","value":"jl-0601"},{"name":"gcloud.compute.zone","value":"us-central1-f"}]}}
+          GCP_METADATA: "gcp-private-dev|147474701642|jl-0601|us-central1-f" # {"type":"string","x-kustomize":{"partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"},{"name":"gcloud.project.projectNumber","value":"147474701642"},{"name":"name","value":"jl-0601"},{"name":"gcloud.compute.zone","value":"us-central1-f"}]}}
     nodeagent:
       env:
         GKE_CLUSTER_URL: "https://container.googleapis.com/v1/projects/gcp-private-dev/locations/us-central1/clusters/jl-0601" # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"},{"name":"name","value":"jl-0601"},{"name":"location","value":"us-central1"}]}}

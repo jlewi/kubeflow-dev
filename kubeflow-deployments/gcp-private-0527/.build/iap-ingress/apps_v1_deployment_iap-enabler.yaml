@@ -20,7 +20,7 @@ spec:
       serviceAccountName: kf-admin
       containers:
       - name: iap
-        image: gcr.io/gcp-private-dev/ingress-setup:latest
+        image: gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/ingress-setup:latest
         command:
         - bash
         - /var/envoy-config/setup_backend.sh

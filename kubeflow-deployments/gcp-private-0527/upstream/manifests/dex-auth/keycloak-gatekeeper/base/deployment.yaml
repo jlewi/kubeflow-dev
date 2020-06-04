@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -53,7 +54,7 @@ spec:
           mountPath: /opt/templates/sign_in.html.tmpl
           subPath: login-page
         securityContext:
-          readOnlyRootFilesystem: true
+            readOnlyRootFilesystem: true
       volumes:
       - name: page-templates
         configMap:

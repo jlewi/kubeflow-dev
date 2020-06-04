@@ -1,0 +1,13 @@
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeRoute
+metadata:
+  name: jl-0601-google-apis
+  namespace: gcp-private-dev
+  labels:
+    kf-name: gcp-private-0527
+spec:
+  priority: 1000
+  destRange: 199.36.153.4/30
+  networkRef:
+    name: jl-0601
+  nextHopGateway: default-internet-gateway

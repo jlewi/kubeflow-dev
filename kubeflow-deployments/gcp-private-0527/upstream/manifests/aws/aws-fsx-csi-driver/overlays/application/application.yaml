@@ -27,9 +27,7 @@ spec:
   descriptor:
     type: aws-efs-csi-driver
     version: v0.3.0
-    description: The Amazon FSx for Lustre Container Storage Interface (CSI) driver
-      provides a CSI interface that allows Amazon EKS clusters to manage the lifecycle
-      of Amazon FSx for Lustre file systems.
+    description: The Amazon FSx for Lustre Container Storage Interface (CSI) driver provides a CSI interface that allows Amazon EKS clusters to manage the lifecycle of Amazon FSx for Lustre file systems.
     maintainers:
     - name: Jiaxin Shan
       email: shjiaxin@amazon.com
@@ -37,9 +35,10 @@ spec:
     - name: Jiaxin Shan
       email: shjiaxin@amazon.com
     keywords:
-    - aws
-    - kubeflow
+     - aws
+     - kubeflow
     links:
     - description: About
       url: https://github.com/kubernetes-sigs/aws-fsx-csi-driver
   addOwnerRef: true
+

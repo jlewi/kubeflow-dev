@@ -8,9 +8,6 @@ metadata:
     app.kubernetes.io/component: notebook-controller
     app.kubernetes.io/name: notebook-controller
     kustomize.component: notebook-controller
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 data:
   ISTIO_GATEWAY: kubeflow/kubeflow-gateway
   USE_ISTIO: "true"

@@ -3,8 +3,8 @@ kind: ClusterRoleBinding
 metadata:
   name: tekton-dashboard-minimal
 subjects:
-- kind: ServiceAccount
-  name: tekton-dashboard
+  - kind: ServiceAccount
+    name: tekton-dashboard
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole

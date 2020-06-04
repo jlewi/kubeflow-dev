@@ -84,7 +84,9 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: katib-controller
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -96,7 +98,9 @@ aggregationRule:
   - matchLabels:
       rbac.authorization.kubeflow.org/aggregate-to-kubeflow-katib-admin: "true"
 rules: []
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -120,7 +124,9 @@ rules:
   - deletecollection
   - patch
   - update
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:

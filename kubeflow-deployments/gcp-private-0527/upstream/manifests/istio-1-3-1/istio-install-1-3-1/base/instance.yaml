@@ -33,7 +33,9 @@ spec:
     destination_uid: destination.uid | ""
     source_ip: source.ip | ip("0.0.0.0")
     source_uid: source.uid | ""
+
 ---
+
 apiVersion: config.istio.io/v1alpha2
 kind: instance
 metadata:
@@ -69,7 +71,9 @@ spec:
       source_workload_namespace: source.workload.namespace | "unknown"
     monitored_resource_type: '"UNSPECIFIED"'
     value: "1"
+
 ---
+
 apiVersion: config.istio.io/v1alpha2
 kind: instance
 metadata:
@@ -105,7 +109,9 @@ spec:
       source_workload_namespace: source.workload.namespace | "unknown"
     monitored_resource_type: '"UNSPECIFIED"'
     value: response.duration | "0ms"
+
 ---
+
 apiVersion: config.istio.io/v1alpha2
 kind: instance
 metadata:
@@ -141,7 +147,9 @@ spec:
       source_workload_namespace: source.workload.namespace | "unknown"
     monitored_resource_type: '"UNSPECIFIED"'
     value: request.size | 0
+
 ---
+
 apiVersion: config.istio.io/v1alpha2
 kind: instance
 metadata:
@@ -177,7 +185,9 @@ spec:
       source_workload_namespace: source.workload.namespace | "unknown"
     monitored_resource_type: '"UNSPECIFIED"'
     value: response.size | 0
+
 ---
+
 apiVersion: config.istio.io/v1alpha2
 kind: instance
 metadata:
@@ -209,7 +219,9 @@ spec:
       source_workload_namespace: source.workload.namespace | "unknown"
     monitored_resource_type: '"UNSPECIFIED"'
     value: connection.received.bytes | 0
+
 ---
+
 apiVersion: config.istio.io/v1alpha2
 kind: instance
 metadata:
@@ -241,7 +253,9 @@ spec:
       source_workload_namespace: source.workload.namespace | "unknown"
     monitored_resource_type: '"UNSPECIFIED"'
     value: connection.sent.bytes | 0
+
 ---
+
 apiVersion: config.istio.io/v1alpha2
 kind: instance
 metadata:
@@ -273,7 +287,9 @@ spec:
       source_workload_namespace: source.workload.namespace | "unknown"
     monitored_resource_type: '"UNSPECIFIED"'
     value: "1"
+
 ---
+
 apiVersion: config.istio.io/v1alpha2
 kind: instance
 metadata:

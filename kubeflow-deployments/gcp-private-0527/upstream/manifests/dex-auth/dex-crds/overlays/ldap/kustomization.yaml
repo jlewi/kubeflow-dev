@@ -3,9 +3,11 @@ kind: Kustomization
 namespace: auth
 bases:
 - ../../base
+
 patchesStrategicMerge:
 - config-map.yaml
 - deployment.yaml
+
 configMapGenerator:
 - name: dex-parameters
   behavior: merge

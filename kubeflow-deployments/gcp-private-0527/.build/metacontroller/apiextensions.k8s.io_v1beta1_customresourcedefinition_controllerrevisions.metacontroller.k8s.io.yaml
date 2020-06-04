@@ -4,9 +4,6 @@ metadata:
   name: controllerrevisions.metacontroller.k8s.io
   labels:
     kustomize.component: metacontroller
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 spec:
   group: metacontroller.k8s.io
   names:

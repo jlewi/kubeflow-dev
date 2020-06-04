@@ -25,9 +25,9 @@ spec:
         image: gcr.io/kubeflow-images-public/katib/v1alpha3/katib-ui
         imagePullPolicy: IfNotPresent
         command:
-        - './katib-ui'
+          - './katib-ui'
         args:
-        - '--port=8080'
+          - '--port=8080'
         env:
         - name: KATIB_CORE_NAMESPACE
           valueFrom:

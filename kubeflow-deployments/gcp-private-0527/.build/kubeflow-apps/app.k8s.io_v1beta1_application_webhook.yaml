@@ -6,9 +6,6 @@ metadata:
   labels:
     app.kubernetes.io/component: poddefaults
     app.kubernetes.io/name: poddefaults
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 spec:
   selector:
     matchLabels:

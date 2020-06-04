@@ -7,9 +7,6 @@ metadata:
     app.kubernetes.io/component: pytorch
     app.kubernetes.io/name: pytorch-operator
     kustomize.component: pytorch-operator
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 rules:
 - resources:
   - pytorchjobs

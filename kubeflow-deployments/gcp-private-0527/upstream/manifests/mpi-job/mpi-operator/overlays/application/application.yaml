@@ -21,8 +21,7 @@ spec:
   descriptor:
     type: "mpi-operator"
     version: "v1"
-    description: "Mpi-operator allows users to create and manage the \"MPIJob\" custom
-      resource."
+    description: "Mpi-operator allows users to create and manage the \"MPIJob\" custom resource."
     maintainers:
     - name: Rong Ou
       email: rong.ou@gmail.com

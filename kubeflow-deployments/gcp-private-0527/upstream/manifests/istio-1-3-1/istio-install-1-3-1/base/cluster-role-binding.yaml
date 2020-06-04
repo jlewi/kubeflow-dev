@@ -12,7 +12,9 @@ subjects:
 - kind: ServiceAccount
   name: istio-citadel-service-account
   namespace: $(namespace)
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -27,7 +29,9 @@ subjects:
 - kind: ServiceAccount
   name: istio-galley-service-account
   namespace: $(namespace)
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -42,7 +46,9 @@ subjects:
 - kind: ServiceAccount
   name: istio-mixer-service-account
   namespace: $(namespace)
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -55,7 +61,9 @@ subjects:
 - kind: ServiceAccount
   name: istio-multi
   namespace: $(namespace)
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -70,7 +78,9 @@ subjects:
 - kind: ServiceAccount
   name: istio-nodeagent-service-account
   namespace: $(namespace)
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -85,7 +95,9 @@ subjects:
 - kind: ServiceAccount
   name: istio-pilot-service-account
   namespace: $(namespace)
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
@@ -100,7 +112,9 @@ subjects:
 - kind: ServiceAccount
   name: istio-security-post-install-account
   namespace: $(namespace)
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -116,7 +130,9 @@ subjects:
 - kind: ServiceAccount
   name: istio-sidecar-injector-service-account
   namespace: $(namespace)
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:

@@ -18,10 +18,10 @@ spec:
         image: gcr.io/ml-pipeline/api-server
         imagePullPolicy: IfNotPresent
         command:
-        - apiserver
-        - --config=/etc/ml-pipeline-config
-        - --sampleconfig=/config/sample_config.json
-        - -logtostderr=true
+          - apiserver
+          - --config=/etc/ml-pipeline-config
+          - --sampleconfig=/config/sample_config.json
+          - -logtostderr=true
         ports:
         - containerPort: 8888
         - containerPort: 8887
@@ -30,6 +30,6 @@ spec:
           mountPath: /etc/ml-pipeline-config
       serviceAccountName: ml-pipeline
       volumes:
-      - name: config-volume
-        configMap:
-          name: ml-pipeline-config
+        - name: config-volume
+          configMap:
+            name: ml-pipeline-config

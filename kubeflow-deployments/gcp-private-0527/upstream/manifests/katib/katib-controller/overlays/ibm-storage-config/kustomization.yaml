@@ -5,6 +5,6 @@ bases:
 patchesStrategicMerge:
 - katib-mysql-deployment.yaml
 images:
-- name: mysql
-  newTag: "5.6"
-  newName: mysql
+  - name: mysql
+    newTag: "5.6"
+    newName: mysql

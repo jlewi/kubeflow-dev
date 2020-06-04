@@ -29,8 +29,7 @@ spec:
   descriptor:
     type: jupyter-web-app
     version: v1beta1
-    description: Provides a UI which allows the user to create/conect/delete jupyter
-      notebooks.
+    description: Provides a UI which allows the user to create/conect/delete jupyter notebooks.
     maintainers:
     - name: Kimonas Sotirchos
       email: kimwnasptd@arrikto.com
@@ -38,12 +37,13 @@ spec:
     - name: Kimonas Sotirchos
       email: kimwnasptd@arrikto.com
     keywords:
-    - jupyterhub
-    - jupyter ui
-    - notebooks
+     - jupyterhub
+     - jupyter ui
+     - notebooks  
     links:
     - description: About
       url: https://github.com/kubeflow/kubeflow/tree/master/components/jupyter-web-app
     - description: Docs
-      url: https://www.kubeflow.org/docs/notebooks
+      url: https://www.kubeflow.org/docs/notebooks 
   addOwnerRef: true
+

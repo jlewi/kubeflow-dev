@@ -40,7 +40,9 @@ rules:
   - tokenreviews
   verbs:
   - create
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -131,7 +133,9 @@ rules:
   - get
   - list
   - watch
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -180,7 +184,9 @@ rules:
   - get
   - list
   - watch
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -194,7 +200,9 @@ rules:
   - configmaps
   verbs:
   - get
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -264,7 +272,9 @@ rules:
   - get
   - list
   - watch
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -291,7 +301,9 @@ rules:
   - get
   - list
   - watch
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
@@ -327,7 +339,9 @@ rules:
   - get
   - list
   - watch
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -353,7 +367,9 @@ rules:
   - list
   - watch
   - patch
+
 ---
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:

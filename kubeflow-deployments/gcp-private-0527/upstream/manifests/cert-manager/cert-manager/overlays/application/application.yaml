@@ -9,7 +9,7 @@ spec:
       app.kubernetes.io/instance: cert-manager
       app.kubernetes.io/managed-by: kfctl
       app.kubernetes.io/component: cert-manager
-      app.kubernetes.io/part-of: kubeflow
+      app.kubernetes.io/part-of: kubeflow      
   componentKinds:
   - group: rbac
     kind: ClusterRole
@@ -26,8 +26,7 @@ spec:
   descriptor:
     type: ""
     version: "v0.10.0"
-    description: "Automatically provision and manage TLS certificates in Kubernetes
-      https://jetstack.io."
+    description: "Automatically provision and manage TLS certificates in Kubernetes https://jetstack.io."
     keywords:
     - cert-manager
     links:

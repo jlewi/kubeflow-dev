@@ -81,7 +81,7 @@ spec:
       repoRef:
         name: manifests
         path: cert-manager/cert-manager
-    name: cert-manager
+    name: cert-manager        
   - kustomizeConfig:
       repoRef:
         name: manifests
@@ -362,8 +362,8 @@ spec:
       - application
       - istio
       parameters:
-      - # kfctl will set admin to current user account that deploying kubeflow
-        name: admin
+        # kfctl will set admin to current user account that deploying kubeflow
+      - name: admin
         # value: SET_EMAIL
       - name: userid-header
         value: X-Goog-Authenticated-User-Email

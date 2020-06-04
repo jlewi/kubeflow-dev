@@ -1,9 +1,11 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+
 configMapGenerator:
 - name: cluster-local-gateway-parameters
   envs:
   - params.env
+
 resources:
 - cluster-role-binding.yaml
 - cluster-role.yaml
@@ -13,6 +15,7 @@ resources:
 - pod-disruption-budget.yaml
 - service-account.yaml
 - service.yaml
+
 vars:
 - name: namespace
   objref:
@@ -21,7 +24,9 @@ vars:
     apiVersion: v1
   fieldref:
     fieldpath: data.namespace
+
 commonLabels:
   kustomize.component: cluster-local-gateway
+
 configurations:
 - params.yaml

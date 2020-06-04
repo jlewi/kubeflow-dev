@@ -4,9 +4,9 @@ metadata:
   name: $(generateName)
 spec:
   componentKinds:
-  - group: app.k8s.io
-    kind: Application
-  descriptor:
+    - group: app.k8s.io
+      kind: Application
+  descriptor: 
     type: tektoncd-install
     version: v1beta1
     description: installs tektoncd pipeline
@@ -17,7 +17,7 @@ spec:
     - name: Kam Kasravi
       email: kam.d.kasravi@intel.com
     keywords:
-    - kubeflow
+     - kubeflow
     links:
     - description: About
       url: "https://kubeflow.org"

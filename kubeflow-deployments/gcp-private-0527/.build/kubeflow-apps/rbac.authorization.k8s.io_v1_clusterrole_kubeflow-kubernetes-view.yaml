@@ -4,9 +4,6 @@ metadata:
   name: kubeflow-kubernetes-view
   labels:
     rbac.authorization.kubeflow.org/aggregate-to-kubeflow-view: "true"
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 rules:
 - resources:
   - configmaps

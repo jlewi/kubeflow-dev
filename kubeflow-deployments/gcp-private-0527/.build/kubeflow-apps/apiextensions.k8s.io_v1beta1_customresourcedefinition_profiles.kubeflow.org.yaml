@@ -4,9 +4,6 @@ metadata:
   name: profiles.kubeflow.org
   labels:
     kustomize.component: profiles
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
   creationTimestamp: null
 spec:
   conversion:

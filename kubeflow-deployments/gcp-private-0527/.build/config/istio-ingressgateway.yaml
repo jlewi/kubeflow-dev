@@ -7,8 +7,6 @@ metadata:
     app: istio-ingressgateway
     istio: ingressgateway
     release: istio
-  annotations:
-    beta.cloud.google.com/backend-config: '{"ports": {"http2":"iap-backendconfig"}}'
 spec:
   type: NodePort
   selector:

@@ -6,6 +6,7 @@ metadata:
 spec:
   subjects:
   - group: "datascience"
+
   roleRef:
     kind: ServiceRole
     name: "ml-pipeline-viewer"

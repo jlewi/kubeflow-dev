@@ -11,6 +11,6 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: xgboost-operator
+    app: xgboost-operator 
   ports:
   - port: 443

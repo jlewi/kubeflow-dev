@@ -102,9 +102,9 @@ data:
     # ignore error if webhook pod does not exist
     kubectl delete pod ${webhookPod} 2>/dev/null || true
     echo "webhook ${webhookPod} is restarted to utilize the new secret"
-
+    
     cat ${tmpdir}/self_ca.crt
-
+    
     # -a means base64 encode
     caBundle=$(cat ${tmpdir}/self_ca.crt | openssl enc -a -A)
     echo ${caBundle}

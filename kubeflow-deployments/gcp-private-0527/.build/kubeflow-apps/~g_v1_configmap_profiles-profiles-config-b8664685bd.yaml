@@ -5,9 +5,6 @@ metadata:
   namespace: kubeflow
   labels:
     kustomize.component: profiles
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 data:
   admin: jlewi@google.com
   gcp-sa: jl-stack-0409-204015-user@jlewi-dev.iam.gserviceaccount.com

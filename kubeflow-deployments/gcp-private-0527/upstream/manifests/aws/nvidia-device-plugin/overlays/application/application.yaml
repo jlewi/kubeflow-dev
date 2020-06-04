@@ -27,10 +27,11 @@ spec:
     - name: Jiaxin Shan
       email: shjiaxin@amazon.com
     keywords:
-    - aws
-    - nvidia
-    - kubeflow
+     - aws
+     - nvidia
+     - kubeflow
     links:
     - description: About
       url: https://github.com/kubernetes/kops/tree/master/hooks/nvidia-device-plugin
   addOwnerRef: true
+

@@ -5,9 +5,6 @@ metadata:
   labels:
     app.kubernetes.io/component: tfjob
     app.kubernetes.io/name: tf-job-crds
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 spec:
   additionalPrinterColumns:
   - name: State

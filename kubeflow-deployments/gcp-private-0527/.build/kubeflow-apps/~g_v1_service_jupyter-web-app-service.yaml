@@ -17,8 +17,6 @@ metadata:
       service: jupyter-web-app-service.$(namespace)
       add_request_headers:
         x-forwarded-prefix: /jupyter
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 spec:
   type: ClusterIP
   selector:

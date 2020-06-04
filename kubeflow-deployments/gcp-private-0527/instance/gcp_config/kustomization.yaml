@@ -12,7 +12,6 @@ commonLabels:
 resources:
 - ../../upstream/manifests/gcp/v2/cnrm
 - iam_policy.yaml
-- enable-services.yaml
 - ../../upstream/manifests/gcp/v2/privateGKE/
 patchesStrategicMerge:
 - cluster_patch.yaml

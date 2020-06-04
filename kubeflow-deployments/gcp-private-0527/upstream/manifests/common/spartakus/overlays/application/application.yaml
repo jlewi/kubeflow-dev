@@ -25,8 +25,8 @@ spec:
     maintainers: []
     owners: []
     keywords:
-    - spartakus
-    - kubeflow
+     - spartakus
+     - kubeflow
     links:
     - description: About
       url: ""

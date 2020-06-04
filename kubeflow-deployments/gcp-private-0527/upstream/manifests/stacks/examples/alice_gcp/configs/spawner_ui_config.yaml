@@ -9,7 +9,7 @@ spawnerFormDefaults:
     value: alicerepo/tensorflow-1.14.0-notebook-cpu:v-base-ef41372-1177829795472347138
     # The list of available standard container Images
     options:
-    - alicerepo/tensorflow-1.15.2-notebook-cpu:1.0.0
-    - alicerepo/tensorflow-1.15.2-notebook-gpu:1.0.0
-    - alicerepo//tensorflow-2.1.0-notebook-cpu:1.0.0
-    - alicerepo//tensorflow-2.1.0-notebook-gpu:1.0.0
+      - alicerepo/tensorflow-1.15.2-notebook-cpu:1.0.0
+      - alicerepo/tensorflow-1.15.2-notebook-gpu:1.0.0
+      - alicerepo//tensorflow-2.1.0-notebook-cpu:1.0.0
+      - alicerepo//tensorflow-2.1.0-notebook-gpu:1.0.0

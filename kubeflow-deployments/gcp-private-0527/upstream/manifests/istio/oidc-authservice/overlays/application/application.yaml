@@ -1,3 +1,4 @@
+ 
 apiVersion: app.k8s.io/v1beta1
 kind: Application
 metadata:
@@ -23,8 +24,7 @@ spec:
   descriptor:
     type: oidc-authservice
     version: v1beta1
-    description: Provides OIDC-based authentication for Kubeflow Applications, at
-      the Istio Gateway.
+    description: Provides OIDC-based authentication for Kubeflow Applications, at the Istio Gateway.
     maintainers:
     - name: Yannis Zarkadas
       email: yanniszark@arrikto.com
@@ -32,9 +32,9 @@ spec:
     - name: Yannis Zarkadas
       email: yanniszark@arrikto.com
     keywords:
-    - oidc
-    - authservice
-    - authentication
+     - oidc
+     - authservice
+     - authentication  
     links:
     - description: About
       url: https://github.com/kubeflow/kubeflow/tree/master/components/oidc-authservice

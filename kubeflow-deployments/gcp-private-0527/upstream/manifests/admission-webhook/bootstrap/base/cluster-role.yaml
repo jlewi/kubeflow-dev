@@ -21,4 +21,5 @@ rules:
   - pods
   verbs:
   - list
-  - delete
+  - delete  
+    

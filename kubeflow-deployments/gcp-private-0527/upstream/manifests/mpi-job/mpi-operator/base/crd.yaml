@@ -21,8 +21,7 @@ spec:
         properties:
           spec:
             title: The MPIJob spec
-            description: Only one of gpus, processingUnits, or replicas should be
-              specified
+            description: Only one of gpus, processingUnits, or replicas should be specified
             oneOf:
             - properties:
                 gpus:
@@ -84,8 +83,7 @@ spec:
             - properties:
                 replicas:
                   title: Total number of replicas
-                  description: The processing resource limit should be specified for
-                    each replica
+                  description: The processing resource limit should be specified for each replica
                   type: integer
                   minimum: 1
                 slotsPerWorker:

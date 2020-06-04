@@ -7,9 +7,6 @@ metadata:
     app.kubernetes.io/component: tfjob
     app.kubernetes.io/name: tf-job-operator
     kustomize.component: tf-job-operator
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 spec:
   replicas: 1
   selector:
@@ -25,14 +22,12 @@ spec:
         app.kubernetes.io/name: tf-job-operator
         kustomize.component: tf-job-operator
       annotations:
-        image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-          "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
         sidecar.istio.io/inject: "false"
     spec:
       serviceAccountName: tf-job-operator
       containers:
       - name: tf-job-operator
-        image: gcr.io/gcp-private-dev/tf_operator:vmaster-gd455e6ef
+        image: gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/tf_operator:vmaster-gd455e6ef
         args:
         - --alsologtostderr
         - -v=1

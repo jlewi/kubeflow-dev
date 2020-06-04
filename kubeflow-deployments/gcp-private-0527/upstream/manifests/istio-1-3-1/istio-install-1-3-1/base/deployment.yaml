@@ -75,7 +75,9 @@ spec:
           requests:
             cpu: 10m
       serviceAccountName: istio-citadel-service-account
+
 ---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -197,7 +199,9 @@ spec:
       - configMap:
           name: istio
         name: mesh-config
+
 ---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -399,7 +403,9 @@ spec:
         secret:
           optional: true
           secretName: istio-ingressgateway-ca-certs
+
 ---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -584,7 +590,9 @@ spec:
         secret:
           optional: true
           secretName: istio.istio-pilot-service-account
+
 ---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -759,7 +767,9 @@ spec:
         secret:
           optional: true
           secretName: policy-adapter-secret
+
 ---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -876,7 +886,9 @@ spec:
             path: values
           name: istio-sidecar-injector
         name: inject-config
+
 ---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -1061,7 +1073,9 @@ spec:
         secret:
           optional: true
           secretName: telemetry-adapter-secret
+
 ---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:

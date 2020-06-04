@@ -17,7 +17,7 @@ spec:
       serviceAccountName: application-controller-service-account
       containers:
       - name: manager
-        image: gcr.io/gcp-private-dev/kubernetes-sigs/application:1.0-beta
+        image: gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/kubernetes-sigs/application:1.0-beta
         command:
         - /root/manager
         env:

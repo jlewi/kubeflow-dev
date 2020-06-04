@@ -21,32 +21,33 @@ spec:
         sidecar.istio.io/inject: "false"
     spec:
       containers:
-      - name: alb-ingress-controller
-        args:
-        # Setting the ingress-class flag below ensures that only ingress resources with the
-        # annotation kubernetes.io/ingress.class: "alb" are respected by the controller. You may
-        # choose any class you'd like for this controller to respect.
-        - --ingress-class=alb
-        # Limit the namespace where this ALB Ingress Controller deployment will
-        # resolve ingress resources. If left commented, all namespaces are used.
-        # - --watch-namespace=your-k8s-namespace
-        # REQUIRED
-        # Name of your cluster. Used when naming resources created
-        # by the ALB Ingress Controller, providing distinction between
-        # clusters.
+        - name: alb-ingress-controller
+          args:
+            # Limit the namespace where this ALB Ingress Controller deployment will
+            # resolve ingress resources. If left commented, all namespaces are used.
+            # - --watch-namespace=your-k8s-namespace
 
-        #            - --cluster-name=$(CLUSTER_NAME)
-        - --cluster-name=$(CLUSTER_NAME)
-        # AWS VPC ID this ingress controller will use to create AWS resources.
-        # If unspecified, it will be discovered from ec2metadata.
-        # - --aws-vpc-id=vpc-xxxxxx
+            # Setting the ingress-class flag below ensures that only ingress resources with the
+            # annotation kubernetes.io/ingress.class: "alb" are respected by the controller. You may
+            # choose any class you'd like for this controller to respect.
+            - --ingress-class=alb
 
-        # AWS region this ingress controller will operate in.
-        # If unspecified, it will be discovered from ec2metadata.
-        # List of regions: http://docs.aws.amazon.com/general/latest/gr/rande.html#vpc_region
-        # - --aws-region=us-west-1
+            # REQUIRED
+            # Name of your cluster. Used when naming resources created
+            # by the ALB Ingress Controller, providing distinction between
+            # clusters.
+#            - --cluster-name=$(CLUSTER_NAME)
+            - --cluster-name=$(CLUSTER_NAME)
 
-        # Repository location of the ALB Ingress Controller.
-        image: docker.io/amazon/aws-alb-ingress-controller
-        imagePullPolicy: Always
+            # AWS VPC ID this ingress controller will use to create AWS resources.
+            # If unspecified, it will be discovered from ec2metadata.
+            # - --aws-vpc-id=vpc-xxxxxx
+
+            # AWS region this ingress controller will operate in.
+            # If unspecified, it will be discovered from ec2metadata.
+            # List of regions: http://docs.aws.amazon.com/general/latest/gr/rande.html#vpc_region
+            # - --aws-region=us-west-1
+          # Repository location of the ALB Ingress Controller.
+          image: docker.io/amazon/aws-alb-ingress-controller
+          imagePullPolicy: Always
       serviceAccountName: alb-ingress-controller

@@ -6,9 +6,6 @@ metadata:
   labels:
     app: metacontroller
     kustomize.component: metacontroller
-  annotations:
-    image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-      "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
 spec:
   replicas: 1
   selector:
@@ -21,14 +18,12 @@ spec:
         app: metacontroller
         kustomize.component: metacontroller
       annotations:
-        image-prefix.kubeflow.org: '{"quay.io/jetstack": "gcr.io/gcp-private-dev/quay.io/jetstack",
-          "metacontroller": "gcr.io/gcp-private-dev/metacontroller"}'
         sidecar.istio.io/inject: "false"
     spec:
       serviceAccountName: meta-controller-service
       containers:
       - name: metacontroller
-        image: gcr.io/gcp-private-dev/metacontroller/metacontroller:v0.3.0
+        image: gcr.io/gcp-private-dev/mirror/metacontroller/metacontroller:v0.3.0
         command:
         - /usr/bin/metacontroller
         - --logtostderr

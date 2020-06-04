@@ -13,3 +13,6 @@ spec:
   nodeConfig:
     serviceAccountRef:
       name: jl-0601-vm # {"type":"string","x-kustomize":{"partialSetters":[{"name":"name","value":"jl-0601"}]}}
+  # TODO(jlewi): Hack to keep it as stable so we don't get update error.
+  releaseChannel:
+    channel: stable

@@ -18,12 +18,12 @@ spec:
       - name: openldap
         image: osixia/openldap
         ports:
-        - containerPort: 389
-        - containerPort: 636
+          - containerPort: 389
+          - containerPort: 636
       - name: phpldapadmin
         image: osixia/phpldapadmin
         ports:
-        - containerPort: 80
+          - containerPort: 80
         env:
         - name: PHPLDAPADMIN_HTTPS
           value: "false"

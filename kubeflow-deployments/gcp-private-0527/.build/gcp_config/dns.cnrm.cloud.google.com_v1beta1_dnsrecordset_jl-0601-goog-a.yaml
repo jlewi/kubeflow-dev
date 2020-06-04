@@ -1,15 +1,18 @@
 apiVersion: dns.cnrm.cloud.google.com/v1beta1
 kind: DNSRecordSet
 metadata:
-  name: gcr-io-cname
+  name: jl-0601-goog-a
   namespace: gcp-private-dev
   labels:
     kf-name: gcp-private-0527
 spec:
-  name: '*.gcr.io.'
-  type: CNAME
+  name: restricted.googleapis.com.
+  type: A
   managedZoneRef:
-    name: gcr-io
+    name: jl-0601-goog-apis
   rrdatas:
-  - gcr.io.
+  - 199.36.153.4
+  - 199.36.153.5
+  - 199.36.153.6
+  - 199.36.153.7
   ttl: 300

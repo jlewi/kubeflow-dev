@@ -19,10 +19,12 @@ spec:
       containers:
       - name: container
         image: gcr.io/kubeflow-images-public/metadata:v0.1.11
-        command: ["./server/server", "--http_port=8080"]
+        command: ["./server/server",
+                  "--http_port=8080"]
         ports:
         - name: backendapi
           containerPort: 8080
+
         readinessProbe:
           httpGet:
             path: /api/v1alpha1/artifact_types
@@ -33,6 +35,7 @@ spec:
           initialDelaySeconds: 3
           periodSeconds: 5
           timeoutSeconds: 2
+
         livenessProbe:
           httpGet:
             path: /api/v1alpha1/artifact_types
@@ -63,13 +66,13 @@ spec:
         sidecar.istio.io/inject: "false"
     spec:
       containers:
-      - name: container
-        envFrom:
-        - configMapRef:
-            name: grpc-configmap
-        image: gcr.io/tfx-oss-public/ml_metadata_store_server:v0.21.1
-        command: ["/bin/metadata_store_server"]
-        args: ["--grpc_port=$(METADATA_GRPC_SERVICE_PORT)"]
-        ports:
-        - name: grpc-backendapi
-          containerPort: 8080 #The value of the port number needs to be in sync with value  specified in grpc-params.env
+        - name: container
+          envFrom:
+          - configMapRef:
+              name: grpc-configmap
+          image: gcr.io/tfx-oss-public/ml_metadata_store_server:v0.21.1
+          command: ["/bin/metadata_store_server"]
+          args: ["--grpc_port=$(METADATA_GRPC_SERVICE_PORT)"]
+          ports:
+            - name: grpc-backendapi
+              containerPort: 8080 #The value of the port number needs to be in sync with value  specified in grpc-params.env

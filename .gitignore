@@ -41,6 +41,6 @@ examples/.ipynb_checkpoints/
 # Secrets
 **/*gserviceaccount.com.json
 **/.build
-
+!**/kubeflow-deployments/.build
 # Don't ignore deployment builds
 !kubeflow-deployments/**/.build

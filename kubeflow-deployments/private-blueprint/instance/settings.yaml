@@ -1,7 +1,0 @@
-# Name of kubeconfig contexts for various 
-# TODO(jlewi): Add kpt setters?
-mgmt-ctxt: gcp-private-dev-mgmt # {"type":"string","x-kustomize":{"partialSetters":[{"name":"mgmt-ctxt","value":"gcp-private-dev-mgmt"}]}}
-project: gcp-private-dev # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
-location: us-central1 # {"type":"string","x-kustomize":{"partialSetters":[{"name":"location","value":"us-central1"}]}}
-name: jl-0604 # {"type":"string","x-kustomize":{"partialSetters":[{"name":"name","value":"jl-0604"}]}}
-gkePrivate: true # {"type":"bool","x-kustomize":{"partialSetters":[{"name":"gke.private","value":"true"}]}}

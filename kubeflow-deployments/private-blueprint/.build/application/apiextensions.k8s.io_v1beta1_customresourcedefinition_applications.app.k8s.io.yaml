@@ -1,0 +1,233 @@
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: applications.app.k8s.io
+  creationTimestamp: null
+spec:
+  group: app.k8s.io
+  names:
+    kind: Application
+    plural: applications
+  scope: Namespaced
+  validation:
+    openAPIV3Schema:
+      properties:
+        apiVersion:
+          type: string
+        kind:
+          type: string
+        metadata:
+          type: object
+        spec:
+          type: object
+          properties:
+            selector:
+              type: object
+            addOwnerRef:
+              type: boolean
+            assemblyPhase:
+              type: string
+            componentKinds:
+              type: array
+              items:
+                type: object
+            descriptor:
+              type: object
+              properties:
+                type:
+                  type: string
+                description:
+                  type: string
+                icons:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                      size:
+                        type: string
+                      src:
+                        type: string
+                    required:
+                    - src
+                keywords:
+                  type: array
+                  items:
+                    type: string
+                links:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      description:
+                        type: string
+                      url:
+                        type: string
+                maintainers:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      email:
+                        type: string
+                      url:
+                        type: string
+                notes:
+                  type: string
+                owners:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      email:
+                        type: string
+                      url:
+                        type: string
+                version:
+                  type: string
+            info:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  type:
+                    type: string
+                  value:
+                    type: string
+                  valueFrom:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                      configMapKeyRef:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          namespace:
+                            type: string
+                          apiVersion:
+                            type: string
+                          kind:
+                            type: string
+                          fieldPath:
+                            type: string
+                          key:
+                            type: string
+                          resourceVersion:
+                            type: string
+                          uid:
+                            type: string
+                      secretKeyRef:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          namespace:
+                            type: string
+                          apiVersion:
+                            type: string
+                          kind:
+                            type: string
+                          fieldPath:
+                            type: string
+                          key:
+                            type: string
+                          resourceVersion:
+                            type: string
+                          uid:
+                            type: string
+                      ingressRef:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          namespace:
+                            type: string
+                          apiVersion:
+                            type: string
+                          kind:
+                            type: string
+                          fieldPath:
+                            type: string
+                          host:
+                            type: string
+                          path:
+                            type: string
+                          resourceVersion:
+                            type: string
+                          uid:
+                            type: string
+                      serviceRef:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          namespace:
+                            type: string
+                          apiVersion:
+                            type: string
+                          kind:
+                            type: string
+                          port:
+                            type: integer
+                            format: int32
+                          fieldPath:
+                            type: string
+                          path:
+                            type: string
+                          resourceVersion:
+                            type: string
+                          uid:
+                            type: string
+        status:
+          type: object
+          properties:
+            components:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  kind:
+                    type: string
+                  status:
+                    type: string
+                  group:
+                    type: string
+                  link:
+                    type: string
+            conditions:
+              type: array
+              items:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  status:
+                    type: string
+                  lastTransitionTime:
+                    type: string
+                    format: date-time
+                  lastUpdateTime:
+                    type: string
+                    format: date-time
+                  message:
+                    type: string
+                  reason:
+                    type: string
+                required:
+                - type
+                - status
+            observedGeneration:
+              type: integer
+              format: int64
+  version: v1beta1

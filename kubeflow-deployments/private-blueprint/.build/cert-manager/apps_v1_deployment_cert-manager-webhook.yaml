@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cert-manager-webhook
+  namespace: cert-manager
+  labels:
+    app: webhook
+    app.kubernetes.io/component: cert-manager
+    app.kubernetes.io/name: cert-manager
+    kustomize.component: cert-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webhook
+      app.kubernetes.io/component: cert-manager
+      app.kubernetes.io/name: cert-manager
+      kustomize.component: cert-manager
+  template:
+    metadata:
+      labels:
+        app: webhook
+        app.kubernetes.io/component: cert-manager
+        app.kubernetes.io/name: cert-manager
+        kustomize.component: cert-manager
+      annotations: null
+    spec:
+      serviceAccountName: cert-manager-webhook
+      containers:
+      - name: cert-manager
+        image: gcr.io/gcp-private-dev/mirror/quay.io/jetstack/cert-manager-webhook:v0.11.0
+        args:
+        - --v=2
+        - --secure-port=6443
+        - --tls-cert-file=/certs/tls.crt
+        - --tls-private-key-file=/certs/tls.key
+        env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        resources: {}
+        volumeMounts:
+        - name: certs
+          mountPath: /certs
+        imagePullPolicy: IfNotPresent
+      volumes:
+      - name: certs
+        secret:
+          secretName: cert-manager-webhook-tls

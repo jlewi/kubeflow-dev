@@ -1,0 +1,35 @@
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: gpu-driver
+  namespace: kubeflow
+  labels:
+    app.kubernetes.io/component: gpu-driver
+    app.kubernetes.io/name: gpu-driver
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: gpu-driver
+      app.kubernetes.io/instance: gpu-driver-v0.7.0
+      app.kubernetes.io/managed-by: kfctl
+      app.kubernetes.io/name: gpu-driver
+      app.kubernetes.io/part-of: kubeflow
+      app.kubernetes.io/version: v0.7.0
+  addOwnerRef: true
+  componentKinds:
+  - kind: ConfigMap
+    group: core
+  - kind: Deployment
+    group: apps
+  descriptor:
+    type: gpu-driver
+    description: ""
+    keywords:
+    - gpu-driver
+    - kubeflow
+    links:
+    - description: About
+      url: ""
+    maintainers: []
+    owners: []
+    version: v1beta1

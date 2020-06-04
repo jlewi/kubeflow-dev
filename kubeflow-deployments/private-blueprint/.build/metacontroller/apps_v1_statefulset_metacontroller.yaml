@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: metacontroller
+  namespace: kubeflow
+  labels:
+    app: metacontroller
+    kustomize.component: metacontroller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: metacontroller
+      kustomize.component: metacontroller
+  template:
+    metadata:
+      labels:
+        app: metacontroller
+        kustomize.component: metacontroller
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      serviceAccountName: meta-controller-service
+      containers:
+      - name: metacontroller
+        image: gcr.io/gcp-private-dev/mirror/metacontroller/metacontroller:v0.3.0
+        command:
+        - /usr/bin/metacontroller
+        - --logtostderr
+        - -v=4
+        - --discovery-interval=20s
+        ports:
+        - containerPort: 2345
+        resources:
+          limits:
+            cpu: "4"
+            memory: 4Gi
+          requests:
+            cpu: 500m
+            memory: 1Gi
+        imagePullPolicy: Always
+        securityContext:
+          allowPrivilegeEscalation: true
+          privileged: true
+  volumeClaimTemplates: []
+  serviceName: ""

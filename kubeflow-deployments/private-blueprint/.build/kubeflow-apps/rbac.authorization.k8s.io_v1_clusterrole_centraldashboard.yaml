@@ -1,0 +1,19 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: centraldashboard
+  labels:
+    app: centraldashboard
+    app.kubernetes.io/component: centraldashboard
+    app.kubernetes.io/name: centraldashboard
+rules:
+- resources:
+  - events
+  - namespaces
+  - nodes
+  apiGroups:
+  - ""
+  verbs:
+  - get
+  - list
+  - watch

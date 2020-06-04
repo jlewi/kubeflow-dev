@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pytorch-operator
+  namespace: kubeflow
+  labels:
+    app.kubernetes.io/component: pytorch
+    app.kubernetes.io/name: pytorch-operator
+    kustomize.component: pytorch-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: pytorch-operator
+      app.kubernetes.io/component: pytorch
+      app.kubernetes.io/name: pytorch-operator
+      kustomize.component: pytorch-operator
+  template:
+    metadata:
+      labels:
+        name: pytorch-operator
+        app.kubernetes.io/component: pytorch
+        app.kubernetes.io/name: pytorch-operator
+        kustomize.component: pytorch-operator
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      serviceAccountName: pytorch-operator
+      containers:
+      - name: pytorch-operator
+        image: gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/pytorch-operator:vmaster-g047cf0f
+        command:
+        - /pytorch-operator.v1
+        - --alsologtostderr
+        - -v=1
+        - --monitoring-port=8443
+        env:
+        - name: MY_POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: MY_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name

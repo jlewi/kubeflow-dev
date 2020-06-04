@@ -1,0 +1,19 @@
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeFirewall
+metadata:
+  name: jl-0604-apis-egress
+  namespace: gcp-private-dev
+  labels:
+    kf-name: jl-0604
+spec:
+  allow:
+  - ports:
+    - 0-65535
+    protocol: tcp
+  description: Allow egress to google APIs
+  destinationRanges:
+  - 199.36.153.4/30
+  direction: EGRESS
+  enableLogging: false
+  networkRef:
+    name: jl-0604

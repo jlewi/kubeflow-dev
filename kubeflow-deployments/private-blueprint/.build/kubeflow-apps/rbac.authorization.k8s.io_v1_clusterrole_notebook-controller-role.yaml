@@ -1,0 +1,54 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: notebook-controller-role
+  labels:
+    app: notebook-controller
+    app.kubernetes.io/component: notebook-controller
+    app.kubernetes.io/name: notebook-controller
+    kustomize.component: notebook-controller
+rules:
+- resources:
+  - statefulsets
+  - deployments
+  apiGroups:
+  - apps
+  verbs:
+  - '*'
+- resources:
+  - pods
+  apiGroups:
+  - ""
+  verbs:
+  - get
+  - list
+  - watch
+- resources:
+  - services
+  apiGroups:
+  - ""
+  verbs:
+  - '*'
+- resources:
+  - events
+  apiGroups:
+  - ""
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+- resources:
+  - notebooks
+  - notebooks/status
+  - notebooks/finalizers
+  apiGroups:
+  - kubeflow.org
+  verbs:
+  - '*'
+- resources:
+  - virtualservices
+  apiGroups:
+  - networking.istio.io
+  verbs:
+  - '*'

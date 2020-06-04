@@ -1,0 +1,21 @@
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeFirewall
+metadata:
+  name: jl-0604-health-egress
+  namespace: gcp-private-dev
+  labels:
+    kf-name: jl-0604
+spec:
+  allow:
+  - ports:
+    - "80"
+    - "443"
+    protocol: tcp
+  description: Allow health check egress
+  destinationRanges:
+  - 130.211.0.0/22
+  - 35.191.0.0/16
+  direction: EGRESS
+  enableLogging: false
+  networkRef:
+    name: jl-0604

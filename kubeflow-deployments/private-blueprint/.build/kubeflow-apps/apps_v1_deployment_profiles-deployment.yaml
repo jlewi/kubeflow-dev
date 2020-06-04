@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: profiles-deployment
+  namespace: kubeflow
+  labels:
+    kustomize.component: profiles
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      kustomize.component: profiles
+  template:
+    metadata:
+      labels:
+        kustomize.component: profiles
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      serviceAccountName: profiles-controller-service-account
+      containers:
+      - name: kfam
+        image: gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/kfam:vmaster-gf3e09203
+        command:
+        - /access-management
+        - -cluster-admin
+        - $(CLUSTER_ADMIN)
+        - -userid-prefix
+        - $(USERID_PREFIX)
+        args: null
+        ports:
+        - name: kfam-http
+          protocol: TCP
+          containerPort: 8081
+        env:
+        - name: USERID_HEADER
+          valueFrom:
+            configMapKeyRef:
+              name: kubeflow-config-988m2m9m87
+              key: userid-header
+        - name: USERID_PREFIX
+          valueFrom:
+            configMapKeyRef:
+              name: kubeflow-config-988m2m9m87
+              key: userid-prefix
+        - name: CLUSTER_ADMIN
+          valueFrom:
+            configMapKeyRef:
+              name: profiles-profiles-config-b8664685bd
+              key: admin
+        livenessProbe:
+          httpGet:
+            port: 8081
+            path: /metrics
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        imagePullPolicy: Always
+      - name: manager
+        image: gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/profile-controller:vmaster-g34aa47c2
+        command:
+        - /manager
+        - -userid-header
+        - $(USERID_HEADER)
+        - -userid-prefix
+        - $(USERID_PREFIX)
+        - -workload-identity
+        - $(WORKLOAD_IDENTITY)
+        args: null
+        ports:
+        - name: manager-http
+          protocol: TCP
+          containerPort: 8080
+        env:
+        - name: USERID_HEADER
+          valueFrom:
+            configMapKeyRef:
+              name: kubeflow-config-988m2m9m87
+              key: userid-header
+        - name: USERID_PREFIX
+          valueFrom:
+            configMapKeyRef:
+              name: kubeflow-config-988m2m9m87
+              key: userid-prefix
+        - name: WORKLOAD_IDENTITY
+          valueFrom:
+            configMapKeyRef:
+              name: profiles-profiles-config-b8664685bd
+              key: gcp-sa
+        livenessProbe:
+          httpGet:
+            port: 8080
+            path: /metrics
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        imagePullPolicy: Always

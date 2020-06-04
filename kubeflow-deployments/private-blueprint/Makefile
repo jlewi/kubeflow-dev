@@ -47,14 +47,12 @@ set-values:
 	kpt cfg set ./instance gcloud.compute.region us-central1
 	kpt cfg set ./instance gcloud.core.project gcp-private-dev
 
-#***********************************************************************************************************************
-
-# Print out the context
-.PHONY: echo
-echo-ctxt:
-	@echo MGMTCTXT=$(MGMTCTXT)
-	@echo KFCTXT=$(KFCTXT)	
-
+#************************************************************************************************************************
+#
+# Package management
+#
+# The rules below help fetch and update packages
+#************************************************************************************************************************
 # Get packages
 .PHONY: get-pkg
 get-pkg:
@@ -72,6 +70,101 @@ get-pkg:
 	# https://github.com/GoogleContainerTools/kpt/issues/539
 	rm -rf $(MANIFESTS_DIR)/common/ambassador
 		
+
+# Update the upstream packages
+.PHONE: update
+update:
+	rm -rf upstream
+	make get-pkg
+	make set-values
+
+#**************************************************************************************************************************
+# Hydration
+#
+# The rules in this section build hydrated manifests
+#**************************************************************************************************************************
+
+# Run all the various hydration rules
+.PHONY: hydrate
+hydrate: clean-build hydrate-gcp hydrate-asm hydrate-kubeflow
+ifeq ($(PRIVATE_GKE),true)
+		make hydrate-private
+endif
+	# ignore error per https://github.com/kubeflow/gcp-blueprints/issues/37
+	-kpt fn run $(BUILD_DIR) 
+
+.PHONY: hydrate-gcp
+hydrate-gcp:
+	# ***********************************************************************************
+	# Hydrate cnrm
+	mkdir -p $(BUILD_DIR)/gcp_config 
+	kustomize build --load_restrictor none -o $(BUILD_DIR)/gcp_config $(GCP_CONFIG)
+
+.PHONY: hydrate-asm
+hydrate-asm:	
+	#************************************************************************************
+	# hydrate asm
+	istioctl manifest generate -f $(MANIFESTS_DIR)/gcp/v2/asm/istio-operator.yaml -o $(BUILD_DIR)/istio
+
+.PHONY: hydrate-kubeflow
+hydrate-kubeflow:	
+	#************************************************************************************
+	# Hydrate kubeflow applications
+	mkdir -p $(BUILD_DIR)/namespaces
+	kustomize build --load_restrictor none -o $(BUILD_DIR)/namespaces  ${KF_DIR}/namespaces
+
+	mkdir -p $(BUILD_DIR)/application
+	kustomize build --load_restrictor none -o $(BUILD_DIR)/application $(KF_DIR)/application
+	mkdir -p $(BUILD_DIR)/cert-manager
+	kustomize build --load_restrictor none -o $(BUILD_DIR)/cert-manager $(KF_DIR)/cert-manager
+	mkdir -p $(BUILD_DIR)/cert-manager-crds
+	kustomize build --load_restrictor none -o $(BUILD_DIR)/cert-manager-crds $(KF_DIR)/cert-manager-crds
+	mkdir -p $(BUILD_DIR)/cert-manager-kube-system-resources
+	kustomize build --load_restrictor none -o $(BUILD_DIR)/cert-manager-kube-system-resources $(KF_DIR)/cert-manager-kube-system-resources
+	mkdir -p $(BUILD_DIR)/cloud-endpoints
+	kustomize build --load_restrictor none -o $(BUILD_DIR)/cloud-endpoints $(KF_DIR)/cloud-endpoints
+	mkdir -p $(BUILD_DIR)/iap-ingress
+	kustomize build --load_restrictor none -o $(BUILD_DIR)/iap-ingress $(KF_DIR)/iap-ingress
+	mkdir -p $(BUILD_DIR)/kubeflow-apps
+	kustomize build --load_restrictor none -o $(BUILD_DIR)/kubeflow-apps $(KF_DIR)/kubeflow-apps
+	mkdir -p $(BUILD_DIR)/kubeflow-apps
+	kustomize build --load_restrictor none -o $(BUILD_DIR)/kubeflow-istio $(KF_DIR)/kubeflow-istio
+	mkdir -p $(BUILD_DIR)/metacontroller
+	kustomize build --load_restrictor none -o $(BUILD_DIR)/metacontroller $(KF_DIR)/metacontroller	
+	mkdir -p $(BUILD_DIR)/kubeflow-issuer
+	kustomize build --load_restrictor none -o $(BUILD_DIR)/kubeflow-issuer $(KF_DIR)/kubeflow-issuer
+
+
+# Extra hydration steps when running on private cluster
+hydrate-private:
+	kfctl alpha mirror build $(MANIFESTS_DIR)/experimental/mirror-images/gcp_template.yaml -d ./instance/kustomize -V -o $(BUILD_DIR)/mirror-pipeline.yaml --gcb
+	mv cloudbuild.yaml $(BUILD_DIR)/
+
+	# Transform all the images 	
+	cp $(MANIFESTS_DIR)/gcp/v2/privateGKE/kustomize-fns/image_prefix.yaml $(BUILD_DIR)/	
+
+
+#*****************************************************************************************************
+# Apply
+#
+# Rules to apply the various manifests
+#****************************************************************************************************
+
+# Uber apply rule to invoke all dependencies
+# TODO(jlewi): If we use prune does that give us a complete upgrade solution?
+# TODO(jlewi): Should we insert appropriate wait statements to wait for various services to
+# be available before continuing?
+.PHONY: apply
+apply: clean-build check-name check-iap apply-gcp wait-gcp create-ctxt apply-asm apply-kubeflow iap-secret	
+ifeq ($(PRIVATE_GKE),"true")
+	make apply-private
+	make apply-endpoint
+endif
+	# Kick the IAP pod because we will reset the policy and need to patch it.
+	# TODO(https://github.com/kubeflow/gcp-blueprints/issues/14)
+	kubectl --context=$(KFCTXT) -n istio-system delete pods -l service=iap-enabler
+
+
 .PHONY: apply-gcp
 apply-gcp: hydrate
 	# Apply management resources
@@ -118,83 +211,20 @@ apply-private:
 	# The path is also hardcoded for jlewi.
 	/home/jlewi/git_cloud-endpoints-controller/controller --context=$(KFCTXT) -f $(BUILD_DIR)/iap-ingress/ctl.isla.solutions_v1_cloudendpoint_$(NAME).yaml 
 
-# TODO(jlewi): If we use prune does that give us a complete upgrade solution?
-# TODO(jlewi): Should we insert appropriate wait statements to wait for various services to
-# be available before continuing?
-.PHONY: apply
-apply: clean-build check-name check-iap apply-gcp wait-gcp create-ctxt apply-asm apply-kubeflow iap-secret	
-ifeq ($(PRIVATE_GKE),"true")
-	make apply-private
-endif
-	# Kick the IAP pod because we will reset the policy and need to patch it.
-	# TODO(https://github.com/kubeflow/gcp-blueprints/issues/14)
-	kubectl --context=$(KFCTXT) -n istio-system delete pods -l service=iap-enabler
-
-.PHONY: hydrate-gcp
-hydrate-gcp:
-	# ***********************************************************************************
-	# Hydrate cnrm
-	mkdir -p $(BUILD_DIR)/gcp_config 
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/gcp_config $(GCP_CONFIG)
-
-.PHONY: hydrate-asm
-hydrate-asm:	
-	#************************************************************************************
-	# hydrate asm
-	istioctl manifest generate -f $(MANIFESTS_DIR)/gcp/v2/asm/istio-operator.yaml -o $(BUILD_DIR)/istio
-
-.PHONY: hydrate-kubeflow
-hydrate-kubeflow:	
-	#************************************************************************************
-	# Hydrate kubeflow applications
-	mkdir -p $(BUILD_DIR)/namespaces
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/namespaces  ${KF_DIR}/namespaces
-
-	mkdir -p $(BUILD_DIR)/application
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/application $(KF_DIR)/application
-	mkdir -p $(BUILD_DIR)/cert-manager
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/cert-manager $(KF_DIR)/cert-manager
-	mkdir -p $(BUILD_DIR)/cert-manager-crds
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/cert-manager-crds $(KF_DIR)/cert-manager-crds
-	mkdir -p $(BUILD_DIR)/cert-manager-kube-system-resources
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/cert-manager-kube-system-resources $(KF_DIR)/cert-manager-kube-system-resources
-	mkdir -p $(BUILD_DIR)/cloud-endpoints
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/cloud-endpoints $(KF_DIR)/cloud-endpoints
-	mkdir -p $(BUILD_DIR)/iap-ingress
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/iap-ingress $(KF_DIR)/iap-ingress
-	mkdir -p $(BUILD_DIR)/kubeflow-apps
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/kubeflow-apps $(KF_DIR)/kubeflow-apps
-	mkdir -p $(BUILD_DIR)/kubeflow-apps
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/kubeflow-istio $(KF_DIR)/kubeflow-istio
-	mkdir -p $(BUILD_DIR)/metacontroller
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/metacontroller $(KF_DIR)/metacontroller	
-	mkdir -p $(BUILD_DIR)/kubeflow-issuer
-	kustomize build --load_restrictor none -o $(BUILD_DIR)/kubeflow-issuer $(KF_DIR)/kubeflow-issuer
-
-
-# Extra hydration steps when running on private cluster
-hydrate-private: hydrate-mirror
-	# Transform all the images 	
-	cp $(MANIFESTS_DIR)/gcp/v2/privateGKE/kustomize-fns/image_prefix.yaml $(BUILD_DIR)/	
-
-#**************************************************************************************************
-# Hydrate all the application directories directories
-# TODO(jlewi): We can't use a kustomization file to combine the top level packages
-# because they might get vars conflicts. Also order is important when applying them.
-.PHONY: hydrate
-hydrate: clean-build hydrate-gcp hydrate-asm hydrate-kubeflow
-ifeq ($(PRIVATE_GKE),true)
-		make hydrate-mirror
-endif
-	# ignore error per https://github.com/kubeflow/gcp-blueprints/issues/37
-	-kpt fn run $(BUILD_DIR) 
-
-hydrate-mirror:
-	kfctl alpha mirror build $(MANIFESTS_DIR)/experimental/mirror-images/gcp_template.yaml -d ./instance/kustomize -V -o $(BUILD_DIR)/mirror-pipeline.yaml --gcb
-	mv cloudbuild.yaml $(BUILD_DIR)/
 
 apply-mirror: hydrate-mirror
 	gcloud builds submit --async gs://kubeflow-examples/image-replicate/replicate-context.tar.gz --project $(PROJECT) --config $(BUILD_DIR)/cloudbuild.yaml	
+
+apply-endpoint:
+	/home/jlewi/git_cloud-endpoints-controller/controller --context=$(KFCTXT) -f $(BUILD_DIR)/iap-ingress/ctl.isla.solutions_v1_cloudendpoint_$(NAME).yaml 
+
+# Print out the context
+.PHONY: echo
+echo-ctxt:
+	@echo MGMTCTXT=$(MGMTCTXT)
+	@echo KFCTXT=$(KFCTXT)	
+
+
 
 #**************************************************************************************************
 # Hydrate ACM repos
@@ -207,6 +237,11 @@ acm-kubeflow: hydrate-asm hydrate-kubeflow
 	mkdir -p $(ACM_KF_REPO)
 	find $(BUILD_DIR) -name "*.yaml" -not -path  "*/gcp_config/**" -exec cp {} $(ACM_KF_REPO)/ ";"
 
+#*****************************************************************************************
+#
+# Helpers
+#
+# The rules below provide various utilities and helpers to glue the steps together
 #*****************************************************************************************
 
 .PHONY: clean-build
@@ -244,12 +279,3 @@ create-ctxt:
 # Delete gcp resources
 delete-gcp:
 	kubectl	--context=$(MGMTCTXT) delete -f $(BUILD_DIR)/gcp_config
-
-#******************************************************************************************************************************
-# Upgrading and resetting
-
-.PHONE: update
-update:
-	rm -rf upstream
-	make get-pkg
-	make set-values

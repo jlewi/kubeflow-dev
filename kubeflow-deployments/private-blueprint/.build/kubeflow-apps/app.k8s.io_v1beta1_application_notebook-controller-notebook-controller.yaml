@@ -1,0 +1,46 @@
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: notebook-controller-notebook-controller
+  namespace: kubeflow
+  labels:
+    app: notebook-controller
+    app.kubernetes.io/component: notebook-controller
+    app.kubernetes.io/name: notebook-controller
+    kustomize.component: notebook-controller
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: notebook-controller
+      app.kubernetes.io/instance: notebook-controller-v1.0.0
+      app.kubernetes.io/managed-by: kfctl
+      app.kubernetes.io/name: notebook-controller
+      app.kubernetes.io/part-of: kubeflow
+      app.kubernetes.io/version: v1.0.0
+  addOwnerRef: true
+  componentKinds:
+  - kind: Service
+    group: core
+  - kind: Deployment
+    group: apps
+  - kind: ServiceAccount
+    group: core
+  descriptor:
+    type: notebook-controller
+    description: Notebooks controller allows users to create a custom resource \"Notebook\"
+      (jupyter notebook).
+    keywords:
+    - jupyter
+    - notebook
+    - notebook-controller
+    - jupyterhub
+    links:
+    - description: About
+      url: https://github.com/kubeflow/kubeflow/tree/master/components/notebook-controller
+    maintainers:
+    - name: Lun-kai Hsu
+      email: lunkai@google.com
+    owners:
+    - name: Lun-kai Hsu
+      email: lunkai@gogle.com
+    version: v1beta1

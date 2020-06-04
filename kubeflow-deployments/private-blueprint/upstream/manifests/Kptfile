@@ -1,0 +1,11 @@
+apiVersion: kpt.dev/v1alpha1
+kind: Kptfile
+metadata:
+    name: private-blueprint
+upstream:
+    type: git
+    git:
+        commit: 07d6fa9e68053165c321027d6959ddcbbb8a3a5b
+        repo: https://github.com/jlewi/manifests
+        directory: /
+        ref: private

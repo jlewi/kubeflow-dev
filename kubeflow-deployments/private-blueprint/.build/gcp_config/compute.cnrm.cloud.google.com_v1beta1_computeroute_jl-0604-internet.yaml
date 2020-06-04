@@ -1,0 +1,14 @@
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeRoute
+metadata:
+  name: jl-0604-internet
+  namespace: gcp-private-dev
+  labels:
+    kf-name: jl-0604
+spec:
+  priority: 1100
+  description: internet-route for IAP JWKS
+  destRange: 0.0.0.0/0
+  networkRef:
+    name: jl-0604
+  nextHopGateway: default-internet-gateway

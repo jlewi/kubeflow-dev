@@ -1,0 +1,158 @@
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: profiles.kubeflow.org
+  labels:
+    kustomize.component: profiles
+  creationTimestamp: null
+spec:
+  conversion:
+    strategy: None
+  group: kubeflow.org
+  names:
+    kind: Profile
+    plural: profiles
+  scope: Cluster
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      type: object
+      description: Profile is the Schema for the profiles API
+      properties:
+        apiVersion:
+          type: string
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+        kind:
+          type: string
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+        metadata:
+          type: object
+        spec:
+          type: object
+          description: ProfileSpec defines the desired state of Profile
+          properties:
+            owner:
+              type: object
+              description: The profile owner
+              properties:
+                name:
+                  type: string
+                  description: Name of the object being referenced.
+                kind:
+                  type: string
+                  description: Kind of object being referenced. Values defined by
+                    this API group are "User", "Group", and "ServiceAccount". If the
+                    Authorizer does not recognized the kind value, the Authorizer
+                    should report an error.
+                apiGroup:
+                  type: string
+                  description: APIGroup holds the API group of the referenced subject.
+                    Defaults to "" for ServiceAccount subjects. Defaults to "rbac.authorization.k8s.io"
+                    for User and Group subjects.
+              required:
+              - kind
+              - name
+            plugins:
+              type: array
+              items:
+                type: object
+                description: Plugin is for customize actions on different platform.
+                properties:
+                  apiVersion:
+                    type: string
+                    description: 'APIVersion defines the versioned schema of this
+                      representation of an object. Servers should convert recognized
+                      schemas to the latest internal value, and may reject unrecognized
+                      values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+                  kind:
+                    type: string
+                    description: 'Kind is a string value representing the REST resource
+                      this object represents. Servers may infer this from the endpoint
+                      the client submits requests to. Cannot be updated. In CamelCase.
+                      More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+                  spec:
+                    type: object
+            resourceQuotaSpec:
+              type: object
+              description: Resourcequota that will be applied to target namespace
+              properties:
+                hard:
+                  type: object
+                  additionalProperties:
+                    type: string
+                  description: 'hard is the set of desired hard limits for each named
+                    resource. More info: https://kubernetes.io/docs/concepts/policy/resource-quotas/'
+                scopeSelector:
+                  type: object
+                  description: scopeSelector is also a collection of filters like
+                    scopes that must match each object tracked by a quota but expressed
+                    using ScopeSelectorOperator in combination with possible values.
+                    For a resource to match, both scopes AND scopeSelector (if specified
+                    in spec), must be matched.
+                  properties:
+                    matchExpressions:
+                      type: array
+                      description: A list of scope selector requirements by scope
+                        of the resources.
+                      items:
+                        type: object
+                        description: A scoped-resource selector requirement is a selector
+                          that contains values, a scope name, and an operator that
+                          relates the scope name and values.
+                        properties:
+                          operator:
+                            type: string
+                            description: Represents a scope's relationship to a set
+                              of values. Valid operators are In, NotIn, Exists, DoesNotExist.
+                          scopeName:
+                            type: string
+                            description: The name of the scope that the selector applies
+                              to.
+                          values:
+                            type: array
+                            description: An array of string values. If the operator
+                              is In or NotIn, the values array must be non-empty.
+                              If the operator is Exists or DoesNotExist, the values
+                              array must be empty. This array is replaced during a
+                              strategic merge patch.
+                            items:
+                              type: string
+                        required:
+                        - operator
+                        - scopeName
+                scopes:
+                  type: array
+                  description: A collection of filters that must match each object
+                    tracked by a quota. If not specified, the quota matches all objects.
+                  items:
+                    type: string
+                    description: A ResourceQuotaScope defines a filter that must match
+                      each object tracked by a quota
+        status:
+          type: object
+          description: ProfileStatus defines the observed state of Profile
+          properties:
+            conditions:
+              type: array
+              items:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  status:
+                    type: string
+                  message:
+                    type: string
+  version: v1
+  versions:
+  - name: v1
+    served: true
+    storage: true
+  - name: v1beta1
+    served: true
+    storage: false

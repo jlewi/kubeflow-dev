@@ -1,0 +1,18 @@
+# This package defines the overlays of all GCP infra
+# config
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+# namespace should match the project.
+# This assumes we are running CNRM in namespace mode and namespaces match project names.
+namespace: gcp-private-dev # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"gcloud.core.project","value":"gcp-private-dev"}]}}
+# TODO(jlewi): do not commit the labels auto-deploy and purpose; they were added
+# as part of autodeployment testing.
+commonLabels:
+  kf-name: jl-0604-001 # {"type":"string","x-kustomize":{"setter":{"name":"name","value":"jl-0604-001"}}}
+resources:
+- ../../upstream/manifests/gcp/v2/cnrm
+- iam_policy.yaml
+- ../../upstream/manifests/gcp/v2/privateGKE/
+patchesStrategicMerge:
+- cluster_patch.yaml
+- ../../upstream/manifests/gcp/v2/privateGKE/cluster-private-patch.yaml

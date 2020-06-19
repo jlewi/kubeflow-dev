@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloud-endpoints-controller
+  namespace: kubeflow
+  labels:
+    app: cloud-endpoints-controller
+    app.kubernetes.io/component: cloud-endpoints
+    app.kubernetes.io/name: cloud-endpoints
+    kustomize.component: cloud-endpoints
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloud-endpoints-controller
+      app.kubernetes.io/component: cloud-endpoints
+      app.kubernetes.io/name: cloud-endpoints
+      kustomize.component: cloud-endpoints
+  template:
+    metadata:
+      labels:
+        app: cloud-endpoints-controller
+        app.kubernetes.io/component: cloud-endpoints
+        app.kubernetes.io/name: cloud-endpoints
+        kustomize.component: cloud-endpoints
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      terminationGracePeriodSeconds: 5
+      serviceAccountName: kf-admin
+      containers:
+      - name: cloud-endpoints-controller
+        image: gcr.io/cloud-solutions-group/cloud-endpoints-controller:0.2.1
+        readinessProbe:
+          failureThreshold: 2
+          httpGet:
+            port: 80
+            path: /healthz
+            scheme: HTTP
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 5
+        imagePullPolicy: Always

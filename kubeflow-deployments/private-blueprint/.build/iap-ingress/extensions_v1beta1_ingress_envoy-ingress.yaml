@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: envoy-ingress
+  namespace: istio-system
+  labels:
+    kustomize.component: iap-ingress
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "true"
+    kubernetes.io/ingress.global-static-ip-name: jl-0604-001-ip
+    networking.gke.io/managed-certificates: gke-certificate
+spec:
+  rules:
+  - host: jl-0604-001.endpoints.gcp-private-dev.cloud.goog
+    http:
+      paths:
+      - backend:
+          serviceName: istio-ingressgateway
+          servicePort: 80
+        path: /*

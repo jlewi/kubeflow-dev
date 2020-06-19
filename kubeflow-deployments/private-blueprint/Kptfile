@@ -1,0 +1,11 @@
+apiVersion: kpt.dev/v1alpha1
+kind: Kptfile
+metadata:
+    name: private-blueprint
+upstream:
+    type: git
+    git:
+        commit: 8ee7812cd0a7eee7b78e05c7c78ee130ca3bc128
+        repo: https://github.com/jlewi/gcp-blueprints
+        directory: /kubeflow
+        ref: private

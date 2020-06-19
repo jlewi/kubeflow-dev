@@ -1,0 +1,152 @@
+images:
+- gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/admission-webhook:vmaster-gaf96e4e3
+- gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/centraldashboard:vmaster-gf39279c0
+- gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/envoy:v20180309-0fb4886b463698702b6a08955045731903a18738
+- gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/ingress-setup:latest
+- gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/jupyter-web-app:vmaster-gd9be4b9e
+- gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/kfam:vmaster-gf3e09203
+- gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/kubernetes-sigs/application:1.0-beta
+- gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/notebook-controller:vmaster-gf39279c0
+- gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/profile-controller:vmaster-g34aa47c2
+- gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/pytorch-operator:vmaster-g047cf0f
+- gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/tf_operator:vmaster-gd455e6ef
+- gcr.io/gcp-private-dev/mirror/metacontroller/metacontroller:v0.3.0
+- gcr.io/gcp-private-dev/mirror/quay.io/jetstack/cert-manager-cainjector:v0.11.0
+- gcr.io/gcp-private-dev/mirror/quay.io/jetstack/cert-manager-controller:v0.11.0
+- gcr.io/gcp-private-dev/mirror/quay.io/jetstack/cert-manager-webhook:v0.11.0
+steps:
+- args:
+  - build
+  - -t
+  - gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/admission-webhook:vmaster-gaf96e4e3
+  - --build-arg=INPUT_IMAGE=gcr.io/kubeflow-images-public/admission-webhook:vmaster-gaf96e4e3
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/centraldashboard:vmaster-gf39279c0
+  - --build-arg=INPUT_IMAGE=gcr.io/kubeflow-images-public/centraldashboard:vmaster-gf39279c0
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/envoy:v20180309-0fb4886b463698702b6a08955045731903a18738
+  - --build-arg=INPUT_IMAGE=gcr.io/kubeflow-images-public/envoy:v20180309-0fb4886b463698702b6a08955045731903a18738
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/ingress-setup:latest
+  - --build-arg=INPUT_IMAGE=gcr.io/kubeflow-images-public/ingress-setup:latest
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/jupyter-web-app:vmaster-gd9be4b9e
+  - --build-arg=INPUT_IMAGE=gcr.io/kubeflow-images-public/jupyter-web-app:vmaster-gd9be4b9e
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/kfam:vmaster-gf3e09203
+  - --build-arg=INPUT_IMAGE=gcr.io/kubeflow-images-public/kfam:vmaster-gf3e09203
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/kubernetes-sigs/application:1.0-beta
+  - --build-arg=INPUT_IMAGE=gcr.io/kubeflow-images-public/kubernetes-sigs/application:1.0-beta
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/notebook-controller:vmaster-gf39279c0
+  - --build-arg=INPUT_IMAGE=gcr.io/kubeflow-images-public/notebook-controller:vmaster-gf39279c0
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/profile-controller:vmaster-g34aa47c2
+  - --build-arg=INPUT_IMAGE=gcr.io/kubeflow-images-public/profile-controller:vmaster-g34aa47c2
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/pytorch-operator:vmaster-g047cf0f
+  - --build-arg=INPUT_IMAGE=gcr.io/kubeflow-images-public/pytorch-operator:vmaster-g047cf0f
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/tf_operator:vmaster-gd455e6ef
+  - --build-arg=INPUT_IMAGE=gcr.io/kubeflow-images-public/tf_operator:vmaster-gd455e6ef
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/gcp-private-dev/mirror/metacontroller/metacontroller:v0.3.0
+  - --build-arg=INPUT_IMAGE=metacontroller/metacontroller:v0.3.0
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/gcp-private-dev/mirror/quay.io/jetstack/cert-manager-cainjector:v0.11.0
+  - --build-arg=INPUT_IMAGE=quay.io/jetstack/cert-manager-cainjector:v0.11.0
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/gcp-private-dev/mirror/quay.io/jetstack/cert-manager-controller:v0.11.0
+  - --build-arg=INPUT_IMAGE=quay.io/jetstack/cert-manager-controller:v0.11.0
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'
+- args:
+  - build
+  - -t
+  - gcr.io/gcp-private-dev/mirror/quay.io/jetstack/cert-manager-webhook:v0.11.0
+  - --build-arg=INPUT_IMAGE=quay.io/jetstack/cert-manager-webhook:v0.11.0
+  - .
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - '-'

@@ -1,0 +1,14 @@
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: jl-0604-001-admin-source
+  namespace: gcp-private-dev
+  labels:
+    kf-name: jl-0604-001
+spec:
+  member: serviceAccount:jl-0604-001-admin@gcp-private-dev.iam.gserviceaccount.com
+  resourceRef:
+    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+    kind: Project
+    external: projects/gcp-private-dev
+  role: roles/source.admin

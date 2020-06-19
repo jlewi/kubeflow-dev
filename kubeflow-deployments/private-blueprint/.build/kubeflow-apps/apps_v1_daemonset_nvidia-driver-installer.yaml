@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nvidia-driver-installer
+  namespace: kubeflow
+  labels:
+    app.kubernetes.io/component: gpu-driver
+    app.kubernetes.io/name: gpu-driver
+    k8s-app: nvidia-driver-installer
+    kustomize.component: gpu-driver
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: gpu-driver
+      app.kubernetes.io/name: gpu-driver
+      kustomize.component: gpu-driver
+  template:
+    metadata:
+      labels:
+        name: nvidia-driver-installer
+        app.kubernetes.io/component: gpu-driver
+        app.kubernetes.io/name: gpu-driver
+        k8s-app: nvidia-driver-installer
+        kustomize.component: gpu-driver
+    spec:
+      hostNetwork: true
+      hostPID: true
+      initContainers:
+      - name: nvidia-driver-installer
+        image: cos-nvidia-installer:fixed
+        env:
+        - name: NVIDIA_INSTALL_DIR_HOST
+          value: /home/kubernetes/bin/nvidia
+        - name: NVIDIA_INSTALL_DIR_CONTAINER
+          value: /usr/local/nvidia
+        - name: ROOT_MOUNT_DIR
+          value: /root
+        resources:
+          requests:
+            cpu: 0.15
+        volumeMounts:
+        - name: nvidia-install-dir-host
+          mountPath: /usr/local/nvidia
+        - name: dev
+          mountPath: /dev
+        - name: root-mount
+          mountPath: /root
+        imagePullPolicy: Never
+        securityContext:
+          privileged: true
+      containers:
+      - name: pause
+        image: gcr.io/google-containers/pause:2.0
+      volumes:
+      - name: dev
+        hostPath:
+          path: /dev
+      - name: nvidia-install-dir-host
+        hostPath:
+          path: /home/kubernetes/bin/nvidia
+      - name: root-mount
+        hostPath:
+          path: /
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: cloud.google.com/gke-accelerator
+                operator: Exists
+      tolerations:
+      - operator: Exists

@@ -1,0 +1,55 @@
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: jupyter-web-app-jupyter-web-app
+  namespace: kubeflow
+  labels:
+    app: jupyter-web-app
+    app.kubernetes.io/component: jupyter-web-app
+    app.kubernetes.io/name: jupyter-web-app
+    kustomize.component: jupyter-web-app
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: jupyter-web-app
+      app.kubernetes.io/instance: jupyter-web-app-v0.7.0
+      app.kubernetes.io/managed-by: kfctl
+      app.kubernetes.io/name: jupyter-web-app
+      app.kubernetes.io/part-of: kubeflow
+      app.kubernetes.io/version: v0.7.0
+  addOwnerRef: true
+  componentKinds:
+  - kind: ConfigMap
+    group: core
+  - kind: Deployment
+    group: apps
+  - kind: RoleBinding
+    group: rbac.authorization.k8s.io
+  - kind: Role
+    group: rbac.authorization.k8s.io
+  - kind: ServiceAccount
+    group: core
+  - kind: Service
+    group: core
+  - kind: VirtualService
+    group: networking.istio.io
+  descriptor:
+    type: jupyter-web-app
+    description: Provides a UI which allows the user to create/conect/delete jupyter
+      notebooks.
+    keywords:
+    - jupyterhub
+    - jupyter ui
+    - notebooks
+    links:
+    - description: About
+      url: https://github.com/kubeflow/kubeflow/tree/master/components/jupyter-web-app
+    - description: Docs
+      url: https://www.kubeflow.org/docs/notebooks
+    maintainers:
+    - name: Kimonas Sotirchos
+      email: kimwnasptd@arrikto.com
+    owners:
+    - name: Kimonas Sotirchos
+      email: kimwnasptd@arrikto.com
+    version: v1beta1

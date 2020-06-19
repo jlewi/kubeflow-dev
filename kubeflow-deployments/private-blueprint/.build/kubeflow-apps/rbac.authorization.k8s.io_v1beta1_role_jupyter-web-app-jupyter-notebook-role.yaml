@@ -1,0 +1,39 @@
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  name: jupyter-web-app-jupyter-notebook-role
+  namespace: kubeflow
+  labels:
+    app: jupyter-web-app
+    kustomize.component: jupyter-web-app
+rules:
+- resources:
+  - pods
+  - pods/log
+  - secrets
+  - services
+  apiGroups:
+  - ""
+  verbs:
+  - '*'
+- resources:
+  - deployments
+  - replicasets
+  apiGroups:
+  - ""
+  - apps
+  - extensions
+  verbs:
+  - '*'
+- resources:
+  - '*'
+  apiGroups:
+  - kubeflow.org
+  verbs:
+  - '*'
+- resources:
+  - jobs
+  apiGroups:
+  - batch
+  verbs:
+  - '*'

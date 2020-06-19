@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: profiles-profiles-config-b8664685bd
+  namespace: kubeflow
+  labels:
+    kustomize.component: profiles
+data:
+  admin: jlewi@google.com
+  gcp-sa: jl-stack-0409-204015-user@jlewi-dev.iam.gserviceaccount.com

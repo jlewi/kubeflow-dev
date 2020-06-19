@@ -1,0 +1,18 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: admission-webhook-cert
+  namespace: kubeflow
+  labels:
+    app.kubernetes.io/component: poddefaults
+    app.kubernetes.io/name: poddefaults
+spec:
+  commonName: admission-webhook-service.kubeflow.svc
+  dnsNames:
+  - admission-webhook-service.kubeflow.svc
+  - admission-webhook-service.kubeflow.svc.cluster.local
+  isCA: true
+  issuerRef:
+    name: kubeflow-self-signing-issuer
+    kind: ClusterIssuer
+  secretName: webhook-certs

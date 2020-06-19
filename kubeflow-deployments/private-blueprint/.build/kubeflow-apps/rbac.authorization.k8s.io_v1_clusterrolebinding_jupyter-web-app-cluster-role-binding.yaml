@@ -1,0 +1,15 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: jupyter-web-app-cluster-role-binding
+  labels:
+    app: jupyter-web-app
+    kustomize.component: jupyter-web-app
+roleRef:
+  name: jupyter-web-app-cluster-role
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- name: jupyter-web-app-service-account
+  namespace: kubeflow
+  kind: ServiceAccount

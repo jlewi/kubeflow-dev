@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workflow-controller
+  namespace: kubeflow
+  labels:
+    app: workflow-controller
+    app.kubernetes.io/component: argo
+    app.kubernetes.io/name: argo
+    kustomize.component: argo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: workflow-controller
+      app.kubernetes.io/component: argo
+      app.kubernetes.io/name: argo
+      kustomize.component: argo
+  template:
+    metadata:
+      labels:
+        app: workflow-controller
+        app.kubernetes.io/component: argo
+        app.kubernetes.io/name: argo
+        kustomize.component: argo
+      annotations:
+        sidecar.istio.io/inject: "false"
+      creationTimestamp: null
+    spec:
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      serviceAccountName: argo
+      serviceAccount: argo
+      schedulerName: default-scheduler
+      containers:
+      - name: workflow-controller
+        image: argoproj/workflow-controller:v2.3.0
+        command:
+        - workflow-controller
+        args:
+        - --configmap
+        - workflow-controller-configmap
+        env:
+        - name: ARGO_NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        imagePullPolicy: IfNotPresent
+      securityContext: {}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600

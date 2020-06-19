@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: metadata-ui
+  namespace: kubeflow
+  labels:
+    app: metadata-ui
+    kustomize.component: metadata
+spec:
+  selector:
+    app: metadata-ui
+    kustomize.component: metadata
+  ports:
+  - port: 80
+    targetPort: 3000

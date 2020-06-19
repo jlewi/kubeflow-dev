@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cache-deployer-deployment
+  namespace: kubeflow
+  labels:
+    app: cache-deployer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cache-deployer
+  template:
+    metadata:
+      labels:
+        app: cache-deployer
+    spec:
+      restartPolicy: Always
+      serviceAccountName: kubeflow-pipelines-cache-deployer-sa
+      containers:
+      - name: main
+        image: gcr.io/ml-pipeline/cache-deployer:1.0.0-rc.2
+        env:
+        - name: NAMESPACE_TO_WATCH
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        imagePullPolicy: Always
+  strategy:
+    type: Recreate

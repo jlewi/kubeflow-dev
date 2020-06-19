@@ -1,0 +1,25 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kubeflow-katib-edit
+  labels:
+    app.kubernetes.io/component: katib
+    app.kubernetes.io/name: katib-controller
+    rbac.authorization.kubeflow.org/aggregate-to-kubeflow-edit: "true"
+    rbac.authorization.kubeflow.org/aggregate-to-kubeflow-katib-admin: "true"
+rules:
+- resources:
+  - experiments
+  - trials
+  - suggestions
+  apiGroups:
+  - kubeflow.org
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - delete
+  - deletecollection
+  - patch
+  - update

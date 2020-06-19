@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minio-pvc
+  namespace: kubeflow
+  labels:
+    app.kubernetes.io/component: minio
+    app.kubernetes.io/name: minio
+spec:
+  resources:
+    requests:
+      storage: 20Gi
+  accessModes:
+  - ReadWriteOnce

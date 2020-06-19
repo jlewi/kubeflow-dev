@@ -1,0 +1,28 @@
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  name: metadata-ui
+  namespace: kubeflow
+  labels:
+    app: metadata-ui
+    kustomize.component: metadata
+rules:
+- resources:
+  - pods
+  - pods/log
+  apiGroups:
+  - ""
+  verbs:
+  - create
+  - get
+  - list
+- resources:
+  - viewers
+  apiGroups:
+  - kubeflow.org
+  verbs:
+  - create
+  - get
+  - list
+  - watch
+  - delete

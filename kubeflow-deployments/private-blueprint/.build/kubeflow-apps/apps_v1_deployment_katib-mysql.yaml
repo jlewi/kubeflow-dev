@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: katib-mysql
+  namespace: kubeflow
+  labels:
+    app: katib
+    app.kubernetes.io/component: katib
+    app.kubernetes.io/name: katib-controller
+    component: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: katib
+      app.kubernetes.io/component: katib
+      app.kubernetes.io/name: katib-controller
+      component: mysql
+  template:
+    metadata:
+      name: katib-mysql
+      labels:
+        app: katib
+        app.kubernetes.io/component: katib
+        app.kubernetes.io/name: katib-controller
+        component: mysql
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      containers:
+      - name: katib-mysql
+        image: mysql:8
+        args:
+        - --datadir
+        - /var/lib/mysql/datadir
+        ports:
+        - name: dbapi
+          containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: katib-mysql-secrets
+              key: MYSQL_ROOT_PASSWORD
+        - name: MYSQL_ALLOW_EMPTY_PASSWORD
+          value: "true"
+        - name: MYSQL_DATABASE
+          value: katib
+        volumeMounts:
+        - name: katib-mysql
+          mountPath: /var/lib/mysql
+        livenessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - mysqladmin ping -u root -p${MYSQL_ROOT_PASSWORD}
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - mysql -D ${MYSQL_DATABASE} -u root -p${MYSQL_ROOT_PASSWORD} -e 'SELECT
+              1'
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 1
+      volumes:
+      - name: katib-mysql
+        persistentVolumeClaim:
+          claimName: katib-mysql

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: kubeflow
+  labels:
+    app: mysql
+    app.kubernetes.io/component: mysql
+    app.kubernetes.io/name: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+      app.kubernetes.io/component: mysql
+      app.kubernetes.io/name: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+        app.kubernetes.io/component: mysql
+        app.kubernetes.io/name: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: gcr.io/ml-pipeline/mysql:5.6
+        ports:
+        - name: mysql
+          containerPort: 3306
+        env:
+        - name: MYSQL_ALLOW_EMPTY_PASSWORD
+          value: "true"
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim
+  strategy:
+    type: Recreate

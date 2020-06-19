@@ -14,7 +14,7 @@ spec:
 apiVersion: dns.cnrm.cloud.google.com/v1beta1
 kind: DNSRecordSet
 metadata:
-  name: jl-0604-001-goog-cname # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"jl-0604-001"}]}}
+  name: jl-0604-001-goog-cjl-0604-001 # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"jl-0604-001"}]}}
 spec:
   name: "*.googleapis.com."
   type: "CNAME"

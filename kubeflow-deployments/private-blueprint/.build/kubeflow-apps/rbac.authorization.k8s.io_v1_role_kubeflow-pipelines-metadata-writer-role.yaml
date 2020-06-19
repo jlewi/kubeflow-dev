@@ -1,0 +1,34 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: kubeflow-pipelines-metadata-writer-role
+  namespace: kubeflow
+  labels:
+    app: kubeflow-pipelines-metadata-writer-role
+rules:
+- resources:
+  - pods
+  apiGroups:
+  - ""
+  verbs:
+  - get
+  - list
+  - watch
+  - update
+  - patch
+- resources:
+  - configmaps
+  apiGroups:
+  - ""
+  verbs:
+  - get
+- resources:
+  - workflows
+  apiGroups:
+  - argoproj.io
+  verbs:
+  - get
+  - list
+  - watch
+  - update
+  - patch

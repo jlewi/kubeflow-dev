@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ml-pipeline-viewer-crd
+  namespace: kubeflow
+  labels:
+    app: ml-pipeline-viewer-crd
+spec:
+  selector:
+    matchLabels:
+      app: ml-pipeline-viewer-crd
+  template:
+    metadata:
+      labels:
+        app: ml-pipeline-viewer-crd
+    spec:
+      serviceAccountName: ml-pipeline-viewer-crd-service-account
+      containers:
+      - name: ml-pipeline-viewer-crd
+        image: gcr.io/ml-pipeline/viewer-crd-controller:1.0.0-rc.2
+        env:
+        - name: MAX_NUM_VIEWERS
+          value: "50"
+        - name: MINIO_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        imagePullPolicy: Always

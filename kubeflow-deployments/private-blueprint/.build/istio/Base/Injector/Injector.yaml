@@ -1,3 +1,22 @@
+# Resources for Injector component
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: istio-sidecar-injector-istio-system
+  labels:
+    app: sidecar-injector
+    istio: sidecar-injector
+    release: istio
+rules:
+- resources: ["configmaps"]
+  apiGroups: [""]
+  resourceNames: ["istio-sidecar-injector"]
+  verbs: ["get", "list", "watch"]
+- resources: ["mutatingwebhookconfigurations"]
+  apiGroups: ["admissionregistration.k8s.io"]
+  resourceNames: ["istio-sidecar-injector", "istio-sidecar-injector-istio-system"]
+  verbs: ["get", "list", "watch", "patch"]
+---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -63,42 +82,6 @@ data:
   # This is the 'mesh' config, loaded by the sidecar injector.
   # It is a different configmap from pilot to allow a-la-carte install of the injector and follow the model
   # of reducing blast-radius of config changes and avoiding globals.
----
-# Resources for Injector component
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: istio-sidecar-injector-istio-system
-  labels:
-    app: sidecar-injector
-    istio: sidecar-injector
-    release: istio
-rules:
-- resources: ["configmaps"]
-  apiGroups: [""]
-  resourceNames: ["istio-sidecar-injector"]
-  verbs: ["get", "list", "watch"]
-- resources: ["mutatingwebhookconfigurations"]
-  apiGroups: ["admissionregistration.k8s.io"]
-  resourceNames: ["istio-sidecar-injector", "istio-sidecar-injector-istio-system"]
-  verbs: ["get", "list", "watch", "patch"]
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: istio-sidecar-injector-admin-role-binding-istio-system
-  labels:
-    app: sidecar-injector
-    istio: sidecar-injector
-    release: istio
-roleRef:
-  name: istio-sidecar-injector-istio-system
-  kind: ClusterRole
-  apiGroup: rbac.authorization.k8s.io
-subjects:
-- name: istio-sidecar-injector-service-account
-  namespace: istio-system
-  kind: ServiceAccount
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -225,6 +208,23 @@ spec:
     rollingUpdate:
       maxSurge: 100%
       maxUnavailable: 25%
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: istio-sidecar-injector-admin-role-binding-istio-system
+  labels:
+    app: sidecar-injector
+    istio: sidecar-injector
+    release: istio
+roleRef:
+  name: istio-sidecar-injector-istio-system
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- name: istio-sidecar-injector-service-account
+  namespace: istio-system
+  kind: ServiceAccount
 ---
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: MutatingWebhookConfiguration

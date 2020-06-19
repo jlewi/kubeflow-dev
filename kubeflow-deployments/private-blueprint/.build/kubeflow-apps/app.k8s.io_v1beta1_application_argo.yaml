@@ -1,0 +1,39 @@
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: argo
+  namespace: kubeflow
+  labels:
+    app.kubernetes.io/component: argo
+    app.kubernetes.io/name: argo
+    kustomize.component: argo
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: argo
+      app.kubernetes.io/name: argo
+  addOwnerRef: true
+  componentKinds:
+  - kind: ConfigMap
+    group: core
+  - kind: Deployment
+    group: apps
+  - kind: ServiceAccount
+    group: core
+  - kind: Service
+    group: core
+  - kind: VirtualService
+    group: networking.istio.io
+  descriptor:
+    type: argo
+    description: Argo Workflows is an open source container-native workflow engine
+      for orchestrating parallel jobs on Kubernetes
+    keywords:
+    - argo
+    - kubeflow
+    links:
+    - description: About
+      url: https://github.com/argoproj/argo
+    maintainers: []
+    owners: []
+    version: v1beta1

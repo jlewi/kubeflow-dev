@@ -1,0 +1,23 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: katib-ui
+  labels:
+    app.kubernetes.io/component: katib
+    app.kubernetes.io/name: katib-controller
+rules:
+- resources:
+  - configmaps
+  - namespaces
+  apiGroups:
+  - ""
+  verbs:
+  - '*'
+- resources:
+  - experiments
+  - trials
+  - suggestions
+  apiGroups:
+  - kubeflow.org
+  verbs:
+  - '*'

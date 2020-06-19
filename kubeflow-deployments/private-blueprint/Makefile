@@ -25,7 +25,7 @@ ACM_KF_REPO=acm-repo
 BUILD_DIR=.build
 
 # The URL you want to fetch manifests from
-MANIFESTS_URL=https://github.com/jlewi/manifests.git@private
+MANIFESTS_URL=https://github.com/kubeflow/manifests.git@master
 
 #***********************************************************************************************************************
 # Edit this section to set the values specific to your deployment

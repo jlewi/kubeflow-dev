@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: katib-ui
+  namespace: kubeflow
+  labels:
+    app: katib
+    app.kubernetes.io/component: katib
+    app.kubernetes.io/name: katib-controller
+    component: ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: katib
+      app.kubernetes.io/component: katib
+      app.kubernetes.io/name: katib-controller
+      component: ui
+  template:
+    metadata:
+      name: katib-ui
+      labels:
+        app: katib
+        app.kubernetes.io/component: katib
+        app.kubernetes.io/name: katib-controller
+        component: ui
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      serviceAccountName: katib-ui
+      containers:
+      - name: katib-ui
+        image: gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/katib/v1alpha3/katib-ui:917164a
+        command:
+        - ./katib-ui
+        args:
+        - --port=8080
+        ports:
+        - name: ui
+          containerPort: 8080
+        env:
+        - name: KATIB_CORE_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        imagePullPolicy: IfNotPresent

@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: metadata-grpc-deployment
+  namespace: kubeflow
+  labels:
+    component: grpc-server
+    kustomize.component: metadata
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: grpc-server
+      kustomize.component: metadata
+  template:
+    metadata:
+      labels:
+        component: grpc-server
+        kustomize.component: metadata
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      containers:
+      - name: container
+        image: gcr.io/tfx-oss-public/ml_metadata_store_server:v0.21.1
+        command:
+        - /bin/metadata_store_server
+        args:
+        - --grpc_port=$(METADATA_GRPC_SERVICE_PORT)
+        - --mysql_config_host=metadata-db
+        - --mysql_config_database=$(MYSQL_DATABASE)
+        - --mysql_config_port=$(MYSQL_PORT)
+        - --mysql_config_user=$(MYSQL_USER_NAME)
+        - --mysql_config_password=$(MYSQL_ROOT_PASSWORD)
+        ports:
+        - name: grpc-backendapi
+          containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: metadata-db-parameters
+        - secretRef:
+            name: metadata-db-secrets
+        - configMapRef:
+            name: metadata-grpc-configmap

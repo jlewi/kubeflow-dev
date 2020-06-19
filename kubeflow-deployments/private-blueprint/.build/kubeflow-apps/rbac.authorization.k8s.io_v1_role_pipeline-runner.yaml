@@ -1,0 +1,81 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: pipeline-runner
+  namespace: kubeflow
+rules:
+- resources:
+  - secrets
+  apiGroups:
+  - ""
+  verbs:
+  - get
+- resources:
+  - configmaps
+  apiGroups:
+  - ""
+  verbs:
+  - get
+  - watch
+  - list
+- resources:
+  - persistentvolumes
+  - persistentvolumeclaims
+  apiGroups:
+  - ""
+  verbs:
+  - '*'
+- resources:
+  - volumesnapshots
+  apiGroups:
+  - snapshot.storage.k8s.io
+  verbs:
+  - create
+  - delete
+  - get
+- resources:
+  - workflows
+  apiGroups:
+  - argoproj.io
+  verbs:
+  - get
+  - list
+  - watch
+  - update
+  - patch
+- resources:
+  - pods
+  - pods/exec
+  - pods/log
+  - services
+  apiGroups:
+  - ""
+  verbs:
+  - '*'
+- resources:
+  - deployments
+  - replicasets
+  apiGroups:
+  - ""
+  - apps
+  - extensions
+  verbs:
+  - '*'
+- resources:
+  - '*'
+  apiGroups:
+  - kubeflow.org
+  verbs:
+  - '*'
+- resources:
+  - jobs
+  apiGroups:
+  - batch
+  verbs:
+  - '*'
+- resources:
+  - seldondeployments
+  apiGroups:
+  - machinelearning.seldon.io
+  verbs:
+  - '*'

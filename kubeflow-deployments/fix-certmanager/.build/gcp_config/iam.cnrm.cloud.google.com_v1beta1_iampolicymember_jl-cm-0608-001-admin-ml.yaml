@@ -1,0 +1,14 @@
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  labels:
+    kf-name: jl-cm-0608-001
+  name: jl-cm-0608-001-admin-ml
+  namespace: jlewi-dev
+spec:
+  member: serviceAccount:jl-cm-0608-001-admin@jlewi-dev.iam.gserviceaccount.com
+  resourceRef:
+    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+    external: projects/jlewi-dev
+    kind: Project
+  role: roles/ml.admin

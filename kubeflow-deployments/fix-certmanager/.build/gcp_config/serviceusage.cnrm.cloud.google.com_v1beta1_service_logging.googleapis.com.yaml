@@ -1,0 +1,10 @@
+apiVersion: serviceusage.cnrm.cloud.google.com/v1beta1
+kind: Service
+metadata:
+  annotations:
+    cnrm.cloud.google.com/deletion-policy: abandon
+    cnrm.cloud.google.com/disable-dependent-services: "false"
+  labels:
+    kf-name: jl-cm-0608-001
+  name: logging.googleapis.com
+  namespace: jlewi-dev

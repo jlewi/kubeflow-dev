@@ -5,7 +5,7 @@ metadata:
 upstream:
     type: git
     git:
-        commit: 42d2574c7ab7acf724830d4a2d2a704b53d15686
-        repo: https://github.com/jlewi/manifests
+        commit: a333e3fceb42410a89321ccdd5fc502da89fec7c
+        repo: https://github.com/kubeflow/manifests
         directory: /
-        ref: private
+        ref: master

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: metadata-envoy-service
+  namespace: kubeflow
+  labels:
+    app: metadata
+    kustomize.component: metadata
+spec:
+  type: ClusterIP
+  selector:
+    component: envoy
+    kustomize.component: metadata
+  ports:
+  - name: md-envoy
+    protocol: TCP
+    port: 9090

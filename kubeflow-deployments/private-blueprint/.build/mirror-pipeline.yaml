@@ -12,7 +12,27 @@ spec:
     - name: context
       type: string
     tasks:
-    - name: 0-gcr-io-kubeflow-images-public-admission-webhook-vmaster-gaf96e4e3
+    - name: 0-argoproj-argoui-v2-3-0
+      params:
+      - name: inputImage
+        value: argoproj/argoui:v2.3.0
+      - name: outputImage
+        value: gcr.io/gcp-private-dev/mirror/argoproj/argoui:v2.3.0
+      - name: context
+        value: $(params.context)
+      taskRef:
+        name: mirror-image
+    - name: 1-argoproj-workflow-controller-v2-3-0
+      params:
+      - name: inputImage
+        value: argoproj/workflow-controller:v2.3.0
+      - name: outputImage
+        value: gcr.io/gcp-private-dev/mirror/argoproj/workflow-controller:v2.3.0
+      - name: context
+        value: $(params.context)
+      taskRef:
+        name: mirror-image
+    - name: 2-gcr-io-kubeflow-images-public-admission-webhook-vmaster-gaf96e4e3
       params:
       - name: inputImage
         value: gcr.io/kubeflow-images-public/admission-webhook:vmaster-gaf96e4e3
@@ -22,7 +42,7 @@ spec:
         value: $(params.context)
       taskRef:
         name: mirror-image
-    - name: 1-gcr-io-kubeflow-images-public-centraldashboard-vmaster-gf39279c0
+    - name: 3-gcr-io-kubeflow-images-public-centraldashboard-vmaster-gf39279c0
       params:
       - name: inputImage
         value: gcr.io/kubeflow-images-public/centraldashboard:vmaster-gf39279c0
@@ -32,7 +52,7 @@ spec:
         value: $(params.context)
       taskRef:
         name: mirror-image
-    - name: 2-gcr-io-kubeflow-images-public-envoy-v20180309-0fb4886b463698702b6a08955045731903a18738
+    - name: 4-gcr-io-kubeflow-images-public-envoy-v20180309-0fb4886b463698702b6a08955045731903a18738
       params:
       - name: inputImage
         value: gcr.io/kubeflow-images-public/envoy:v20180309-0fb4886b463698702b6a08955045731903a18738
@@ -42,7 +62,7 @@ spec:
         value: $(params.context)
       taskRef:
         name: mirror-image
-    - name: 3-gcr-io-kubeflow-images-public-ingress-setup-latest
+    - name: 5-gcr-io-kubeflow-images-public-ingress-setup-latest
       params:
       - name: inputImage
         value: gcr.io/kubeflow-images-public/ingress-setup:latest
@@ -52,7 +72,7 @@ spec:
         value: $(params.context)
       taskRef:
         name: mirror-image
-    - name: 4-gcr-io-kubeflow-images-public-jupyter-web-app-vmaster-gd9be4b9e
+    - name: 6-gcr-io-kubeflow-images-public-jupyter-web-app-vmaster-gd9be4b9e
       params:
       - name: inputImage
         value: gcr.io/kubeflow-images-public/jupyter-web-app:vmaster-gd9be4b9e
@@ -62,7 +82,37 @@ spec:
         value: $(params.context)
       taskRef:
         name: mirror-image
-    - name: 5-gcr-io-kubeflow-images-public-kfam-vmaster-gf3e09203
+    - name: 7-gcr-io-kubeflow-images-public-katib-v1alpha3-katib-controller-917164a
+      params:
+      - name: inputImage
+        value: gcr.io/kubeflow-images-public/katib/v1alpha3/katib-controller:917164a
+      - name: outputImage
+        value: gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/katib/v1alpha3/katib-controller:917164a
+      - name: context
+        value: $(params.context)
+      taskRef:
+        name: mirror-image
+    - name: 8-gcr-io-kubeflow-images-public-katib-v1alpha3-katib-db-manager-917164a
+      params:
+      - name: inputImage
+        value: gcr.io/kubeflow-images-public/katib/v1alpha3/katib-db-manager:917164a
+      - name: outputImage
+        value: gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/katib/v1alpha3/katib-db-manager:917164a
+      - name: context
+        value: $(params.context)
+      taskRef:
+        name: mirror-image
+    - name: 9-gcr-io-kubeflow-images-public-katib-v1alpha3-katib-ui-917164a
+      params:
+      - name: inputImage
+        value: gcr.io/kubeflow-images-public/katib/v1alpha3/katib-ui:917164a
+      - name: outputImage
+        value: gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/katib/v1alpha3/katib-ui:917164a
+      - name: context
+        value: $(params.context)
+      taskRef:
+        name: mirror-image
+    - name: 10-gcr-io-kubeflow-images-public-kfam-vmaster-gf3e09203
       params:
       - name: inputImage
         value: gcr.io/kubeflow-images-public/kfam:vmaster-gf3e09203
@@ -72,7 +122,7 @@ spec:
         value: $(params.context)
       taskRef:
         name: mirror-image
-    - name: 6-gcr-io-kubeflow-images-public-kubernetes-sigs-application-1-0-beta
+    - name: 11-gcr-io-kubeflow-images-public-kubernetes-sigs-application-1-0-beta
       params:
       - name: inputImage
         value: gcr.io/kubeflow-images-public/kubernetes-sigs/application:1.0-beta
@@ -82,7 +132,27 @@ spec:
         value: $(params.context)
       taskRef:
         name: mirror-image
-    - name: 7-gcr-io-kubeflow-images-public-notebook-controller-vmaster-gf39279c0
+    - name: 12-gcr-io-kubeflow-images-public-metadata-frontend-v0-1-8
+      params:
+      - name: inputImage
+        value: gcr.io/kubeflow-images-public/metadata-frontend:v0.1.8
+      - name: outputImage
+        value: gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/metadata-frontend:v0.1.8
+      - name: context
+        value: $(params.context)
+      taskRef:
+        name: mirror-image
+    - name: 13-gcr-io-kubeflow-images-public-metadata-v0-1-11
+      params:
+      - name: inputImage
+        value: gcr.io/kubeflow-images-public/metadata:v0.1.11
+      - name: outputImage
+        value: gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/metadata:v0.1.11
+      - name: context
+        value: $(params.context)
+      taskRef:
+        name: mirror-image
+    - name: 14-gcr-io-kubeflow-images-public-notebook-controller-vmaster-gf39279c0
       params:
       - name: inputImage
         value: gcr.io/kubeflow-images-public/notebook-controller:vmaster-gf39279c0
@@ -92,7 +162,7 @@ spec:
         value: $(params.context)
       taskRef:
         name: mirror-image
-    - name: 8-gcr-io-kubeflow-images-public-profile-controller-vmaster-g34aa47c2
+    - name: 15-gcr-io-kubeflow-images-public-profile-controller-vmaster-g34aa47c2
       params:
       - name: inputImage
         value: gcr.io/kubeflow-images-public/profile-controller:vmaster-g34aa47c2
@@ -102,17 +172,17 @@ spec:
         value: $(params.context)
       taskRef:
         name: mirror-image
-    - name: 9-gcr-io-kubeflow-images-public-pytorch-operator-vmaster-g047cf0f
+    - name: 16-gcr-io-kubeflow-images-public-pytorch-operator-vmaster-gd596e904
       params:
       - name: inputImage
-        value: gcr.io/kubeflow-images-public/pytorch-operator:vmaster-g047cf0f
+        value: gcr.io/kubeflow-images-public/pytorch-operator:vmaster-gd596e904
       - name: outputImage
-        value: gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/pytorch-operator:vmaster-g047cf0f
+        value: gcr.io/gcp-private-dev/mirror/gcr.io/kubeflow-images-public/pytorch-operator:vmaster-gd596e904
       - name: context
         value: $(params.context)
       taskRef:
         name: mirror-image
-    - name: 10-gcr-io-kubeflow-images-public-tf-operator-vmaster-gd455e6ef
+    - name: 17-gcr-io-kubeflow-images-public-tf-operator-vmaster-gd455e6ef
       params:
       - name: inputImage
         value: gcr.io/kubeflow-images-public/tf_operator:vmaster-gd455e6ef
@@ -122,7 +192,117 @@ spec:
         value: $(params.context)
       taskRef:
         name: mirror-image
-    - name: 11-metacontroller-metacontroller-v0-3-0
+    - name: 18-gcr-io-ml-pipeline-api-server-1-0-0-rc-2
+      params:
+      - name: inputImage
+        value: gcr.io/ml-pipeline/api-server:1.0.0-rc.2
+      - name: outputImage
+        value: gcr.io/gcp-private-dev/mirror/gcr.io/ml-pipeline/api-server:1.0.0-rc.2
+      - name: context
+        value: $(params.context)
+      taskRef:
+        name: mirror-image
+    - name: 19-gcr-io-ml-pipeline-cache-deployer-1-0-0-rc-2
+      params:
+      - name: inputImage
+        value: gcr.io/ml-pipeline/cache-deployer:1.0.0-rc.2
+      - name: outputImage
+        value: gcr.io/gcp-private-dev/mirror/gcr.io/ml-pipeline/cache-deployer:1.0.0-rc.2
+      - name: context
+        value: $(params.context)
+      taskRef:
+        name: mirror-image
+    - name: 20-gcr-io-ml-pipeline-cache-server-1-0-0-rc-2
+      params:
+      - name: inputImage
+        value: gcr.io/ml-pipeline/cache-server:1.0.0-rc.2
+      - name: outputImage
+        value: gcr.io/gcp-private-dev/mirror/gcr.io/ml-pipeline/cache-server:1.0.0-rc.2
+      - name: context
+        value: $(params.context)
+      taskRef:
+        name: mirror-image
+    - name: 21-gcr-io-ml-pipeline-envoy-metadata-grpc
+      params:
+      - name: inputImage
+        value: gcr.io/ml-pipeline/envoy:metadata-grpc
+      - name: outputImage
+        value: gcr.io/gcp-private-dev/mirror/gcr.io/ml-pipeline/envoy:metadata-grpc
+      - name: context
+        value: $(params.context)
+      taskRef:
+        name: mirror-image
+    - name: 22-gcr-io-ml-pipeline-frontend-1-0-0-rc-2
+      params:
+      - name: inputImage
+        value: gcr.io/ml-pipeline/frontend:1.0.0-rc.2
+      - name: outputImage
+        value: gcr.io/gcp-private-dev/mirror/gcr.io/ml-pipeline/frontend:1.0.0-rc.2
+      - name: context
+        value: $(params.context)
+      taskRef:
+        name: mirror-image
+    - name: 23-gcr-io-ml-pipeline-metadata-writer-1-0-0-rc-2
+      params:
+      - name: inputImage
+        value: gcr.io/ml-pipeline/metadata-writer:1.0.0-rc.2
+      - name: outputImage
+        value: gcr.io/gcp-private-dev/mirror/gcr.io/ml-pipeline/metadata-writer:1.0.0-rc.2
+      - name: context
+        value: $(params.context)
+      taskRef:
+        name: mirror-image
+    - name: 24-gcr-io-ml-pipeline-mysql-5-6
+      params:
+      - name: inputImage
+        value: gcr.io/ml-pipeline/mysql:5.6
+      - name: outputImage
+        value: gcr.io/gcp-private-dev/mirror/gcr.io/ml-pipeline/mysql:5.6
+      - name: context
+        value: $(params.context)
+      taskRef:
+        name: mirror-image
+    - name: 25-gcr-io-ml-pipeline-persistenceagent-1-0-0-rc-2
+      params:
+      - name: inputImage
+        value: gcr.io/ml-pipeline/persistenceagent:1.0.0-rc.2
+      - name: outputImage
+        value: gcr.io/gcp-private-dev/mirror/gcr.io/ml-pipeline/persistenceagent:1.0.0-rc.2
+      - name: context
+        value: $(params.context)
+      taskRef:
+        name: mirror-image
+    - name: 26-gcr-io-ml-pipeline-scheduledworkflow-1-0-0-rc-2
+      params:
+      - name: inputImage
+        value: gcr.io/ml-pipeline/scheduledworkflow:1.0.0-rc.2
+      - name: outputImage
+        value: gcr.io/gcp-private-dev/mirror/gcr.io/ml-pipeline/scheduledworkflow:1.0.0-rc.2
+      - name: context
+        value: $(params.context)
+      taskRef:
+        name: mirror-image
+    - name: 27-gcr-io-ml-pipeline-viewer-crd-controller-1-0-0-rc-2
+      params:
+      - name: inputImage
+        value: gcr.io/ml-pipeline/viewer-crd-controller:1.0.0-rc.2
+      - name: outputImage
+        value: gcr.io/gcp-private-dev/mirror/gcr.io/ml-pipeline/viewer-crd-controller:1.0.0-rc.2
+      - name: context
+        value: $(params.context)
+      taskRef:
+        name: mirror-image
+    - name: 28-gcr-io-ml-pipeline-visualization-server-1-0-0-rc-2
+      params:
+      - name: inputImage
+        value: gcr.io/ml-pipeline/visualization-server:1.0.0-rc.2
+      - name: outputImage
+        value: gcr.io/gcp-private-dev/mirror/gcr.io/ml-pipeline/visualization-server:1.0.0-rc.2
+      - name: context
+        value: $(params.context)
+      taskRef:
+        name: mirror-image
+    - name: 29-metacontroller-metacontroller-v0-3-0
       params:
       - name: inputImage
         value: metacontroller/metacontroller:v0.3.0
@@ -132,7 +312,27 @@ spec:
         value: $(params.context)
       taskRef:
         name: mirror-image
-    - name: 12-quay-io-jetstack-cert-manager-cainjector-v0-11-0
+    - name: 30-mysql-8
+      params:
+      - name: inputImage
+        value: mysql:8
+      - name: outputImage
+        value: gcr.io/gcp-private-dev/mirror/mysql:8
+      - name: context
+        value: $(params.context)
+      taskRef:
+        name: mirror-image
+    - name: 31-mysql-8-0-3
+      params:
+      - name: inputImage
+        value: mysql:8.0.3
+      - name: outputImage
+        value: gcr.io/gcp-private-dev/mirror/mysql:8.0.3
+      - name: context
+        value: $(params.context)
+      taskRef:
+        name: mirror-image
+    - name: 32-quay-io-jetstack-cert-manager-cainjector-v0-11-0
       params:
       - name: inputImage
         value: quay.io/jetstack/cert-manager-cainjector:v0.11.0
@@ -142,7 +342,7 @@ spec:
         value: $(params.context)
       taskRef:
         name: mirror-image
-    - name: 13-quay-io-jetstack-cert-manager-controller-v0-11-0
+    - name: 33-quay-io-jetstack-cert-manager-controller-v0-11-0
       params:
       - name: inputImage
         value: quay.io/jetstack/cert-manager-controller:v0.11.0
@@ -152,7 +352,7 @@ spec:
         value: $(params.context)
       taskRef:
         name: mirror-image
-    - name: 14-quay-io-jetstack-cert-manager-webhook-v0-11-0
+    - name: 34-quay-io-jetstack-cert-manager-webhook-v0-11-0
       params:
       - name: inputImage
         value: quay.io/jetstack/cert-manager-webhook:v0.11.0

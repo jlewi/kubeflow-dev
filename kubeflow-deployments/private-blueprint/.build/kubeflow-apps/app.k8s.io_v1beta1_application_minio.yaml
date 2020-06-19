@@ -1,0 +1,31 @@
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: minio
+  namespace: kubeflow
+  labels:
+    app.kubernetes.io/component: minio
+    app.kubernetes.io/name: minio
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: minio
+      app.kubernetes.io/name: minio
+  addOwnerRef: true
+  componentKinds:
+  - kind: ConfigMap
+    group: core
+  - kind: Deployment
+    group: apps
+  descriptor:
+    type: minio
+    description: ""
+    keywords:
+    - minio
+    - kubeflow
+    links:
+    - description: About
+      url: ""
+    maintainers: []
+    owners: []
+    version: v1beta1

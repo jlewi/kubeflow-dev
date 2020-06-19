@@ -1,3 +1,15 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: istio-ingressgateway-sds
+  namespace: istio-system
+  labels:
+    release: istio
+rules:
+- resources: ["secrets"]
+  apiGroups: [""]
+  verbs: ["get", "watch", "list"]
+---
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
@@ -27,16 +39,31 @@ metadata:
     release: istio
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: RoleBinding
 metadata:
   name: istio-ingressgateway-sds
   namespace: istio-system
   labels:
     release: istio
-rules:
-- resources: ["secrets"]
-  apiGroups: [""]
-  verbs: ["get", "watch", "list"]
+roleRef:
+  name: istio-ingressgateway-sds
+  kind: Role
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- name: istio-ingressgateway-service-account
+  kind: ServiceAccount
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Sidecar
+metadata:
+  name: default
+  namespace: istio-system
+  labels:
+    release: istio
+spec:
+  egress:
+  - hosts:
+    - "*/*"
 ---
 # Resources for IngressGateway component
 apiVersion: autoscaling/v2beta1
@@ -77,33 +104,6 @@ spec:
       istio: ingressgateway
       release: istio
   minAvailable: 1
----
-apiVersion: networking.istio.io/v1alpha3
-kind: Sidecar
-metadata:
-  name: default
-  namespace: istio-system
-  labels:
-    release: istio
-spec:
-  egress:
-  - hosts:
-    - "*/*"
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: istio-ingressgateway-sds
-  namespace: istio-system
-  labels:
-    release: istio
-roleRef:
-  name: istio-ingressgateway-sds
-  kind: Role
-  apiGroup: rbac.authorization.k8s.io
-subjects:
-- name: istio-ingressgateway-service-account
-  kind: ServiceAccount
 ---
 apiVersion: apps/v1
 kind: Deployment

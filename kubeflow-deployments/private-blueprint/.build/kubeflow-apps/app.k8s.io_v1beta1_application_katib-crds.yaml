@@ -1,0 +1,68 @@
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: katib-crds
+  namespace: kubeflow
+  labels:
+    app.kubernetes.io/component: katib
+    app.kubernetes.io/name: katib-crds
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: katib
+      app.kubernetes.io/instance: katib-crds
+      app.kubernetes.io/managed-by: kfctl
+      app.kubernetes.io/name: katib-crds
+      app.kubernetes.io/part-of: kubeflow
+  addOwnerRef: true
+  componentKinds:
+  - kind: Service
+    group: core
+  - kind: Deployment
+    group: apps
+  - kind: ServiceAccount
+    group: core
+  - kind: Experiment
+    group: kubeflow.org
+  - kind: Suggestion
+    group: kubeflow.org
+  - kind: Trial
+    group: kubeflow.org
+  descriptor:
+    type: katib
+    description: Katib is a service for hyperparameter tuning and neural architecture
+      search.
+    keywords:
+    - katib
+    - katib-controller
+    - hyperparameter tuning
+    links:
+    - description: About
+      url: https://github.com/kubeflow/katib
+    maintainers:
+    - name: Ce Gao
+      email: gaoce@caicloud.io
+    - name: Johnu George
+      email: johnugeo@cisco.com
+    - name: Hougang Liu
+      email: liuhougang6@126.com
+    - name: Richard Liu
+      email: ricliu@google.com
+    - name: YujiOshima
+      email: yuji.oshima0x3fd@gmail.com
+    - name: Andrey Velichkevich
+      email: andrey.velichkevich@gmail.com
+    owners:
+    - name: Ce Gao
+      email: gaoce@caicloud.io
+    - name: Johnu George
+      email: johnugeo@cisco.com
+    - name: Hougang Liu
+      email: liuhougang6@126.com
+    - name: Richard Liu
+      email: ricliu@google.com
+    - name: YujiOshima
+      email: yuji.oshima0x3fd@gmail.com
+    - name: Andrey Velichkevich
+      email: andrey.velichkevich@gmail.com
+    version: v1alpha3

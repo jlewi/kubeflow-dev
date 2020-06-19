@@ -1,0 +1,54 @@
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: argo
+  labels:
+    app: argo
+    app.kubernetes.io/component: argo
+    app.kubernetes.io/name: argo
+    kustomize.component: argo
+rules:
+- resources:
+  - pods
+  - pods/exec
+  apiGroups:
+  - ""
+  verbs:
+  - create
+  - get
+  - list
+  - watch
+  - update
+  - patch
+- resources:
+  - configmaps
+  apiGroups:
+  - ""
+  verbs:
+  - get
+  - watch
+  - list
+- resources:
+  - persistentvolumeclaims
+  apiGroups:
+  - ""
+  verbs:
+  - create
+  - delete
+- resources:
+  - workflows
+  - workflows/finalizers
+  apiGroups:
+  - argoproj.io
+  verbs:
+  - get
+  - list
+  - watch
+  - update
+  - patch
+- resources:
+  - sparkapplications
+  apiGroups:
+  - sparkoperator.k8s.io
+  verbs:
+  - '*'

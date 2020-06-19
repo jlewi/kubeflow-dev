@@ -1,0 +1,31 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: ml-pipeline-viewer-controller-role
+  namespace: kubeflow
+rules:
+- resources:
+  - deployments
+  - services
+  apiGroups:
+  - '*'
+  verbs:
+  - create
+  - get
+  - list
+  - watch
+  - update
+  - patch
+  - delete
+- resources:
+  - viewers
+  apiGroups:
+  - kubeflow.org
+  verbs:
+  - create
+  - get
+  - list
+  - watch
+  - update
+  - patch
+  - delete

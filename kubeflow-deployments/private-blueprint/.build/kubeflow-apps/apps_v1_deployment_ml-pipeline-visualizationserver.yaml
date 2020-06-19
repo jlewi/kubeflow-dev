@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ml-pipeline-visualizationserver
+  namespace: kubeflow
+  labels:
+    app: ml-pipeline-visualizationserver
+spec:
+  selector:
+    matchLabels:
+      app: ml-pipeline-visualizationserver
+  template:
+    metadata:
+      labels:
+        app: ml-pipeline-visualizationserver
+    spec:
+      serviceAccountName: ml-pipeline-visualizationserver
+      containers:
+      - name: ml-pipeline-visualizationserver
+        image: gcr.io/ml-pipeline/visualization-server:1.0.0-rc.2
+        ports:
+        - name: http
+          containerPort: 8888
+        livenessProbe:
+          exec:
+            command:
+            - wget
+            - -q
+            - -S
+            - -O
+            - '-'
+            - http://localhost:8888/
+          initialDelaySeconds: 3
+          periodSeconds: 5
+          timeoutSeconds: 2
+        readinessProbe:
+          exec:
+            command:
+            - wget
+            - -q
+            - -S
+            - -O
+            - '-'
+            - http://localhost:8888/
+          initialDelaySeconds: 3
+          periodSeconds: 5
+          timeoutSeconds: 2
+        imagePullPolicy: IfNotPresent

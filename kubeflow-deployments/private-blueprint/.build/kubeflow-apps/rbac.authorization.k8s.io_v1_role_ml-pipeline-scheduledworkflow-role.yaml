@@ -1,0 +1,39 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: ml-pipeline-scheduledworkflow-role
+  namespace: kubeflow
+  labels:
+    app: ml-pipeline-scheduledworkflow-role
+rules:
+- resources:
+  - workflows
+  apiGroups:
+  - argoproj.io
+  verbs:
+  - create
+  - get
+  - list
+  - watch
+  - update
+  - patch
+  - delete
+- resources:
+  - scheduledworkflows
+  apiGroups:
+  - kubeflow.org
+  verbs:
+  - create
+  - get
+  - list
+  - watch
+  - update
+  - patch
+  - delete
+- resources:
+  - events
+  apiGroups:
+  - ""
+  verbs:
+  - create
+  - patch

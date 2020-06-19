@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ml-pipeline-scheduledworkflow
+  namespace: kubeflow
+  labels:
+    app: ml-pipeline-scheduledworkflow
+spec:
+  selector:
+    matchLabels:
+      app: ml-pipeline-scheduledworkflow
+  template:
+    metadata:
+      labels:
+        app: ml-pipeline-scheduledworkflow
+    spec:
+      serviceAccountName: ml-pipeline-scheduledworkflow
+      containers:
+      - name: ml-pipeline-scheduledworkflow
+        image: gcr.io/ml-pipeline/scheduledworkflow:1.0.0-rc.2
+        env:
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        imagePullPolicy: IfNotPresent

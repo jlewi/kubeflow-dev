@@ -20,56 +20,173 @@ data:
             + pilot_eds_no_instances + pilot_endpoint_not_ready
             + pilot_total_xds_internal_errors + pilot_total_xds_rejects
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: istio-pilot-istio-system
-  labels:
-    app: pilot
-    release: istio
-rules:
-- resources: ["*"]
-  apiGroups: ["config.istio.io"]
-  verbs: ["*"]
-- resources: ["*"]
-  apiGroups: ["rbac.istio.io"]
-  verbs: ["get", "watch", "list"]
-- resources: ["*"]
-  apiGroups: ["security.istio.io"]
-  verbs: ["get", "watch", "list"]
-- resources: ["*"]
-  apiGroups: ["networking.istio.io"]
-  verbs: ["*"]
-- resources: ["*"]
-  apiGroups: ["authentication.istio.io"]
-  verbs: ["*"]
-- resources: ["customresourcedefinitions"]
-  apiGroups: ["apiextensions.k8s.io"]
-  verbs: ["*"]
-- resources: ["ingresses", "ingresses/status"]
-  apiGroups: ["extensions"]
-  verbs: ["*"]
-- resources: ["configmaps"]
-  apiGroups: [""]
-  verbs: ["create", "get", "list", "watch", "update"]
-- resources: ["endpoints", "pods", "services", "namespaces", "nodes", "secrets"]
-  apiGroups: [""]
-  verbs: ["get", "list", "watch"]
-- resources: ["secrets"]
-  apiGroups: [""]
-  verbs: ["create", "get", "watch", "list", "update", "delete"]
-- resources:
-  - "certificatesigningrequests"
-  - "certificatesigningrequests/approval"
-  - "certificatesigningrequests/status"
-  apiGroups: ["certificates.k8s.io"]
-  verbs: ["update", "create", "get", "delete"]
----
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: promsd
   namespace: istio-system
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: istio
+  namespace: istio-system
+  labels:
+    release: istio
+data:
+  mesh: |-
+    # Set enableTracing to false to disable request tracing.
+    enableTracing: true
+
+    # Set accessLogFile to empty string to disable access log.
+    accessLogFile: ""
+
+    accessLogFormat: ""
+
+    accessLogEncoding: 'TEXT'
+
+    enableEnvoyAccessLogService: false
+    # reportBatchMaxEntries is the number of requests that are batched before telemetry data is sent to the mixer server
+    reportBatchMaxEntries: 100
+    # reportBatchMaxTime is the max waiting time before the telemetry data of a request is sent to the mixer server
+    reportBatchMaxTime: 1s
+    disableMixerHttpReports: true
+
+    disablePolicyChecks: true
+
+    # Automatic protocol detection uses a set of heuristics to
+    # determine whether the connection is using TLS or not (on the
+    # server side), as well as the application protocol being used
+    # (e.g., http vs tcp). These heuristics rely on the client sending
+    # the first bits of data. For server first protocols like MySQL,
+    # MongoDB, etc., Envoy will timeout on the protocol detection after
+    # the specified period, defaulting to non mTLS plain TCP
+    # traffic. Set this field to tweak the period that Envoy will wait
+    # for the client to send the first bits of data. (MUST BE >=1ms)
+    protocolDetectionTimeout: 0s
+
+    # This is the k8s ingress service name, update if you used a different name
+    ingressService: "istio-ingressgateway"
+    ingressControllerMode: "OFF"
+    ingressClass: "istio"
+
+    # The trust domain corresponds to the trust root of a system.
+    # Refer to https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#21-trust-domain
+    trustDomain: "gcp-private-dev.svc.id.goog"
+
+    #  The trust domain aliases represent the aliases of trust_domain.
+    #  For example, if we have
+    #  trustDomain: td1
+    #  trustDomainAliases: [“td2”, "td3"]
+    #  Any service with the identity "td1/ns/foo/sa/a-service-account", "td2/ns/foo/sa/a-service-account",
+    #  or "td3/ns/foo/sa/a-service-account" will be treated the same in the Istio mesh.
+    trustDomainAliases:
+    # Unix Domain Socket through which envoy communicates with NodeAgent SDS to get
+    # key/cert for mTLS. Use secret-mount files instead of SDS if set to empty.
+    sdsUdsPath: "unix:/var/run/sds/uds_path"
+
+    # If true, automatically configure client side mTLS settings to match the corresponding service's
+    # server side mTLS authentication policy, when destination rule for that service does not specify
+    # TLS settings.
+    enableAutoMtls: false
+    config_sources:
+    - address: localhost:15019
+
+    outboundTrafficPolicy:
+      mode: ALLOW_ANY
+
+    # Configures DNS certificates provisioned through Chiron linked into Pilot.
+    # The DNS certificate provisioning is enabled by default now so it get tested.
+    # TODO (lei-tang): we'll decide whether enable it by default or not before Istio 1.4 Release.
+    certificates:
+      - dnsNames:
+        - istio-galley.istio-system.svc
+        - istio-galley.istio-system
+        secretName: dns.istio-galley-service-account
+      - dnsNames:
+        - istio-sidecar-injector.istio-system.svc
+        - istio-sidecar-injector.istio-system
+        secretName: dns.istio-sidecar-injector-service-account
+
+    defaultConfig:
+      #
+      # TCP connection timeout between Envoy & the application, and between Envoys.
+      connectTimeout: 10s
+      #
+      ### ADVANCED SETTINGS #############
+      # Where should envoy's configuration be stored in the istio-proxy container
+      configPath: "/etc/istio/proxy"
+      # The pseudo service name used for Envoy.
+      serviceCluster: istio-proxy
+      # These settings that determine how long an old Envoy
+      # process should be kept alive after an occasional reload.
+      drainDuration: 45s
+      parentShutdownDuration: 1m0s
+      #
+      # Port where Envoy listens (on local host) for admin commands
+      # You can exec into the istio-proxy container in a pod and
+      # curl the admin port (curl http://localhost:15000/) to obtain
+      # diagnostic information from Envoy. See
+      # https://lyft.github.io/envoy/docs/operations/admin.html
+      # for more details
+      proxyAdminPort: 15000
+      #
+      # Set concurrency to a specific number to control the number of Proxy worker threads.
+      # If set to 0 (default), then start worker thread for each CPU thread/core.
+      concurrency: 2
+      #
+      tracing:
+        zipkin:
+          # Address of the Zipkin collector
+          address: zipkin.istio-system:9411
+      #
+      # Mutual TLS authentication between sidecars and istio control plane.
+      controlPlaneAuthPolicy: MUTUAL_TLS
+      #
+      # Address where istio Pilot service is running
+      discoveryAddress: istio-pilot.istio-system:15011
+  meshNetworks: |-
+    # Network config
+    networks: {}
+  values.yaml: |-
+    appNamespaces: []
+    autoscaleEnabled: true
+    autoscaleMax: 5
+    autoscaleMin: 1
+    configMap: true
+    configNamespace: istio-config
+    cpu:
+      targetAverageUtilization: 80
+    enableProtocolSniffingForInbound: false
+    enableProtocolSniffingForOutbound: false
+    enabled: true
+    env: {}
+    image: pilot
+    ingress:
+      ingressClass: istio
+      ingressControllerMode: "OFF"
+      ingressService: istio-ingressgateway
+    keepaliveMaxServerConnectionAge: 30m
+    meshNetworks:
+      networks: {}
+    namespace: istio-system
+    nodeSelector: {}
+    plugins: []
+    podAnnotations: {}
+    podAntiAffinityLabelSelector: []
+    podAntiAffinityTermLabelSelector: []
+    policy:
+      enabled: false
+    replicaCount: 1
+    resources:
+      requests:
+        cpu: 500m
+        memory: 2048Mi
+    rollingMaxSurge: 100%
+    rollingMaxUnavailable: 25%
+    tolerations: []
+    traceSampling: 1
+    useMCP: true
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
@@ -153,6 +270,70 @@ spec:
               runtime: envoy.wasm.runtime.null
               vm_id: stackdriver_outbound
       operation: INSERT_BEFORE
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: promsd-sidecar
+  namespace: istio-system
+data:
+  sidecar.yml: |-
+    static_metadata:
+    - metric: pilot_xds_pushes
+      type: counter
+    - metric: pilot_config_push_latency
+      type: histogram
+    - metric: pilot_xds_push_timeouts
+      type: counter
+    - metric: pilot_errors_xds
+      type: counter
+    - metric: pilot_errors_internal
+      type: counter
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: istio-pilot-istio-system
+  labels:
+    app: pilot
+    release: istio
+rules:
+- resources: ["*"]
+  apiGroups: ["config.istio.io"]
+  verbs: ["*"]
+- resources: ["*"]
+  apiGroups: ["rbac.istio.io"]
+  verbs: ["get", "watch", "list"]
+- resources: ["*"]
+  apiGroups: ["security.istio.io"]
+  verbs: ["get", "watch", "list"]
+- resources: ["*"]
+  apiGroups: ["networking.istio.io"]
+  verbs: ["*"]
+- resources: ["*"]
+  apiGroups: ["authentication.istio.io"]
+  verbs: ["*"]
+- resources: ["customresourcedefinitions"]
+  apiGroups: ["apiextensions.k8s.io"]
+  verbs: ["*"]
+- resources: ["ingresses", "ingresses/status"]
+  apiGroups: ["extensions"]
+  verbs: ["*"]
+- resources: ["configmaps"]
+  apiGroups: [""]
+  verbs: ["create", "get", "list", "watch", "update"]
+- resources: ["endpoints", "pods", "services", "namespaces", "nodes", "secrets"]
+  apiGroups: [""]
+  verbs: ["get", "list", "watch"]
+- resources: ["secrets"]
+  apiGroups: [""]
+  verbs: ["create", "get", "watch", "list", "update", "delete"]
+- resources:
+  - "certificatesigningrequests"
+  - "certificatesigningrequests/approval"
+  - "certificatesigningrequests/status"
+  apiGroups: ["certificates.k8s.io"]
+  verbs: ["update", "create", "get", "delete"]
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -381,34 +562,6 @@ data:
                               cluster: out.galley.15019
                               timeout: 0.000s
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: ClusterRole
-metadata:
-  name: promsd-istio-system
-rules:
-- resources:
-  - nodes
-  - services
-  - endpoints
-  - pods
-  - nodes/proxy
-  apiGroups:
-  - ""
-  verbs:
-  - get
-  - list
-  - watch
-- resources:
-  - configmaps
-  apiGroups:
-  - ""
-  verbs:
-  - get
-- nonResourceURLs:
-  - /metrics
-  verbs:
-  - get
----
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
@@ -438,25 +591,6 @@ spec:
       operation: INSERT_BEFORE
 ---
 apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: promsd-sidecar
-  namespace: istio-system
-data:
-  sidecar.yml: |-
-    static_metadata:
-    - metric: pilot_xds_pushes
-      type: counter
-    - metric: pilot_config_push_latency
-      type: histogram
-    - metric: pilot_xds_push_timeouts
-      type: counter
-    - metric: pilot_errors_xds
-      type: counter
-    - metric: pilot_errors_internal
-      type: counter
----
-apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: istio-pilot-service-account
@@ -465,167 +599,33 @@ metadata:
     app: pilot
     release: istio
 ---
-apiVersion: v1
-kind: ConfigMap
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
 metadata:
-  name: istio
-  namespace: istio-system
-  labels:
-    release: istio
-data:
-  mesh: |-
-    # Set enableTracing to false to disable request tracing.
-    enableTracing: true
-
-    # Set accessLogFile to empty string to disable access log.
-    accessLogFile: ""
-
-    accessLogFormat: ""
-
-    accessLogEncoding: 'TEXT'
-
-    enableEnvoyAccessLogService: false
-    # reportBatchMaxEntries is the number of requests that are batched before telemetry data is sent to the mixer server
-    reportBatchMaxEntries: 100
-    # reportBatchMaxTime is the max waiting time before the telemetry data of a request is sent to the mixer server
-    reportBatchMaxTime: 1s
-    disableMixerHttpReports: true
-
-    disablePolicyChecks: true
-
-    # Automatic protocol detection uses a set of heuristics to
-    # determine whether the connection is using TLS or not (on the
-    # server side), as well as the application protocol being used
-    # (e.g., http vs tcp). These heuristics rely on the client sending
-    # the first bits of data. For server first protocols like MySQL,
-    # MongoDB, etc., Envoy will timeout on the protocol detection after
-    # the specified period, defaulting to non mTLS plain TCP
-    # traffic. Set this field to tweak the period that Envoy will wait
-    # for the client to send the first bits of data. (MUST BE >=1ms)
-    protocolDetectionTimeout: 0s
-
-    # This is the k8s ingress service name, update if you used a different name
-    ingressService: "istio-ingressgateway"
-    ingressControllerMode: "OFF"
-    ingressClass: "istio"
-
-    # The trust domain corresponds to the trust root of a system.
-    # Refer to https://github.com/spiffe/spiffe/blob/master/standards/SPIFFE-ID.md#21-trust-domain
-    trustDomain: "gcp-private-dev.svc.id.goog"
-
-    #  The trust domain aliases represent the aliases of trust_domain.
-    #  For example, if we have
-    #  trustDomain: td1
-    #  trustDomainAliases: [“td2”, "td3"]
-    #  Any service with the identity "td1/ns/foo/sa/a-service-account", "td2/ns/foo/sa/a-service-account",
-    #  or "td3/ns/foo/sa/a-service-account" will be treated the same in the Istio mesh.
-    trustDomainAliases:
-    # Unix Domain Socket through which envoy communicates with NodeAgent SDS to get
-    # key/cert for mTLS. Use secret-mount files instead of SDS if set to empty.
-    sdsUdsPath: "unix:/var/run/sds/uds_path"
-
-    # If true, automatically configure client side mTLS settings to match the corresponding service's
-    # server side mTLS authentication policy, when destination rule for that service does not specify
-    # TLS settings.
-    enableAutoMtls: false
-    config_sources:
-    - address: localhost:15019
-
-    outboundTrafficPolicy:
-      mode: ALLOW_ANY
-
-    # Configures DNS certificates provisioned through Chiron linked into Pilot.
-    # The DNS certificate provisioning is enabled by default now so it get tested.
-    # TODO (lei-tang): we'll decide whether enable it by default or not before Istio 1.4 Release.
-    certificates:
-      - dnsNames:
-        - istio-galley.istio-system.svc
-        - istio-galley.istio-system
-        secretName: dns.istio-galley-service-account
-      - dnsNames:
-        - istio-sidecar-injector.istio-system.svc
-        - istio-sidecar-injector.istio-system
-        secretName: dns.istio-sidecar-injector-service-account
-
-    defaultConfig:
-      #
-      # TCP connection timeout between Envoy & the application, and between Envoys.
-      connectTimeout: 10s
-      #
-      ### ADVANCED SETTINGS #############
-      # Where should envoy's configuration be stored in the istio-proxy container
-      configPath: "/etc/istio/proxy"
-      # The pseudo service name used for Envoy.
-      serviceCluster: istio-proxy
-      # These settings that determine how long an old Envoy
-      # process should be kept alive after an occasional reload.
-      drainDuration: 45s
-      parentShutdownDuration: 1m0s
-      #
-      # Port where Envoy listens (on local host) for admin commands
-      # You can exec into the istio-proxy container in a pod and
-      # curl the admin port (curl http://localhost:15000/) to obtain
-      # diagnostic information from Envoy. See
-      # https://lyft.github.io/envoy/docs/operations/admin.html
-      # for more details
-      proxyAdminPort: 15000
-      #
-      # Set concurrency to a specific number to control the number of Proxy worker threads.
-      # If set to 0 (default), then start worker thread for each CPU thread/core.
-      concurrency: 2
-      #
-      tracing:
-        zipkin:
-          # Address of the Zipkin collector
-          address: zipkin.istio-system:9411
-      #
-      # Mutual TLS authentication between sidecars and istio control plane.
-      controlPlaneAuthPolicy: MUTUAL_TLS
-      #
-      # Address where istio Pilot service is running
-      discoveryAddress: istio-pilot.istio-system:15011
-  meshNetworks: |-
-    # Network config
-    networks: {}
-  values.yaml: |-
-    appNamespaces: []
-    autoscaleEnabled: true
-    autoscaleMax: 5
-    autoscaleMin: 1
-    configMap: true
-    configNamespace: istio-config
-    cpu:
-      targetAverageUtilization: 80
-    enableProtocolSniffingForInbound: false
-    enableProtocolSniffingForOutbound: false
-    enabled: true
-    env: {}
-    image: pilot
-    ingress:
-      ingressClass: istio
-      ingressControllerMode: "OFF"
-      ingressService: istio-ingressgateway
-    keepaliveMaxServerConnectionAge: 30m
-    meshNetworks:
-      networks: {}
-    namespace: istio-system
-    nodeSelector: {}
-    plugins: []
-    podAnnotations: {}
-    podAntiAffinityLabelSelector: []
-    podAntiAffinityTermLabelSelector: []
-    policy:
-      enabled: false
-    replicaCount: 1
-    resources:
-      requests:
-        cpu: 500m
-        memory: 2048Mi
-    rollingMaxSurge: 100%
-    rollingMaxUnavailable: 25%
-    tolerations: []
-    traceSampling: 1
-    useMCP: true
+  name: promsd-istio-system
+rules:
+- resources:
+  - nodes
+  - services
+  - endpoints
+  - pods
+  - nodes/proxy
+  apiGroups:
+  - ""
+  verbs:
+  - get
+  - list
+  - watch
+- resources:
+  - configmaps
+  apiGroups:
+  - ""
+  verbs:
+  - get
+- nonResourceURLs:
+  - /metrics
+  verbs:
+  - get
 ---
 # Resources for Pilot component
 apiVersion: autoscaling/v2beta1
@@ -648,22 +648,6 @@ spec:
     name: istio-pilot
     apiVersion: apps/v1
     kind: Deployment
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: istio-pilot-istio-system
-  labels:
-    app: pilot
-    release: istio
-roleRef:
-  name: istio-pilot-istio-system
-  kind: ClusterRole
-  apiGroup: rbac.authorization.k8s.io
-subjects:
-- name: istio-pilot-service-account
-  namespace: istio-system
-  kind: ServiceAccount
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -691,6 +675,22 @@ data:
       - source_labels: [__meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
         action: keep
         regex: istio-pilot;http-monitoring
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: istio-pilot-istio-system
+  labels:
+    app: pilot
+    release: istio
+roleRef:
+  name: istio-pilot-istio-system
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- name: istio-pilot-service-account
+  namespace: istio-system
+  kind: ServiceAccount
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding

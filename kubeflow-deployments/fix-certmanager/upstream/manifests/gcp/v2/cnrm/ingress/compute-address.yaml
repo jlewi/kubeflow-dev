@@ -1,0 +1,11 @@
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeAddress
+metadata:
+  name: jl-cm-0608-001-ip # {"type":"string","x-kustomize":{"setBy":"kpt","partialSetters":[{"name":"name","value":"jl-cm-0608-001"}]}}
+  labels:
+    label-one: "value-one"
+spec:
+  addressType: EXTERNAL
+  description: Static IP for Kubeflow ingress.
+  location: global
+  ipVersion: IPV4

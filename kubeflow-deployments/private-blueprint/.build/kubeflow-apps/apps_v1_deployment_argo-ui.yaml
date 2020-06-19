@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argo-ui
+  namespace: kubeflow
+  labels:
+    app: argo-ui
+    app.kubernetes.io/component: argo
+    app.kubernetes.io/name: argo
+    kustomize.component: argo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: argo-ui
+      app.kubernetes.io/component: argo
+      app.kubernetes.io/name: argo
+      kustomize.component: argo
+  template:
+    metadata:
+      labels:
+        app: argo-ui
+        app.kubernetes.io/component: argo
+        app.kubernetes.io/name: argo
+        kustomize.component: argo
+      annotations:
+        sidecar.istio.io/inject: "false"
+      creationTimestamp: null
+    spec:
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      serviceAccountName: argo-ui
+      serviceAccount: argo-ui
+      schedulerName: default-scheduler
+      containers:
+      - name: argo-ui
+        image: argoproj/argoui:v2.3.0
+        env:
+        - name: ARGO_NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+        - name: IN_CLUSTER
+          value: "true"
+        - name: ENABLE_WEB_CONSOLE
+          value: "false"
+        - name: BASE_HREF
+          value: /argo/
+        resources: {}
+        readinessProbe:
+          httpGet:
+            port: 8001
+            path: /
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        imagePullPolicy: IfNotPresent
+      securityContext: {}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600

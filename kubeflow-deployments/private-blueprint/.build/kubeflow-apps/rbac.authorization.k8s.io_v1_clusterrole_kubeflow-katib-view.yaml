@@ -1,0 +1,19 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kubeflow-katib-view
+  labels:
+    app.kubernetes.io/component: katib
+    app.kubernetes.io/name: katib-controller
+    rbac.authorization.kubeflow.org/aggregate-to-kubeflow-view: "true"
+rules:
+- resources:
+  - experiments
+  - trials
+  - suggestions
+  apiGroups:
+  - kubeflow.org
+  verbs:
+  - get
+  - list
+  - watch

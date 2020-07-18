@@ -1,0 +1,11 @@
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: jlewi-0717-001-admin-workload-identity-user # {"$kpt-set":"name-admin-wi"}
+spec:
+  member: serviceAccount:jlewi-dev.svc.id.goog[kubeflow/profiles-controller-service-account] # {"$kpt-set":"admin-profiles-sa-wi"}
+  role: roles/iam.workloadIdentityUser
+  resourceRef:
+    apiVersion: iam.cnrm.cloud.google.com/v1beta1
+    kind: IAMServiceAccount
+    name: jlewi-0717-001-admin # {"$kpt-set":"admin-sa-name"}

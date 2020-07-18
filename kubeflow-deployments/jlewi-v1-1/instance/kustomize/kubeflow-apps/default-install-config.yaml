@@ -1,0 +1,8 @@
+apiVersion: v1
+data:
+  profile-name: default-profile
+  user: EMAIL
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: default-install-config

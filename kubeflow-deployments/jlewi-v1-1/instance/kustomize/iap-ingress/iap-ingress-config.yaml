@@ -1,0 +1,10 @@
+apiVersion: v1
+data:
+  appName: KUBEFLOW-NAME # {"$kpt-set":"name-label"}
+  hostname: KUBEFLOW-NAME.endpoints.PROJECT.cloud.goog
+  ipName: KUBEFLOW-NAME-ip
+  project: "PROJECT"
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: iap-ingress-config

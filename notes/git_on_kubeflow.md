@@ -73,72 +73,77 @@ fi
     kubectl create secret generic ssh-key --from-file=id_rsa=<path to private key> --from-file=id_rsa.pub=<path to public key>
     ```
 
-1. Use an init container and a pod volume to setup the ssh keys
+1. Mount the git credentials into a volume
 
    * Here's a sample pod spec
 
      ```
-     apiVersion: v1
-     kind: Pod
-     metadata:
-       name: jlewi-pod
-       labels:
-         app: jlewi
-     spec:
-       initContainers:
-       - command:
-         - /usr/local/bin/setup_ssh.sh
-         - --ssh_dir=/root/.ssh
-         - --private_key=/secret/ssh-key/id_rsa
-         - --public_key=/secret/ssh-key/id_rsa.pub
-         image: gcr.io/kubeflow-releasing/test-worker:v20190421-c9a1370-dirty-228f45
-         name: setup-ssh
-         volumeMounts:
-         - mountPath: /root/.ssh
-           name: ssh-config
-         - mountPath: /secret/ssh-key
-           name: ssh
-           readOnly: true
-       containers:
-       - command:
-         - tail
-         - -f 
-         - /dev/null
-         image: gcr.io/kubeflow-releasing/test-worker:v20190421-c9a1370-dirty-228f45
-         name: update
-         env:
-         - name: GOOGLE_APPLICATION_CREDENTIALS
-           value: /secret/gcp-credentials/key.json
-         - name: PYTHONPATH
-           value: /src/kubeflow/kubeflow/py:/src/kubeflow/testing/py:/src/kubeflow/fairing        
-         volumeMounts:
-         - mountPath: /src
-           name: src
-         - mountPath: /secret/gcp-credentials
-           name: gcp-credentials
-           readOnly: true
-         - mountPath: /root/.ssh
-           name: ssh-config
-       restartPolicy: Never
-       volumes:
-       - name: ssh-config
-         emptyDir: {}
-       - name: src
-         emptyDir: {}
-       - name: gcp-credentials
-         secret:
-           secretName: user-gcp-sa
-       - name: ssh
-         secret:
-           secretName: kubeflow-bot-ssh
+      apiVersion: kubeflow.org/v1
+      kind: Notebook
+      metadata:
+        labels:
+          app: jlewi-grpc # {"$ref":"#/definitions/io.k8s.cli.substitutions.name"}
+        name: jlewi-grpc # {"$ref":"#/definitions/io.k8s.cli.substitutions.name"}
+      spec:
+        template:
+          spec:
+            containers:
+            - env:
+              # TODO(jlewi): I got an error: 
+              #- name: JUPYTERLAB_DIR # Set the JUPYTERLAB_DIR so we can install extensions        
+              #  value: /home/jovyan/.jupyterlab_dir
+              image: gcr.io/kubeflow-images-public/tensorflow-1.15.2-notebook-cpu:1.0.0
+              name: jlewi-grpc # {"$ref":"#/definitions/io.k8s.cli.substitutions.name"}
+              # Bump the resources to include a GPU
+              resources:
+                limits:
+                  nvidia.com/gpu: 0 # {"$kpt-set":"numGpus"}
+                  cpu: "16"
+                  memory: 32Gi
+                requests:
+                  cpu: "4"
+                  memory: 4Gi
+              volumeMounts:
+              - mountPath: /home/jovyan
+                name: workspace
+              - mountPath: /dev/shm
+                name: dshm    
+              - mountPath: /secret/ssh-key
+                name: ssh
+                readOnly: true
+            # Start a container running theia which is an IDE
+            - image: theiaide/theia:next # TODO(jlewi): Should we use an image which actually includes an appropriate toolchain like python?
+              name: theia
+              resources:
+                requests:
+                  cpu: "4"
+                  memory: 1.0Gi
+                limits:
+                  cpu: "16"
+                  memory: 8.0Gi
+              volumeMounts:
+              - mountPath: /mount/jovyan
+                name: workspace
+            serviceAccountName: default-editor
+            ttlSecondsAfterFinished: 300
+            volumes:
+            - name: workspace
+              persistentVolumeClaim:
+                claimName: workspace-jlewi-grpc # {"$kpt-set":"pvc-name"}
+            - name: ssh
+              secret:
+                secretName: git-creds
+            - emptyDir:
+                medium: Memory
+              name: dshm
      ```
 
-   * The init container runs the script setup_ssh.sh from https://github.com/kubeflow/testing this script
+1. Use ssh-agent to add the ssh key
 
-     * Copies the ssh key from a secret to a pod volume
-     * Sets the permissions on the ssh files as needed
-
-   * The main container mounts `${HOME}/.ssh` from a pod volume 
+   ```
+   eval "$(ssh-agent -s)"
+   ssh-add  /secret/ssh-key/ssh
+   ```
 
 ## Next Steps
 

@@ -1,7 +1,7 @@
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeDisk
 metadata:
-  name: jlewi-0717-001-storage-metadata-store # {"$kpt-set":"name-storage-metadata-store"}
+  name: jlewi-0719-001-storage-metadata-store # {"$kpt-set":"name-storage-metadata-store"}
 spec:
   location: us-east1-d # {"$kpt-set":"location"}
   size: 20
@@ -9,7 +9,7 @@ spec:
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeDisk
 metadata:
-  name: jlewi-0717-001-storage-artifact-store # {"$kpt-set":"name-storage-artifact-store"}
+  name: jlewi-0719-001-storage-artifact-store # {"$kpt-set":"name-storage-artifact-store"}
 spec:
   location: us-east1-d # {"$kpt-set":"location"}
   size: 200

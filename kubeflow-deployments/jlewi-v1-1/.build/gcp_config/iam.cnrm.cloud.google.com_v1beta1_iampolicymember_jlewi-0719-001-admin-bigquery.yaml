@@ -1,0 +1,14 @@
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  labels:
+    kf-name: jlewi-0719-001
+  name: jlewi-0719-001-admin-bigquery
+  namespace: jlewi-dev
+spec:
+  member: serviceAccount:jlewi-0719-001-admin@jlewi-dev.iam.gserviceaccount.com
+  resourceRef:
+    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+    external: projects/jlewi-dev
+    kind: Project
+  role: roles/bigquery.admin

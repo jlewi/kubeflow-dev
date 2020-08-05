@@ -1,0 +1,12 @@
+apiVersion: container.cnrm.cloud.google.com/v1beta1
+kind: ContainerCluster
+metadata:
+  annotations:
+    gke.io/cluster: bootstrap://
+  name: jlewi-admin
+  namespace: jlewi-dev
+spec:
+  initialNodeCount: 3
+  location: us-west1
+  releaseChannel:
+    channel: REGULAR

@@ -1,0 +1,11 @@
+apiVersion: v1
+data:
+  minioPd: jlewi-0719-001-storage-artifact-store
+  minioPvName: minio-pv
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/component: minio
+    app.kubernetes.io/name: minio
+  name: pipeline-minio-install-config-2d847kdff4
+  namespace: kubeflow

@@ -1,0 +1,6 @@
+# The purpose of this file is to store values in setters
+# so its easy to get them using yq for use in Make.
+# TODO(jlewi): File a feature request to have kpt list-setters return the value
+project: jlewi-dev # {"$kpt-set":"gcloud.core.project"}
+name: jlewi-admin # {"$kpt-set":"name"}
+location: us-west1 # {"$kpt-set":"location"}

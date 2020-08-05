@@ -1,0 +1,12 @@
+apiVersion: ctl.isla.solutions/v1
+kind: CloudEndpoint
+metadata:
+  labels:
+    kustomize.component: iap-ingress
+  name: jlewi-0719-001
+  namespace: istio-system
+spec:
+  project: jlewi-dev
+  targetIngress:
+    name: envoy-ingress
+    namespace: istio-system

@@ -15,6 +15,6 @@
 apiVersion: iam.cnrm.cloud.google.com/v1beta1
 kind: IAMServiceAccount
 metadata:
-  name: jlewi-0717-001-user # {"$kpt-set":"user-sa-name"}
+  name: jlewi-0719-001-user # {"$kpt-set":"user-sa-name"}
 spec:
   displayName: kubeflow user service account

@@ -15,7 +15,7 @@
 apiVersion: install.istio.io/v1alpha2
 kind: IstioControlPlane
 metadata:
-  clusterName: "jlewi-dev/us-east1-d/jlewi-0717-001" # {"$kpt-set":"asm-cluster-name"}
+  clusterName: "jlewi-dev/us-east1-d/jlewi-0719-001" # {"$kpt-set":"asm-cluster-name"}
 spec:
   profile: asm
   hub: gcr.io/gke-release/asm
@@ -25,14 +25,14 @@ spec:
       istio-ingressgateway:
         type: NodePort
     global:
-      meshID: "jlewi-dev_us-east1-d_jlewi-0717-001" # {"$kpt-set":"asm-mesh-id"}
+      meshID: "jlewi-dev_us-east1-d_jlewi-0719-001" # {"$kpt-set":"asm-mesh-id"}
       trustDomain: "jlewi-dev.svc.id.goog" # {"$kpt-set":"identity-ns"}
       sds:
         token:
           aud: "jlewi-dev.svc.id.goog" # {"$kpt-set":"identity-ns"}
       proxy:
         env:
-          GCP_METADATA: "jlewi-dev|147474701642|jlewi-0717-001|us-east1-d" # {"$kpt-set":"asm-gcp-metadata"}
+          GCP_METADATA: "jlewi-dev|147474701642|jlewi-0719-001|us-east1-d" # {"$kpt-set":"asm-gcp-metadata"}
     nodeagent:
       env:
-        GKE_CLUSTER_URL: "https://container.googleapis.com/v1/projects/jlewi-dev/locations/us-east1-d/clusters/jlewi-0717-001" # {"$kpt-set":"asm-cluster-url"}
+        GKE_CLUSTER_URL: "https://container.googleapis.com/v1/projects/jlewi-dev/locations/us-east1-d/clusters/jlewi-0719-001" # {"$kpt-set":"asm-cluster-url"}

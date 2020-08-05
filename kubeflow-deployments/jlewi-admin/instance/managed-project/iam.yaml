@@ -1,0 +1,12 @@
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: cnrm-system-MANAGED_PROJECT-owner
+  namespace: jlewi-dev # {"$kpt-set":"managed-project"}
+spec:
+  member: serviceAccount:jlewi-admin-cnrm-system@jlewi-dev.iam.gserviceaccount.com # {"$kpt-set":"managed-project-owner-member"}
+  role: roles/owner
+  resourceRef:
+    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+    kind: Project
+    external: jlewi-dev # {"$kpt-set":"managed-project-ref"}

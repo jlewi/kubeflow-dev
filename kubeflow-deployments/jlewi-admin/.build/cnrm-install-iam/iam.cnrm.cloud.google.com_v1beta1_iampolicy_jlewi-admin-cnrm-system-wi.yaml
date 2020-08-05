@@ -1,0 +1,14 @@
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicy
+metadata:
+  name: jlewi-admin-cnrm-system-wi
+  namespace: jlewi-dev
+spec:
+  bindings:
+  - members:
+    - serviceAccount:jlewi-dev.svc.id.goog[cnrm-system/cnrm-controller-manager]
+    role: roles/iam.workloadIdentityUser
+  resourceRef:
+    apiVersion: iam.cnrm.cloud.google.com/v1alpha1
+    kind: IAMServiceAccount
+    name: jlewi-admin-cnrm-system

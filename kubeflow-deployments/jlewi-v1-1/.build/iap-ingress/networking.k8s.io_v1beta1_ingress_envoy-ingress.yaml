@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   annotations:
     ingress.kubernetes.io/ssl-redirect: "true"
-    kubernetes.io/ingress.global-static-ip-name: jlewi-0717-001-ip
+    kubernetes.io/ingress.global-static-ip-name: jlewi-0719-001-ip
     networking.gke.io/managed-certificates: gke-certificate
   labels:
     kustomize.component: iap-ingress
@@ -11,7 +11,7 @@ metadata:
   namespace: istio-system
 spec:
   rules:
-  - host: jlewi-0717-001.endpoints.PROJECT.cloud.goog
+  - host: jlewi-0719-001.endpoints.jlewi-dev.cloud.goog
     http:
       paths:
       - backend:

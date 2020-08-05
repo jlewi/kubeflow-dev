@@ -25,4 +25,4 @@ spec:
     autoRepair: true
     autoUpgrade: true
   clusterRef:
-    name: jlewi-0717-001 # {"$kpt-set":"name"}
+    name: jlewi-0719-001 # {"$kpt-set":"name"}

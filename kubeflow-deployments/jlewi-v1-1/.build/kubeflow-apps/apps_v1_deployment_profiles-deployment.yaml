@@ -42,7 +42,7 @@ spec:
           valueFrom:
             configMapKeyRef:
               key: gcp-sa
-              name: profiles-profiles-config-8bm5g45bm6
+              name: profiles-profiles-config-m5h98tgdmk
         image: gcr.io/kubeflow-images-public/profile-controller:vmaster-g34aa47c2
         imagePullPolicy: Always
         livenessProbe:
@@ -78,7 +78,7 @@ spec:
           valueFrom:
             configMapKeyRef:
               key: admin
-              name: profiles-profiles-config-8bm5g45bm6
+              name: profiles-profiles-config-m5h98tgdmk
         image: gcr.io/kubeflow-images-public/kfam:vmaster-gf3e09203
         imagePullPolicy: Always
         livenessProbe:

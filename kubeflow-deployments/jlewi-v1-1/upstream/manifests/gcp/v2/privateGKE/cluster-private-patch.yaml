@@ -2,8 +2,8 @@
 apiVersion: container.cnrm.cloud.google.com/v1beta1
 kind: ContainerCluster
 metadata:
-  clusterName: "jlewi-dev/us-east1-d/jlewi-0717-001" # {"$kpt-set":"asm-cluster-name"}
-  name: jlewi-0717-001 # {"$kpt-set":"name"}
+  clusterName: "jlewi-dev/us-east1-d/jlewi-0719-001" # {"$kpt-set":"asm-cluster-name"}
+  name: jlewi-0719-001 # {"$kpt-set":"name"}
 spec:
   # https://cloud.google.com/kubernetes-engine/docs/reference/rest/v1/projects.locations.clusters#Cluster.PrivateClusterConfig
   # This is the least secure config because it allows access to master from all public IPs.
@@ -33,6 +33,6 @@ spec:
     #createSubnetwork: true
   # Create the clsuter in the private network we created.
   networkRef:
-    name: jlewi-0717-001 # {"$kpt-set":"name"}
+    name: jlewi-0719-001 # {"$kpt-set":"name"}
   subnetworkRef:
-    name: jlewi-0717-001 # {"$kpt-set":"name"}
+    name: jlewi-0719-001 # {"$kpt-set":"name"}

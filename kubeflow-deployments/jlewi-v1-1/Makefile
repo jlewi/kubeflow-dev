@@ -40,15 +40,14 @@ set-values:
 
 	$(KPT) cfg set ./instance mgmt-ctxt jlewi-mgmt
 
-	$(KPT) cfg set ./upstream/manifests/gcp name jlewi-0717-001
+	$(KPT) cfg set ./upstream/manifests/gcp name jlewi-0719-001
 	$(KPT) cfg set ./upstream/manifests/gcp gcloud.core.project jlewi-dev
 	$(KPT) cfg set ./upstream/manifests/gcp gcloud.compute.zone us-east1-d
 	$(KPT) cfg set ./upstream/manifests/gcp location us-east1-d
 	$(KPT) cfg set ./upstream/manifests/gcp log-firewalls false
 
-	$(KPT) cfg set ./instance name jlewi-0717-001
+	$(KPT) cfg set ./instance name jlewi-0719-001
 	$(KPT) cfg set ./instance location us-east1-d
-	$(KPT) cfg set ./instance gcloud.compute.region us-east1
 	$(KPT) cfg set ./instance gcloud.core.project jlewi-dev
 
 #************************************************************************************************************************

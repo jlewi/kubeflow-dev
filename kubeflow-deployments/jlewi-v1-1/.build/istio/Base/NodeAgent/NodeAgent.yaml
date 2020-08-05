@@ -69,7 +69,7 @@ spec:
             - name: CA_PROVIDER
               value: "GoogleCA"
             - name: GKE_CLUSTER_URL
-              value: "https://container.googleapis.com/v1/projects/jlewi-dev/locations/us-east1-d/clusters/jlewi-0717-001"
+              value: "https://container.googleapis.com/v1/projects/jlewi-dev/locations/us-east1-d/clusters/jlewi-0719-001"
             - name: PLUGINS
               value: "GoogleTokenExchange"
             - name: VALID_TOKEN

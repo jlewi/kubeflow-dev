@@ -1,0 +1,14 @@
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  labels:
+    kf-name: jlewi-0719-001
+  name: jlewi-0719-001-admin-workload-identity-user
+  namespace: jlewi-dev
+spec:
+  member: serviceAccount:jlewi-dev.svc.id.goog[kubeflow/profiles-controller-service-account]
+  resourceRef:
+    apiVersion: iam.cnrm.cloud.google.com/v1beta1
+    kind: IAMServiceAccount
+    name: jlewi-0719-001-admin
+  role: roles/iam.workloadIdentityUser

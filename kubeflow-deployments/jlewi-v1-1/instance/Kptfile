@@ -18,7 +18,8 @@ openAPI:
       x-k8s-cli:
         setter:
           name: gcloud.core.project
-          value: project-id
+          value: jlewi-dev
+          isSet: true
     io.k8s.cli.substitutions.name-label:
       x-k8s-cli:
         substitution:
@@ -31,17 +32,20 @@ openAPI:
       x-k8s-cli:
         setter:
           name: name
-          value: KUBEFLOW-NAME
+          value: jlewi-0719-001
+          isSet: true
     io.k8s.cli.setters.location:
       x-k8s-cli:
         setter:
           name: location
-          value: LOCATION
+          value: us-east1-d
+          isSet: true
     io.k8s.cli.setters.mgmt-ctxt:
       x-k8s-cli:
         setter:
           name: mgmt-ctxt
-          value: MANAGEMENT-CTXT
+          value: jlewi-mgmt
+          isSet: true
     io.k8s.cli.setters.kustomize_manifests_path:
       x-k8s-cli:
         setter:
@@ -159,3 +163,68 @@ openAPI:
           values:
           - marker: ${kustomize_manifests_path}
             ref: '#/definitions/io.k8s.cli.setters.kustomize_manifests_path'
+    io.k8s.cli.setters.gke.private:
+      x-k8s-cli:
+        setter:
+          name: gke.private
+          value: "false"
+          isSet: true
+    io.k8s.cli.setters.email:
+      x-k8s-cli:
+        setter:
+          name: email
+          value: EMAIL
+    io.k8s.cli.substitutions.gcp-sa:
+      x-k8s-cli:
+        substitution:
+          name: gcp-sa
+          pattern: ${name}-user@${gcloud.core.project}.iam.gserviceaccount.com
+          values:
+          - marker: ${name}
+            ref: '#/definitions/io.k8s.cli.setters.name'
+          - marker: ${gcloud.core.project}
+            ref: '#/definitions/io.k8s.cli.setters.gcloud.core.project'
+    io.k8s.cli.substitutions.ip-name:
+      x-k8s-cli:
+        substitution:
+          name: ip-name
+          pattern: ${name}-ip
+          values:
+          - marker: ${name}
+            ref: '#/definitions/io.k8s.cli.setters.name'
+    io.k8s.cli.substitutions.hostname:
+      x-k8s-cli:
+        substitution:
+          name: hostname
+          pattern: ${name}.endpoints.${gcloud.core.project}.cloud.goog
+          values:
+          - marker: ${name}
+            ref: '#/definitions/io.k8s.cli.setters.name'
+          - marker: ${gcloud.core.project}
+            ref: '#/definitions/io.k8s.cli.setters.gcloud.core.project'
+    io.k8s.cli.substitutions.storage-artifact-store-name:
+      x-k8s-cli:
+        substitution:
+          name: storage-artifact-store-name
+          pattern: ${name}-storage-artifact-store
+          values:
+          - marker: ${name}
+            ref: '#/definitions/io.k8s.cli.setters.name'
+    io.k8s.cli.substitutions.metadata-artifact-store-name:
+      x-k8s-cli:
+        substitution:
+          name: metadata-artifact-store-name
+          pattern: ${name}-storage-metadata-store
+          values:
+          - marker: ${name}
+            ref: '#/definitions/io.k8s.cli.setters.name'
+    io.k8s.cli.substitutions.gcp-sa-admin:
+      x-k8s-cli:
+        substitution:
+          name: gcp-sa-admin
+          pattern: ${name}-admin@${gcloud.core.project}.iam.gserviceaccount.com
+          values:
+          - marker: ${name}
+            ref: '#/definitions/io.k8s.cli.setters.name'
+          - marker: ${gcloud.core.project}
+            ref: '#/definitions/io.k8s.cli.setters.gcloud.core.project'

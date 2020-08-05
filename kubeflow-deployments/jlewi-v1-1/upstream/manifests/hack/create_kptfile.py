@@ -120,6 +120,21 @@ class KptCreator:
     create_setter("gcloud.compute.zone", "us-east1-d", path)
     create_setter("gcloud.compute.region", "us-central1", path)
 
+    # Workload identity bindings for the kf-admin account
+    for ns in ["kubeflow", "istio-system"]:
+      name = f"iampolicy-member-kfadmin-{ns}"
+      value = f"serviceAccount:project-id.svc.id.goog[{ns}/kf-admin]"
+      pattern = f"serviceAccount:${{gcloud.core.project}}.svc.id.goog[{ns}/kf-admin]"
+      create_subst(name, value, pattern, path)
+
+
+    # For user account create names for IAM policy member rules
+    services = ["cloudbuild", "viewer", "source",
+                "storage", "bigquery", "dataflow",
+                "ml", "dataproc", "cloudsql", "logging",
+                "metricwriter", "monitoringviewer"]
+
+
     # Import create zone and region before location so that location overrides
     # it
     create_setter("location", "us-east1-d", path)

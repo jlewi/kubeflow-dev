@@ -13,4 +13,4 @@ spec:
     storage: 20Gi
   gcePersistentDisk:
     fsType: ext4
-    pdName: jlewi-0717-001-storage-metadata-store
+    pdName: jlewi-0719-001-storage-metadata-store

@@ -16,7 +16,7 @@ openAPI:
       x-k8s-cli:
         setter:
           name: name
-          value: jlewi-0717-001
+          value: jlewi-0719-001
           isSet: true
     io.k8s.cli.setters.gcloud.compute.zone:
       x-k8s-cli:
@@ -786,6 +786,46 @@ openAPI:
         substitution:
           name: image-mirror-metacontroller
           pattern: gcr.io/${gcloud.core.project}/mirror/metacontroller
+          values:
+          - marker: ${gcloud.core.project}
+            ref: '#/definitions/io.k8s.cli.setters.gcloud.core.project'
+    io.k8s.cli.substitutions.name-admin-kubeflow-wi:
+      x-k8s-cli:
+        substitution:
+          name: name-admin-kubeflow-wi
+          pattern: ${name}-admin-kubeflow-wi
+          values:
+          - marker: ${name}
+            ref: '#/definitions/io.k8s.cli.setters.name'
+    io.k8s.cli.substitutions.name-admin-istio-wi:
+      x-k8s-cli:
+        substitution:
+          name: name-admin-istio-wi
+          pattern: ${name}-admin-istio-wi
+          values:
+          - marker: ${name}
+            ref: '#/definitions/io.k8s.cli.setters.name'
+    io.k8s.cli.substitutions.iampolicy-member-kfadmin-kubeflow:
+      x-k8s-cli:
+        substitution:
+          name: iampolicy-member-kfadmin-kubeflow
+          pattern: serviceAccount:${gcloud.core.project}.svc.id.goog[kubeflow/kf-admin]
+          values:
+          - marker: ${gcloud.core.project}
+            ref: '#/definitions/io.k8s.cli.setters.gcloud.core.project'
+    io.k8s.cli.substitutions.iampolicy-member-kfadmin-istio:
+      x-k8s-cli:
+        substitution:
+          name: iampolicy-member-kfadmin-istio
+          pattern: serviceAccount:${gcloud.core.project}.svc.id.goog[istio/kf-admin]
+          values:
+          - marker: ${gcloud.core.project}
+            ref: '#/definitions/io.k8s.cli.setters.gcloud.core.project'
+    io.k8s.cli.substitutions.iampolicy-member-kfadmin-istio-system:
+      x-k8s-cli:
+        substitution:
+          name: iampolicy-member-kfadmin-istio-system
+          pattern: serviceAccount:${gcloud.core.project}.svc.id.goog[istio-system/kf-admin]
           values:
           - marker: ${gcloud.core.project}
             ref: '#/definitions/io.k8s.cli.setters.gcloud.core.project'

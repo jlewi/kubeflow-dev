@@ -174,7 +174,7 @@ spec:
         - name: ISTIO_META_OWNER
           value: kubernetes://apis/apps/v1/namespaces/istio-system/deployments/istio-ingressgateway
         - name: ISTIO_META_MESH_ID
-          value: jlewi-dev_us-east1-d_jlewi-0717-001
+          value: jlewi-dev_us-east1-d_jlewi-0719-001
         - name: ISTIO_META_POD_NAME
           valueFrom:
             fieldRef:
@@ -189,7 +189,7 @@ spec:
         - name: ISTIO_META_ROUTER_MODE
           value: sni-dnat
         - name: GCP_METADATA
-          value: jlewi-dev|147474701642|jlewi-0717-001|us-east1-d
+          value: jlewi-dev|147474701642|jlewi-0719-001|us-east1-d
         - name: ISTIO_METAJSON_LABELS
           value: |
             {"app":"istio-ingressgateway","istio":"ingressgateway"}

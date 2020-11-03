@@ -1,0 +1,128 @@
+# We need to create the notebook manually if we want to control
+# the istio side car.
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: jlewi-nb # {"$kpt-set":"name"}
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8888
+  selector:
+    statefulset: jlewi-nb # {"$kpt-set":"name"}
+  type: ClusterIP
+---
+# TODO(jlewi): Need appropriate kpt setters.
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: jlewi-nb # {"$kpt-set":"name"}
+spec:
+  gateways:
+  - istio-system/ingressgateway
+  hosts:
+  - '*'
+  http:
+  - match:
+    - uri:
+        prefix: /notebook/default-profile/jlewi-nb/ # {"$kpt-set":"nbprefix-env"}
+    rewrite:
+      uri: /notebook/default-profile/jlewi-nb/ # {"$kpt-set":"nbprefix-env"}
+    route:
+    - destination:
+        host: jlewi-nb.default-profile.svc.cluster.local # {"$kpt-set":"dest-service"}
+        port:
+          number: 80
+    timeout: 300s
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: jlewi-nb # {"$kpt-set":"name"}
+spec:
+  podManagementPolicy: OrderedReady
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      statefulset: jlewi-nb # {"$kpt-set":"name"}
+  serviceName: "jlewi-grpc"
+  template:
+    metadata:
+      annotations:
+        # For now we disable the istio side car on the workers.
+        sidecar.istio.io/inject: "false"
+      labels:
+        app: jlewi-nb # {"$kpt-set":"name"}
+        notebook-name: jlewi-nb # {"$kpt-set":"name"}
+        statefulset: jlewi-nb # {"$kpt-set":"name"}
+    spec:
+      securityContext:
+        # 1000 = jovyan
+        runAsUser: 1000
+        runAsGroup: 100
+        # Mount the PVC as a group that the user belongs to.
+        fsGroup: 100
+      containers:
+      - env:
+        - name: NB_PREFIX
+          value: /notebook/default-profile/jlewi-nb/ # {"$kpt-set":"nbprefix-env"}
+        # TODO(jlewi): I got an error: 
+        #- name: JUPYTERLAB_DIR # Set the JUPYTERLAB_DIR so we can install extensions        
+        #  value: /home/jovyan/.jupyterlab_dir
+        # image: gcr.io/kubeflow-images-public/tensorflow-1.15.2-notebook-cpu:1.0.0
+        # Use an image with TFF
+        image: gcr.io/kubeflow-images-public/tensorflow-2.1.0-notebook-cpu:1.0.0
+        name: jlewi-nb # {"$kpt-set":"name"}
+        #command:
+        #- tail 
+        #- -f 
+        #- /dev/null
+        # Bump the resources to include a GPU
+        # "sh","-c", "jupyter notebook --notebook-dir=/home/${NB_USER} --ip=0.0.0.0 --no-browser --allow-root --port=8888 --NotebookApp.token='' --NotebookApp.password='' --NotebookApp.allow_origin='*' --NotebookApp.base_url=${NB_PREFIX}"
+        resources:
+          limits:
+            nvidia.com/gpu: 0 # {"$kpt-set":"numGpus"}
+            cpu: "16"
+            memory: 32Gi
+          requests:
+            cpu: "4"
+            memory: 4Gi
+        volumeMounts:
+        - mountPath: /home/jovyan
+          name: workspace
+        - mountPath: /dev/shm
+          name: dshm
+        - mountPath: /secret/ssh-key
+          name: ssh
+          readOnly: true
+      # Start a container running theia which is an IDE
+      - image: theiaide/theia:next # TODO(jlewi): Should we use an image which actually includes an appropriate toolchain like python?
+        name: theia
+        resources:
+          requests:
+            cpu: "4"
+            memory: 1.0Gi
+          limits:
+            cpu: "16"
+            memory: 8.0Gi
+        volumeMounts:
+        - mountPath: /mount/jovyan
+          name: workspace
+        - mountPath: /secret/ssh-key
+          name: ssh
+          readOnly: true
+      serviceAccountName: default-editor
+      volumes:
+      - name: workspace
+        persistentVolumeClaim:
+          claimName: workspace-jlewi-nb # {"$kpt-set":"pvc-name"}
+      - name: ssh
+        secret:
+          secretName: git-creds
+      - emptyDir:
+          medium: Memory
+        name: dshm

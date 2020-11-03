@@ -1,0 +1,138 @@
+apiVersion: kpt.dev/v1alpha1
+kind: Kptfile
+metadata:
+  name: .
+packageMetadata:
+  shortDescription: sample description
+openAPI:
+  definitions:
+    io.k8s.cli.setters.namespace:
+      x-k8s-cli:
+        setter:
+          name: namespace
+          value: default-profile
+          isSet: true
+    io.k8s.cli.substitutions.namespace:
+      x-k8s-cli:
+        substitution:
+          name: namespace
+          pattern: NAMESPACE
+          values:
+          - marker: NAMESPACE
+            ref: '#/definitions/io.k8s.cli.setters.namespace'
+    io.k8s.cli.setters.name:
+      x-k8s-cli:
+        setter:
+          name: name
+          value: jlewi-nb
+          isSet: true
+    io.k8s.cli.substitutions.name:
+      x-k8s-cli:
+        substitution:
+          name: name
+          pattern: NAME
+          values:
+          - marker: NAME
+            ref: '#/definitions/io.k8s.cli.setters.name'
+    io.k8s.cli.substitutions.pvc-name:
+      x-k8s-cli:
+        substitution:
+          name: pvc-name
+          pattern: workspace-NAME
+          values:
+          - marker: NAME
+            ref: '#/definitions/io.k8s.cli.setters.name'
+    io.k8s.cli.substitutions.theia-name:
+      x-k8s-cli:
+        substitution:
+          name: theia-name
+          pattern: NAME-theia
+          values:
+          - marker: NAME
+            ref: '#/definitions/io.k8s.cli.setters.name'
+    io.k8s.cli.substitutions.theia-host:
+      x-k8s-cli:
+        substitution:
+          name: theia-url
+          pattern: NAME-theia.SPACE.svc.cluster.local
+          values:
+          - marker: NAME
+            ref: '#/definitions/io.k8s.cli.setters.name'
+          - marker: SPACE
+            ref: '#/definitions/io.k8s.cli.setters.namespace'
+    io.k8s.cli.setters.gcloud.core.project:
+      x-k8s-cli:
+        setter:
+          name: gcloud.core.project
+          value: jlewi-dev
+          isSet: true
+    io.k8s.cli.setters.kfname:
+      x-k8s-cli:
+        setter:
+          name: kfname
+          value: jlewi-vmaster
+          isSet: true
+    io.k8s.cli.substitutions.nb-url:
+      x-k8s-cli:
+        substitution:
+          name: nb-url
+          pattern: https://${kfname}.endpoints.${gcloud.core.project}.cloud.goog/notebook/${namespace}/${name}/lab
+          values:
+          - marker: ${kfname}
+            ref: '#/definitions/io.k8s.cli.setters.kfname'
+          - marker: ${gcloud.core.project}
+            ref: '#/definitions/io.k8s.cli.setters.gcloud.core.project'
+          - marker: ${namespace}
+            ref: '#/definitions/io.k8s.cli.substitutions.namespace'
+          - marker: ${name}
+            ref: '#/definitions/io.k8s.cli.substitutions.name'
+    io.k8s.cli.substitutions.theia-url:
+      x-k8s-cli:
+        substitution:
+          name: theia-url
+          pattern: https://${kfname}.endpoints.${gcloud.core.project}.cloud.goog/notebook/${namespace}/${name}-theia/
+          values:
+          - marker: ${kfname}
+            ref: '#/definitions/io.k8s.cli.setters.kfname'
+          - marker: ${gcloud.core.project}
+            ref: '#/definitions/io.k8s.cli.setters.gcloud.core.project'
+          - marker: ${namespace}
+            ref: '#/definitions/io.k8s.cli.substitutions.namespace'
+          - marker: ${name}
+            ref: '#/definitions/io.k8s.cli.substitutions.name'
+    io.k8s.cli.setters.numGpus:
+      x-k8s-cli:
+        setter:
+          name: numGpus
+          value: "0"
+          isSet: true
+    io.k8s.cli.substitutions.theia-prefix:
+      x-k8s-cli:
+        substitution:
+          name: theia-prefix
+          pattern: /notebook/${namespace}/${name}-theia/
+          values:
+          - marker: ${namespace}
+            ref: '#/definitions/io.k8s.cli.substitutions.namespace'
+          - marker: ${name}
+            ref: '#/definitions/io.k8s.cli.substitutions.name'
+    io.k8s.cli.substitutions.nbprefix-env:
+      x-k8s-cli:
+        substitution:
+          name: nbprefix-env
+          pattern: /notebook/${namespace}/${name}/
+          values:
+          - marker: ${namespace}
+            ref: '#/definitions/io.k8s.cli.substitutions.namespace'
+          - marker: ${name}
+            ref: '#/definitions/io.k8s.cli.substitutions.name'
+    io.k8s.cli.substitutions.dest-service:
+      x-k8s-cli:
+        substitution:
+          name: dest-service
+          pattern: ${name}.${namespace}.svc.cluster.local
+          values:
+          - marker: ${name}
+            ref: '#/definitions/io.k8s.cli.substitutions.name'
+          - marker: ${namespace}
+            ref: '#/definitions/io.k8s.cli.substitutions.namespace'

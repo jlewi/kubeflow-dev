@@ -1,0 +1,48 @@
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  labels:
+    app: jlewi-nb # {"$kpt-set":"name"}
+  name: jlewi-nb # {"$kpt-set":"name"}
+spec:
+  # TODO(jlewi): Should we take ownership?
+  addOwnerRef: false
+  componentKinds:
+  - group: core
+    kind: ConfigMap
+  - group: kubeflow.org
+    kind: Notebook
+  - group: apps
+    kind: StatefulSet
+  - group: apps
+    kind: Deployment
+  - group: rbac.authorization.k8s.io
+    kind: RoleBinding
+  - group: rbac.authorization.k8s.io
+    kind: Role
+  - group: core
+    kind: ServiceAccount
+  - group: core
+    kind: Service
+  - group: networking.istio.io
+    kind: VirtualService
+  descriptor:
+    description: Notebook for kubeflow code intelligence
+    keywords:
+    - jupyter
+    - notebook
+    links:
+    # TODO(jlewi): Need to annotate this with kpt setters
+    - description: jupyterlab
+      url: https://jlewi-vmaster.endpoints.jlewi-dev.cloud.goog/notebook/default-profile/jlewi-nb/lab # {"$kpt-set":"nb-url"}
+    - description: theia
+      url: https://jlewi-vmaster.endpoints.jlewi-dev.cloud.goog/notebook/default-profile/jlewi-nb-theia/ # {"$kpt-set":"theia-url"}
+    # The type text is what shows up in the software column in the applications dashboard.
+    # It will be a link to the first in the list of links.
+    # Additional links will show up in the details page.
+    type: notebook
+    version: v1
+  # TODO(jlewi): Use commonLabels to ensure it gets applied to all resources?
+  selector:
+    matchLabels:
+      app: jlewi-nb # {"$kpt-set":"name"}

@@ -2,7 +2,7 @@ apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    cnrm.cloud.google.com/version: 1.15.1
+    cnrm.cloud.google.com/version: 1.27.2
   creationTimestamp: null
   labels:
     cnrm.cloud.google.com/managed-by-kcc: "true"
@@ -62,7 +62,7 @@ spec:
                       The IP protocol to which this rule applies. The protocol type is
                       required when creating a firewall rule. This value can either be
                       one of the following well known protocol strings (tcp, udp,
-                      icmp, esp, ah, sctp, ipip), or the IP protocol number.
+                      icmp, esp, ah, sctp, ipip, all), or the IP protocol number.
                     type: string
                 required:
                 - protocol
@@ -91,7 +91,7 @@ spec:
                       The IP protocol to which this rule applies. The protocol type is
                       required when creating a firewall rule. This value can either be
                       one of the following well known protocol strings (tcp, udp,
-                      icmp, esp, ah, sctp, ipip), or the IP protocol number.
+                      icmp, esp, ah, sctp, ipip, all), or the IP protocol number.
                     type: string
                 required:
                 - protocol
@@ -125,11 +125,22 @@ spec:
                 is unspecified, the firewall rule will be enabled.
               type: boolean
             enableLogging:
-              description: |-
-                This field denotes whether to enable logging for a particular
-                firewall rule. If logging is enabled, logs will be exported to
-                Stackdriver.
+              description: DEPRECATED — Deprecated in favor of log_config. This field
+                denotes whether to enable logging for a particular firewall rule.
+                If logging is enabled, logs will be exported to Stackdriver.
               type: boolean
+            logConfig:
+              description: |-
+                This field denotes the logging options for a particular firewall rule.
+                If defined, logging is enabled, and logs will be exported to Cloud Logging.
+              properties:
+                metadata:
+                  description: 'This field denotes whether to include or exclude metadata
+                    for firewall logs. Possible values: ["EXCLUDE_ALL_METADATA", "INCLUDE_ALL_METADATA"]'
+                  type: string
+              required:
+              - metadata
+              type: object
             networkRef:
               description: The network to attach this firewall to.
               oneOf:
@@ -148,7 +159,7 @@ spec:
                 - external
               properties:
                 external:
-                  description: The name of a ComputeNetwork.
+                  description: The selfLink of a ComputeNetwork.
                   type: string
                 name:
                   description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'

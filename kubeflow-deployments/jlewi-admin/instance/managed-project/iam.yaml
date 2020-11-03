@@ -9,4 +9,6 @@ spec:
   resourceRef:
     apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
     kind: Project
-    external: jlewi-dev # {"$kpt-set":"managed-project-ref"}
+    # N.B. With anthoscli 0.2.4 this is just the project id
+    # and not projects/MANAGED_PROJECT as used by the CNRM docs.
+    external: jlewi-dev # {"$kpt-set":"managed-project"}

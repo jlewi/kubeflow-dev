@@ -1,0 +1,13 @@
+# This package defines the overlays of all GCP infra
+# config
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+# namespace should match the project.
+# This assumes we are running CNRM in namespace mode and namespaces match project names.
+namespace: jlewi-dev # {"$kpt-set":"project"}
+# TODO(jlewi): do not commit the labels auto-deploy and purpose; they were added
+# as part of autodeployment testing.
+commonLabels:
+  kf-name: jlewi-vmaster # {"$kpt-set":"name-label"}
+resources:
+- ../../upstream/manifests/gcp/v2/cnrm

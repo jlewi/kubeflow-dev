@@ -1,0 +1,11 @@
+apiVersion: kpt.dev/v1alpha1
+kind: Kptfile
+metadata:
+    name: jlewi-vmaster
+upstream:
+    type: git
+    git:
+        commit: 7ed4077e274a883c92899bb1bf1e04d3d33ee5b7
+        repo: https://github.com/kubeflow/gcp-blueprints
+        directory: /kubeflow
+        ref: master

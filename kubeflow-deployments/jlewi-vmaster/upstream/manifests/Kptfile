@@ -1,0 +1,11 @@
+apiVersion: kpt.dev/v1alpha1
+kind: Kptfile
+metadata:
+    name: jlewi-vmaster
+upstream:
+    type: git
+    git:
+        commit: ea1a35124bf61bf5ac84b80b17eb6b6c2bfdd1e1
+        repo: https://github.com/kubeflow/manifests
+        directory: /
+        ref: master

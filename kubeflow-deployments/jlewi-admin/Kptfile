@@ -1,11 +1,11 @@
 apiVersion: kpt.dev/v1alpha1
 kind: Kptfile
 metadata:
-    name: bp-admin
+    name: jlewi-admin
 upstream:
     type: git
     git:
-        commit: 6320c73ac94b2fb344fa42c19c23ddeda2b15451
+        commit: c56166658410a388235933bb99a9c032bec47b82
         repo: https://github.com/kubeflow/gcp-blueprints
         directory: /management
         ref: master

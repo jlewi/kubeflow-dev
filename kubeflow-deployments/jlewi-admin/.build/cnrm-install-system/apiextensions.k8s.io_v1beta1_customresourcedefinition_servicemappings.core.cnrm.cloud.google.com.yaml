@@ -2,7 +2,7 @@ apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    cnrm.cloud.google.com/version: 1.15.1
+    cnrm.cloud.google.com/version: 1.27.2
   creationTimestamp: null
   labels:
     cnrm.cloud.google.com/managed-by-kcc: "true"
@@ -96,6 +96,11 @@ spec:
                       onto its associated terraform IAM resources (policies, bindings,
                       and members)
                     properties:
+                      auditConfigName:
+                        description: AuditConfigName is the terraform name of the
+                          associated IAM Audit Config resource, if there is any (e.g.
+                          google_project_iam_audit_config for the Project resource)
+                        type: string
                       policyMemberName:
                         description: PolicyMemberName is the terraform name of the
                           associated IAM Policy Member resource (e.g. google_spanner_instance_iam_member)
@@ -185,7 +190,7 @@ spec:
                         type: string
                       nameValueTemplate:
                         description: NameValueTemplate is a template by which the
-                          value of the metadata.name value should be interpreted before
+                          value of the metadata.name field should be interpreted before
                           being passed to the Terraform provider. {{value}} is used
                           in place of this sourced value.  e.g. If the value sourced
                           from metadata.name is "foo_bar", a nameValueTemplate of
@@ -193,10 +198,39 @@ spec:
                           the provider is "resource/foo_bar"
                         type: string
                     type: object
+                  mutableButUnreadableFields:
+                    description: MutableButUnreadableFields is a list of Terraform
+                      fields that are mutable but not returned by the Terraform read.
+                      KCC tracks the values of such fields to be able to determine
+                      if the user changed their values on the spec.
+                    items:
+                      type: string
+                    type: array
                   name:
                     description: Name is the Terraform name of the resource (e.g.
                       google_spanner_instance)
                     type: string
+                  resourceID:
+                    description: ResourceID determines how to map the `spec.resourceID`
+                      field to the Terraform resource's configuration. For multiple
+                      ResourceConfigs that map to the same Kind, their ResourceID
+                      definition must be the same.
+                    properties:
+                      targetField:
+                        description: TargetField is the name of the field in the TF
+                          resource where the KRM `spec.resourceID` field will be mapped
+                          to.
+                        type: string
+                      valueTemplate:
+                        description: ValueTemplate is a template by which the value
+                          of the `spec.resourceID` field should be interpreted before
+                          being passed to the Terraform provider. {{value}} is used
+                          in place of the source value, i.e. the value of `spec.resourceID`.  E.g.
+                          If `spec.resourceID` is "foo", a ValueTemplate of "resources/{{value}}"
+                          means the final value passed to the Terraform provider is
+                          "resources/foo".
+                        type: string
+                    type: object
                   resourceReferences:
                     description: ResourceReferences configures the mapping of fields
                       in the Terraform resource that implicitly define references
@@ -207,11 +241,11 @@ spec:
                           description: Description is the description for the resource
                             reference that will be exposed in the CRD.
                           type: string
-                        group:
-                          description: Group is the Kubernetes group of the resource
-                            being referenced. If not is set, it is implied that the
-                            kind specified is unique across all groups.
-                          type: string
+                        gvk:
+                          description: GVK is the Group,Version,Kind of the resource
+                            being referenced.  This field is mutually exclusive with
+                            JSONSchemaType.
+                          type: object
                         jsonSchemaType:
                           description: JSONSchemaType specifies the type as understood
                             by JSON schema validation of this reference field. Should
@@ -226,12 +260,6 @@ spec:
                             healthCheckRef) Complex references (those with a "Types"
                             list defined) or lists of references should not specify
                             a key.'
-                          type: string
-                        kind:
-                          description: Kind is the Kubernetes kind of the resource
-                            being referenced. The API group and version are assumed
-                            to match the referencing resource's.  This field is mutually
-                            exclusive with JSONSchemaType.
                           type: string
                         parent:
                           description: Parent specifies whether the referenced resource
@@ -268,12 +296,11 @@ spec:
                             for that value.
                           items:
                             properties:
-                              group:
-                                description: Group is the Kubernetes group of the
-                                  resource being referenced. If not is set, it is
-                                  implied that the kind specified is unique across
-                                  all groups.
-                                type: string
+                              gvk:
+                                description: GVK is the Group,Version,Kind of the
+                                  resource being referenced.  This field is mutually
+                                  exclusive with JSONSchemaType.
+                                type: object
                               jsonSchemaType:
                                 description: JSONSchemaType specifies the type as
                                   understood by JSON schema validation of this reference
@@ -289,12 +316,6 @@ spec:
                                   (e.g.   instanceRef, healthCheckRef) Complex references
                                   (those with a "Types" list defined) or lists of
                                   references should not specify a key.'
-                                type: string
-                              kind:
-                                description: Kind is the Kubernetes kind of the resource
-                                  being referenced. The API group and version are
-                                  assumed to match the referencing resource's.  This
-                                  field is mutually exclusive with JSONSchemaType.
                                 type: string
                               parent:
                                 description: Parent specifies whether the referenced
@@ -316,10 +337,15 @@ spec:
                                 description: ValueTemplate is a template by which
                                   the value sourced from the reference should be interpreted
                                   before being passed to the Terraform provider. {{value}}
-                                  is used in place of this sourced value.  e.g. If
+                                  is used in place of this sourced value. The template
+                                  can contain other value placeholders that need to
+                                  be sourced from the reference resource.  e.g. If
                                   the value sourced from the reference is "foo@domain.com",
                                   a valueTemplate of "serviceAccount:{{value}}" would
                                   mean the final value passed to the provider is "serviceAccount:foo@domain.com"
+                                  e.g. If the template is "projects/{{project}}/topics/{{value}}",
+                                  the project value will be sourced from the referenced
+                                  resource.
                                 type: string
                             type: object
                           type: array
@@ -327,10 +353,15 @@ spec:
                           description: ValueTemplate is a template by which the value
                             sourced from the reference should be interpreted before
                             being passed to the Terraform provider. {{value}} is used
-                            in place of this sourced value.  e.g. If the value sourced
-                            from the reference is "foo@domain.com", a valueTemplate
-                            of "serviceAccount:{{value}}" would mean the final value
+                            in place of this sourced value. The template can contain
+                            other value placeholders that need to be sourced from
+                            the reference resource.  e.g. If the value sourced from
+                            the reference is "foo@domain.com", a valueTemplate of
+                            "serviceAccount:{{value}}" would mean the final value
                             passed to the provider is "serviceAccount:foo@domain.com"
+                            e.g. If the template is "projects/{{project}}/topics/{{value}}",
+                            the project value will be sourced from the referenced
+                            resource.
                           type: string
                       required:
                       - tfField

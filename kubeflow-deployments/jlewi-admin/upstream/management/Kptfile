@@ -5,10 +5,10 @@ metadata:
 upstream:
   type: git
   git:
-    commit: 199e73ff15189d8d290caf28fe8347a1ef10430c
-    repo: https://github.com/jlewi/manifests
+    commit: c903ce81672bad7a72c07b887aac5587def993b1
+    repo: https://github.com/kubeflow/manifests
     directory: /gcp/v2/management
-    ref: fix_management
+    ref: master
 packageMetadata:
   shortDescription: GCP blueprint configs.
 openAPI:
@@ -101,3 +101,11 @@ openAPI:
           values:
           - marker: ${name}
             ref: '#/definitions/io.k8s.cli.setters.name'
+    io.k8s.cli.substitutions.wi-pool:
+      x-k8s-cli:
+        substitution:
+          name: wi-pool
+          pattern: ${gcloud.core.project}.svc.id.goog
+          values:
+          - marker: ${gcloud.core.project}
+            ref: '#/definitions/io.k8s.cli.setters.gcloud.core.project'

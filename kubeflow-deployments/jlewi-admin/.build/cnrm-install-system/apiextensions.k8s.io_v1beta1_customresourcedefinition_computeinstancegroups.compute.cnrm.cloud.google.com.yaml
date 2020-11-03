@@ -2,7 +2,7 @@ apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    cnrm.cloud.google.com/version: 1.15.1
+    cnrm.cloud.google.com/version: 1.27.2
   creationTimestamp: null
   labels:
     cnrm.cloud.google.com/managed-by-kcc: "true"
@@ -39,6 +39,7 @@ spec:
         spec:
           properties:
             description:
+              description: An optional textual description of the instance group.
               type: string
             instances:
               items:
@@ -69,11 +70,14 @@ spec:
                 type: object
               type: array
             namedPort:
+              description: The named port configuration.
               items:
                 properties:
                   name:
+                    description: The name which the port will be mapped to.
                     type: string
                   port:
+                    description: The port number to map the name to.
                     type: integer
                 required:
                 - name
@@ -107,6 +111,7 @@ spec:
                   type: string
               type: object
             zone:
+              description: The zone that this instance group should be created in.
               type: string
           required:
           - zone
@@ -140,8 +145,10 @@ spec:
                 type: object
               type: array
             selfLink:
+              description: The URI of the created resource.
               type: string
             size:
+              description: The number of instances in the group.
               type: integer
           type: object
       required:

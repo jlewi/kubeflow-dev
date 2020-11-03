@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.allow-http: "false"
+    kubernetes.io/ingress.global-static-ip-name: jlewi-vmaster-ip
+    networking.gke.io/managed-certificates: gke-certificate
+  labels:
+    kustomize.component: iap-ingress
+  name: envoy-ingress
+  namespace: istio-system
+spec:
+  backend:
+    serviceName: istio-ingressgateway
+    servicePort: 80
+  rules:
+  - host: jlewi-vmaster.endpoints.jlewi-dev.cloud.goog
+    http:
+      paths:
+      - backend:
+          serviceName: istio-ingressgateway
+          servicePort: 80
+        path: /*

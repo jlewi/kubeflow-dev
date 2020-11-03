@@ -10,3 +10,5 @@ spec:
   location: us-west1
   releaseChannel:
     channel: REGULAR
+  workloadIdentityConfig:
+    identityNamespace: jlewi-dev.svc.id.goog

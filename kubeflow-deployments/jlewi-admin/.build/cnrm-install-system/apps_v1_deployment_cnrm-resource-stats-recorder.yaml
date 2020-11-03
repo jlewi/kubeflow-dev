@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    cnrm.cloud.google.com/version: 1.15.1
+    cnrm.cloud.google.com/version: 1.27.2
   labels:
     cnrm.cloud.google.com/component: cnrm-resource-stats-recorder
     cnrm.cloud.google.com/system: "true"
@@ -18,7 +18,7 @@ spec:
   template:
     metadata:
       annotations:
-        cnrm.cloud.google.com/version: 1.15.1
+        cnrm.cloud.google.com/version: 1.27.2
       labels:
         cnrm.cloud.google.com/component: cnrm-resource-stats-recorder
         cnrm.cloud.google.com/system: "true"
@@ -31,8 +31,8 @@ spec:
         - /configconnector/recorder
         env:
         - name: CONFIG_CONNECTOR_VERSION
-          value: 1.15.1
-        image: gcr.io/cnrm-eap/recorder:b59b871
+          value: 1.27.2
+        image: gcr.io/cnrm-eap/recorder:1c8c589
         imagePullPolicy: Always
         name: recorder
         readinessProbe:
@@ -44,10 +44,10 @@ spec:
           periodSeconds: 3
         resources:
           limits:
-            cpu: 20m
+            cpu: 40m
             memory: 64Mi
           requests:
-            cpu: 10m
+            cpu: 20m
             memory: 32Mi
         securityContext:
           privileged: false

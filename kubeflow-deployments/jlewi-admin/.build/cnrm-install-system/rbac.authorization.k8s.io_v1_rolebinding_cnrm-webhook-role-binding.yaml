@@ -1,0 +1,17 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  annotations:
+    cnrm.cloud.google.com/version: 1.27.2
+  labels:
+    cnrm.cloud.google.com/system: "true"
+  name: cnrm-webhook-role-binding
+  namespace: cnrm-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: cnrm-webhook-cnrm-system-role
+subjects:
+- kind: ServiceAccount
+  name: cnrm-webhook-manager
+  namespace: cnrm-system

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app.kubernetes.io/component: kubeflow
+    app.kubernetes.io/name: kubeflow
+  name: application-controller-stateful-set
+  namespace: kubeflow
+spec:
+  selector:
+    matchLabels:
+      app: application-controller
+      app.kubernetes.io/component: kubeflow
+      app.kubernetes.io/name: kubeflow
+  serviceName: application-controller-service
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+      labels:
+        app: application-controller
+        app.kubernetes.io/component: kubeflow
+        app.kubernetes.io/name: kubeflow
+    spec:
+      containers:
+      - command:
+        - /root/manager
+        env:
+        - name: project
+          value: $(project)
+        image: gcr.io/kubeflow-images-public/kubernetes-sigs/application:1.0-beta
+        imagePullPolicy: Always
+        name: manager
+      serviceAccountName: application-controller-service-account
+  volumeClaimTemplates: []

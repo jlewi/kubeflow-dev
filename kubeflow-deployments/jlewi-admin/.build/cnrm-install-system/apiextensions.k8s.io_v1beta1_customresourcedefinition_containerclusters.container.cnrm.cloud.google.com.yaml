@@ -2,7 +2,7 @@ apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    cnrm.cloud.google.com/version: 1.15.1
+    cnrm.cloud.google.com/version: 1.27.2
   creationTimestamp: null
   labels:
     cnrm.cloud.google.com/managed-by-kcc: "true"
@@ -47,6 +47,8 @@ spec:
                   properties:
                     disabled:
                       type: boolean
+                    loadBalancerType:
+                      type: string
                   required:
                   - disabled
                   type: object
@@ -242,6 +244,13 @@ spec:
                 work for routes-based clusters, where ip_allocation_policy is not
                 defined.
               type: string
+            clusterTelemetry:
+              properties:
+                type:
+                  type: string
+              required:
+              - type
+              type: object
             databaseEncryption:
               description: 'Application-layer Secrets Encryption settings. The object
                 format is {state = string, key_name = string}. Valid values of state
@@ -257,11 +266,27 @@ spec:
               required:
               - state
               type: object
+            datapathProvider:
+              description: The desired datapath provider for this cluster. By default,
+                uses the IPTables-based kube-proxy implementation.
+              type: string
             defaultMaxPodsPerNode:
               description: The default maximum number of pods per node in this cluster.
                 This doesn't work on "routes-based" clusters, clusters that don't
                 have IP Aliasing enabled.
               type: integer
+            defaultSnatStatus:
+              description: Whether the cluster disables default in-node sNAT rules.
+                In-node sNAT rules will be disabled when defaultSnatStatus is disabled.
+              properties:
+                disabled:
+                  description: When disabled is set to false, default IP masquerade
+                    rules will be applied to the nodes to prevent sNAT on cluster
+                    internal traffic.
+                  type: boolean
+              required:
+              - disabled
+              type: object
             description:
               description: ' Description of the cluster.'
               type: string
@@ -313,12 +338,9 @@ spec:
                     a specific range to use.
                   type: string
                 clusterSecondaryRangeName:
-                  description: The IP address range of the services IPs in this cluster.
-                    Set to blank to have a range chosen with the default size. Set
-                    to /netmask (e.g. /14) to have a range chosen with a specific
-                    netmask. Set to a CIDR notation (e.g. 10.96.0.0/14) from the RFC-1918
-                    private networks (e.g. 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16)
-                    to pick a specific range to use.
+                  description: The name of the existing secondary range in the cluster's
+                    subnetwork to use for pod IP addresses. Alternatively, cluster_ipv4_cidr_block
+                    can be used to automatically create a GKE-managed one.
                   type: string
                 servicesIpv4CidrBlock:
                   description: The IP address range of the services IPs in this cluster.
@@ -531,6 +553,10 @@ spec:
                   description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
                   type: string
               type: object
+            networkingMode:
+              description: Determines whether alias IPs or routes will be used for
+                pod IPs in the cluster.
+              type: string
             nodeConfig:
               properties:
                 bootDiskKMSCryptoKeyRef:
@@ -577,9 +603,29 @@ spec:
                   type: array
                 imageType:
                   type: string
+                kubeletConfig:
+                  properties:
+                    cpuCfsQuota:
+                      type: boolean
+                    cpuCfsQuotaPeriod:
+                      type: string
+                    cpuManagerPolicy:
+                      type: string
+                  required:
+                  - cpuManagerPolicy
+                  type: object
                 labels:
                   additionalProperties:
                     type: string
+                  type: object
+                linuxNodeConfig:
+                  properties:
+                    sysctls:
+                      additionalProperties:
+                        type: string
+                      type: object
+                  required:
+                  - sysctls
                   type: object
                 localSsdCount:
                   type: integer
@@ -674,6 +720,48 @@ spec:
               type: array
             nodeVersion:
               type: string
+            notificationConfig:
+              description: The notification config for sending cluster upgrade notifications
+              properties:
+                pubsub:
+                  description: Notification config for Cloud Pub/Sub
+                  properties:
+                    enabled:
+                      description: Whether or not the notification config is enabled
+                      type: boolean
+                    topicRef:
+                      description: The PubSubTopic to send the notification to.
+                      oneOf:
+                      - not:
+                          required:
+                          - external
+                        required:
+                        - name
+                      - not:
+                          anyOf:
+                          - required:
+                            - name
+                          - required:
+                            - namespace
+                        required:
+                        - external
+                      properties:
+                        external:
+                          description: The name of a PubSubTopic.
+                          type: string
+                        name:
+                          description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                          type: string
+                        namespace:
+                          description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                          type: string
+                      type: object
+                  required:
+                  - enabled
+                  type: object
+              required:
+              - pubsub
+              type: object
             podSecurityPolicyConfig:
               description: Configuration for the PodSecurityPolicy feature.
               properties:
@@ -702,6 +790,16 @@ spec:
                     only applies to private clusters, when enable_private_nodes is
                     true.
                   type: boolean
+                masterGlobalAccessConfig:
+                  description: Controls cluster master global access settings.
+                  properties:
+                    enabled:
+                      description: Whether the cluster master is accessible globally
+                        or not.
+                      type: boolean
+                  required:
+                  - enabled
+                  type: object
                 masterIpv4CidrBlock:
                   description: The IP range in CIDR notation to use for the hosted
                     master network. This range will be used for assigning private
@@ -854,6 +952,9 @@ spec:
                 the master has been updated by GKE.
               type: string
             operation:
+              type: string
+            selfLink:
+              description: Server-defined URL for the resource.
               type: string
             servicesIpv4Cidr:
               description: The IP address range of the Kubernetes services in this

@@ -1,64 +1,62 @@
+# NAME, LOCATION, PROJECT in Kptfile are set by calling kpt cfg set
+NAME=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.name".x-k8s-cli.setter.value')
+LOCATION=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.location".x-k8s-cli.setter.value')
+PROJECT=$(shell yq r ./instance/Kptfile 'openAPI.definitions."io.k8s.cli.setters.gcloud.core.project".x-k8s-cli.setter.value')
 
-# The kname of the context for the management cluster
-# The name of the context for your Kubeflow cluster
-NAME=$(shell yq r ./instance/settings.yaml name)
 MGMTCTXT=$(NAME)
 
 # The URL you want to fetch manifests from
-# TODO(jlewi): Change to kubeflow/gcp-blueprints once its checked in
-#MANIFESTS_URL=https://github.com/kubeflow/manifests.git/gcp@master
-MANIFESTS_URL=https://github.com/jlewi/manifests.git/gcp/v2/management@fix_management
-
-PROJECT=$(shell yq r ./instance/settings.yaml project)
+MANIFESTS_URL=https://github.com/kubeflow/manifests.git/gcp/v2/management@master
 
 # Directory where manifests should be fetched to
 MANIFESTS_DIR=./upstream/management
 
 INSTANCE_DIR=./instance
 
-set-values:	
-	kpt cfg set ./instance name jlewi-admin
-	kpt cfg set ./instance location us-west1
-	kpt cfg set ./instance gcloud.core.project jlewi-dev
-	
-	kpt cfg set ./upstream/management name jlewi-admin
-	kpt cfg set ./upstream/management location us-west1
-	kpt cfg set ./upstream/management gcloud.core.project jlewi-dev
-
 # Print out the context
 .PHONY: echo
 echo-ctxt:
 	@echo MGMTCTXT=$(MGMTCTXT)
 
+# Validate cluster values are changed from default dummy values
+.PHONY: validate-values
+validate-values:
+	@if [[ $(NAME) == "NAME" || $(LOCATION) == "LOCATION" || $(PROJECT) == "PROJECT" ]]; then\
+        echo "either of NAME, LOCATION, PROJECT values not set.";\
+		exit 1;\
+    fi
+
 # Get packages
+# TODO(jlewi): We should think about how we layout packages in kubeflow/manifests so
+# users don't end up pulling tests or other things they don't need.
 .PHONY: get-pkg
 get-pkg:
-	# TODO(jlewi): We should switch to using upstream kubeflow/manifests and pin
-	# to a specific version
-	# TODO(jlewi): We should think about how we layout packages in kubeflow/manifests so
-	# users don't end up pulling tests or other things they don't need.	
 	mkdir -p  ./upstream
 	kpt pkg get $(MANIFESTS_URL) $(MANIFESTS_DIR)
 
+# Create the cluster
 .PHONY: apply
 apply: hydrate
 	anthoscli apply -f .build/cluster
 
 .PHONY: hydrate
-hydrate:
+hydrate: validate-values
+	kpt cfg set ./upstream/management name $(NAME)
+	kpt cfg set ./upstream/management location $(LOCATION)
+	kpt cfg set ./upstream/management gcloud.core.project $(PROJECT)
+
 	# Delete the directory so any resources that have been removed
 	# from the manifests will be pruned
 	rm -rf .build
 	mkdir -p .build/
 	mkdir -p .build/cluster
-	kustomize build $(INSTANCE_DIR)/cluster -o .build/cluster 
+	kustomize build $(INSTANCE_DIR)/cluster -o .build/cluster
 
-
-# Create a kubeconfig context for the kubeflow cluster
+# Create a kubeconfig context for the cluster
 .PHONE: create-ctxt
-create-ctxt:
-	PROJECT=$(shell yq r ./instance/settings.yaml project) \
-	   REGION=$(shell yq r ./instance/settings.yaml location) \
+create-ctxt: validate-values
+	PROJECT=$(PROJECT) \
+	   REGION=$(LOCATION) \
 	   NAME=$(NAME) ./hack/create_context.sh
 
 .PHONY: hydrate-kcc
@@ -68,11 +66,12 @@ hydrate-kcc:
 	rm -rf ./.build/cnrm-install-iam
 	mkdir -p ./.build/cnrm-install-system
 	mkdir -p ./.build/cnrm-install-services
-	mkdir -p ./.build/cnrm-install-iam	
+	mkdir -p ./.build/cnrm-install-iam
 	kustomize build -o ./.build/cnrm-install-system $(INSTANCE_DIR)/cnrm-install-system
 	kustomize build -o ./.build/cnrm-install-services $(INSTANCE_DIR)/cnrm-install-services
 	kustomize build -o ./.build/cnrm-install-iam $(INSTANCE_DIR)/cnrm-install-iam
 
+# Install config connector in the cluster
 .PHONY: apply-kcc
 apply-kcc: hydrate-kcc
 	anthoscli apply -f .build/cnrm-install-services
@@ -83,9 +82,5 @@ apply-kcc: hydrate-kcc
 # Update the upstream packages
 .PHONE: update
 update:
-	# DO NOT SUBMIT
-	rm -rf ./instance
-	cp -rf ~/git_kubeflow-gcp-blueprints/management/instance ./
 	rm -rf upstream
 	make get-pkg
-	make set-values	

@@ -75,9 +75,8 @@ spec:
         # TODO(jlewi): I got an error: 
         #- name: JUPYTERLAB_DIR # Set the JUPYTERLAB_DIR so we can install extensions        
         #  value: /home/jovyan/.jupyterlab_dir
-        # image: gcr.io/kubeflow-images-public/tensorflow-1.15.2-notebook-cpu:1.0.0
-        # Use an image with TFF
-        image: gcr.io/kubeflow-images-public/tensorflow-2.1.0-notebook-cpu:1.0.0
+        # Use a stock  Jupyter image.
+        image: tensorflow/tensorflow:2.3.1-jupyter
         name: jlewi-nb # {"$kpt-set":"name"}
         # Explicitly set the command so we can use off the shelf notebook images.
         command:        

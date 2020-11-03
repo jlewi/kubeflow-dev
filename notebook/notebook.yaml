@@ -70,6 +70,8 @@ spec:
       - env:
         - name: NB_PREFIX
           value: /notebook/default-profile/jlewi-nb/ # {"$kpt-set":"nbprefix-env"}
+        - name: NB_USER
+          value: jovyan
         # TODO(jlewi): I got an error: 
         #- name: JUPYTERLAB_DIR # Set the JUPYTERLAB_DIR so we can install extensions        
         #  value: /home/jovyan/.jupyterlab_dir
@@ -77,12 +79,19 @@ spec:
         # Use an image with TFF
         image: gcr.io/kubeflow-images-public/tensorflow-2.1.0-notebook-cpu:1.0.0
         name: jlewi-nb # {"$kpt-set":"name"}
-        #command:
-        #- tail 
-        #- -f 
-        #- /dev/null
-        # Bump the resources to include a GPU
-        # "sh","-c", "jupyter notebook --notebook-dir=/home/${NB_USER} --ip=0.0.0.0 --no-browser --allow-root --port=8888 --NotebookApp.token='' --NotebookApp.password='' --NotebookApp.allow_origin='*' --NotebookApp.base_url=${NB_PREFIX}"
+        # Explicitly set the command so we can use off the shelf notebook images.
+        command:        
+        - jupyter 
+        - notebook 
+        - --notebook-dir=/home/$(NB_USER)
+        - --ip=0.0.0.0 
+        - --no-browser 
+        - --allow-root 
+        - --port=8888 
+        - --NotebookApp.token='' 
+        - --NotebookApp.password='' 
+        - --NotebookApp.allow_origin='*' 
+        - --NotebookApp.base_url=$(NB_PREFIX)
         resources:
           limits:
             nvidia.com/gpu: 0 # {"$kpt-set":"numGpus"}

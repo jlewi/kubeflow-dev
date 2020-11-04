@@ -76,7 +76,14 @@ spec:
         #- name: JUPYTERLAB_DIR # Set the JUPYTERLAB_DIR so we can install extensions        
         #  value: /home/jovyan/.jupyterlab_dir
         # Use a stock  Jupyter image.
-        image: tensorflow/tensorflow:2.3.1-jupyter
+        #
+        # Note: TF doesn't appear to have jupyterlab
+        # Set hugging face's cache directory to be on the PD. This is for permission reasons,
+        # size reasons, as well as durability.        
+        - name: TRANSFORMERS_CACHE
+          value: /home/jovyan/.cache
+        #image: tensorflow/tensorflow:2.3.1-jupyter
+        image: gcr.io/deeplearning-platform-release/pytorch-cpu.1-4
         name: jlewi-nb # {"$kpt-set":"name"}
         # Explicitly set the command so we can use off the shelf notebook images.
         command:        

@@ -27,6 +27,8 @@ spec:
         # Mount the PVC as a group that the user belongs to.
         fsGroup: 100
       containers:
+      - name: echo
+        image: gcr.io/kubeflow-images-staging/echo-server:latest        
       - env:
         - name: NB_USER
           value: jovyan
@@ -45,10 +47,10 @@ spec:
         # TODO(jlewi): How do we want to set this
         - --user-data-dir=/home/jovyan/data
         - --verbose
-        #command:
-        #- tail
-        #- -f
-        #- /dev/null
+        command:
+        - tail
+        - -f
+        - /dev/null
         resources:
           limits:
             nvidia.com/gpu: 0 # {"$kpt-set":"numGpus"}

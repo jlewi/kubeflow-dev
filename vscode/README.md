@@ -1,79 +1,43 @@
 # vscode
 
-You can run Microsoft's Visual Studio Code in a side car of your Jupyter pods.
+Kubernetes resources to run VS Code Server
 
 This is possible because of [coder.com](https://coder.com/) which has published
 a remote server for Visual Studio Code.
 
-This makes it easy to edit code using a full IDE and then run that code from within your
-Jupyter notebook.
+Unfortunately, I haven't been able to get this working behind ISTIO (1.4)
 
-Unfortunately, due to https://github.com/cdr/code-server/issues/670 code-server
-doesn't work behind a reverse proxy yet. So you will need to use `kubectl port-forward`.
+  * So for now you will need to use `kubectl port-forward`.
+  * TODO(jlewi): Try using a Deployment instead of statefulset?
+  * With ISTIO i'm getting upstream/disconnect errors 
+  * https://github.com/cdr/code-server/issues/670 related to reverse proxies
 
 
 ## Instructions
 
-1. Build a docker image containing Visual Studio code server.
+1. List the setters
 
    ```
-   IMAGE=<URL for your code-server image>
-   make IMG=${IMAGE} push
+   kpt cfg list-setters .
    ```
 
-1. Follow the Kubeflow [instructions](https://www.kubeflow.org/docs/notebooks/setup/) to run a notebook
-
-1. Get the spec for your notebook
+1. Set all the setters
 
    ```
-   kubectl get notebooks ${NOTEBOOK} > ${NOTEBOOK}.yaml
-   ```
-Looks like there is an issue with running it behind a reverse proxy
-
-1. Add a side car to the pod template spec to run vscode
-
-   ```
-   ...
-   spec:
-      containers:
-      ...
-      - env: []
-        command:
-          - code-server
-          - --allow-http
-          - --no-auth
-          - --data-dir=/home/jovyan/data
-        image: ${VSCODE-IMAGE}
-        name: vscode
-        resources:
-          limits:
-            cpu: 8
-            memory: 16Gi
-          requests:
-            cpu: 1
-            memory: 1Gi    
-        volumeMounts:
-        - mountPath: /home/jovyan
-          name: ${PVC-NAME}
-   ...
+   kpt cfg set . ...
    ```
 
-   * Replace `${VCODE-IMAGE}` with the URL of the docker image you built in the previous step
-   * Replace `${PVC-NAME}` with the name of the PVC for your home directory
-   * The home directory is shared between the vscode container and the jupyter container.
-     * This ensures you can edit files with vscode and then run them inside jupyter
-
-1. Connect to vscode using port-forwarding
+1. Deploy it
 
    ```
-   kubectl port-forward ${NOTEBOOK}-0 8443:8443
+   make apply
    ```
 
-1. Open http://localhost:8443 to connect
+1. Port-forward to the service
 
-   * **Note** The first time you open it seems to take several minutes to fully load
-
-
+   ```
+   kubectl port-forward service service/${NAME} 8080:8080
+   ```
 ## Known issues
 
 * Connection seems to be flaky

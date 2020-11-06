@@ -10,4 +10,4 @@ spec:
     targetPort: 8080
   selector:
     app: jlewi-vscode # {"$kpt-set":"name"}
-  type: ClusterIP
+  clusterIP: None

@@ -38,7 +38,7 @@ spec:
           value: /home/jovyan
         #image: tensorflow/tensorflow:2.3.1-jupyter
         image: gcr.io/issue-label-bot-dev/hf-trainer:4f7a6a9-dirty@sha256:05a48afd77890fb8e00c56fc93267d5a87b7d6d7d9581689fdcee02df4629371 # {"$kpt-set":"image"}
-        name: jlewi-vscode # {"$kpt-set":"name"}
+        name: vscode
         # Explicitly set the command so we can use off the shelf notebook images.
         command:
         - /usr/local/bin/code-server

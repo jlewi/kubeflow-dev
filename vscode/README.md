@@ -36,8 +36,14 @@ Unfortunately, I haven't been able to get this working behind ISTIO (1.4)
 1. Port-forward to the service
 
    ```
-   kubectl port-forward service service/${NAME} 8080:8080
+   kubectl port-forward service service/${NAME} 8080:80
    ```
+## ISTIO
+
+Notes about trying to make it work over istio
+
+* codeserver has a healthcheck on "/healthz"
+
 ## Known issues
 
 * Connection seems to be flaky

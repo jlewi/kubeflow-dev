@@ -55,6 +55,6 @@ apply:
 	# TODO(jlewi): What's the best way to make sure the statefulset pod gets kicked?
 	# should we delete it manually or could we add a unique annotation?
 	kustomize build | kubectl --context=$(CONTEXT) apply -f -
-	kubectl --context=$(CONTEXT) \
-		-n $(shell yq r Kptfile openAPI.definitions["io.k8s.cli.setters.namespace"].["x-k8s-cli"].setter.value) \
-		delete pods jlewi-vscode-0
+# 	kubectl --context=$(CONTEXT) \
+# 		-n $(shell yq r Kptfile openAPI.definitions["io.k8s.cli.setters.namespace"].["x-k8s-cli"].setter.value) \
+# 		delete pods jlewi-vscode-0

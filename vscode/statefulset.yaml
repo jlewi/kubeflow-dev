@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: jlewi-vscode # {"$kpt-set":"name"}
+spec:
+  podManagementPolicy: OrderedReady
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      statefulset: jlewi-vscode # {"$kpt-set":"name"}
+  serviceName: jlewi-vscode # {"$kpt-set":"name"}
+  template:
+    metadata:
+      annotations:
+        # Do we need the istio side car for virtual service reverse proxy
+        sidecar.istio.io/inject: "true"
+      labels:
+        app: jlewi-vscode # {"$kpt-set":"name"}
+        code-server: jlewi-vscode # {"$kpt-set":"name"}
+        statefulset: jlewi-vscode # {"$kpt-set":"name"}
+    spec:
+      securityContext:
+        # 1000 = jovyan
+        runAsUser: 1000
+        runAsGroup: 100
+        # Mount the PVC as a group that the user belongs to.
+        fsGroup: 100
+      containers:
+      - env:
+        - name: NB_USER
+          value: jovyan
+        - name: TRANSFORMERS_CACHE # TODO(jlewi): I got an error: 
+          value: /home/jovyan/.cache
+        - name: HOME # Set the home directory explicitly to ensure it matches the PVC. Otherwise our home
+          value: /home/jovyan
+        #image: tensorflow/tensorflow:2.3.1-jupyter
+        image: gcr.io/issue-label-bot-dev/hf-trainer:4f7a6a9-dirty@sha256:05a48afd77890fb8e00c56fc93267d5a87b7d6d7d9581689fdcee02df4629371 # {"$kpt-set":"image"}
+        name: jlewi-vscode # {"$kpt-set":"name"}
+        # Explicitly set the command so we can use off the shelf notebook images.
+        command:
+        - /usr/local/bin/code-server        
+        - --auth=none
+        - --bind-addr=localhost:8080
+        # TODO(jlewi): How do we want to set this
+        - --user-data-dir=/home/jovyan/data
+        - --verbose
+        #command:
+        #- tail
+        #- -f
+        #- /dev/null
+        resources:
+          limits:
+            nvidia.com/gpu: 0 # {"$kpt-set":"numGpus"}
+            cpu: "16"
+            memory: 32Gi
+          requests:
+            cpu: "4"
+            memory: 4Gi
+        volumeMounts:
+        - mountPath: /home/jovyan
+          name: workspace
+        - mountPath: /dev/shm
+          name: dshm
+        - mountPath: /secret/ssh-key
+          name: ssh
+          readOnly: true
+      serviceAccountName: default-editor # {"$kpt-set":"serviceAccount"}
+      volumes:
+      - name: workspace
+        persistentVolumeClaim:
+          claimName: workspace-jlewi-vscode # {"$kpt-set":"pvc-name"}
+      - name: ssh
+        secret:
+          secretName: git-creds # {"$kpt-set":"gitSecret"}
+      - emptyDir:
+          medium: Memory
+        name: dshm

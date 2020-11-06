@@ -1,0 +1,154 @@
+apiVersion: kpt.dev/v1alpha1
+kind: Kptfile
+metadata:
+  name: .
+packageMetadata:
+  shortDescription: sample description
+openAPI:
+  definitions:
+    io.k8s.cli.setters.namespace:
+      x-k8s-cli:
+        setter:
+          name: namespace
+          value: kubeflow-jlewi
+          isSet: true
+    io.k8s.cli.substitutions.namespace:
+      x-k8s-cli:
+        substitution:
+          name: namespace
+          pattern: NAMESPACE
+          values:
+          - marker: NAMESPACE
+            ref: '#/definitions/io.k8s.cli.setters.namespace'
+    io.k8s.cli.setters.name:
+      x-k8s-cli:
+        setter:
+          name: name
+          value: jlewi-vscode
+          isSet: true
+    io.k8s.cli.substitutions.name:
+      x-k8s-cli:
+        substitution:
+          name: name
+          pattern: NAME
+          values:
+          - marker: NAME
+            ref: '#/definitions/io.k8s.cli.setters.name'
+    io.k8s.cli.substitutions.pvc-name:
+      x-k8s-cli:
+        substitution:
+          name: pvc-name
+          pattern: workspace-NAME
+          values:
+          - marker: NAME
+            ref: '#/definitions/io.k8s.cli.setters.name'
+    io.k8s.cli.substitutions.vscode-name:
+      x-k8s-cli:
+        substitution:
+          name: vscode-name
+          pattern: NAME-vscode
+          values:
+          - marker: NAME
+            ref: '#/definitions/io.k8s.cli.setters.name'
+    io.k8s.cli.substitutions.vscode-host:
+      x-k8s-cli:
+        substitution:
+          name: vscode-url
+          pattern: NAME.SPACE.svc.cluster.local
+          values:
+          - marker: NAME
+            ref: '#/definitions/io.k8s.cli.setters.name'
+          - marker: SPACE
+            ref: '#/definitions/io.k8s.cli.setters.namespace'
+    io.k8s.cli.setters.gcloud.core.project:
+      x-k8s-cli:
+        setter:
+          name: gcloud.core.project
+          value: issue-label-bot-dev
+          isSet: true
+    io.k8s.cli.setters.kfname:
+      x-k8s-cli:
+        setter:
+          name: kfname
+          value: issue-label-bot
+          isSet: true
+    io.k8s.cli.substitutions.nb-url:
+      x-k8s-cli:
+        substitution:
+          name: nb-url
+          pattern: https://${kfname}.endpoints.${gcloud.core.project}.cloud.goog/notebook/${namespace}/${name}/lab
+          values:
+          - marker: ${kfname}
+            ref: '#/definitions/io.k8s.cli.setters.kfname'
+          - marker: ${gcloud.core.project}
+            ref: '#/definitions/io.k8s.cli.setters.gcloud.core.project'
+          - marker: ${namespace}
+            ref: '#/definitions/io.k8s.cli.substitutions.namespace'
+          - marker: ${name}
+            ref: '#/definitions/io.k8s.cli.substitutions.name'
+    io.k8s.cli.substitutions.vscode-url:
+      x-k8s-cli:
+        substitution:
+          name: vscode-url
+          pattern: https://${kfname}.endpoints.${gcloud.core.project}.cloud.goog/vscode/${namespace}/${name}/
+          values:
+          - marker: ${kfname}
+            ref: '#/definitions/io.k8s.cli.setters.kfname'
+          - marker: ${gcloud.core.project}
+            ref: '#/definitions/io.k8s.cli.setters.gcloud.core.project'
+          - marker: ${namespace}
+            ref: '#/definitions/io.k8s.cli.substitutions.namespace'
+          - marker: ${name}
+            ref: '#/definitions/io.k8s.cli.substitutions.name'
+    io.k8s.cli.setters.numGpus:
+      x-k8s-cli:
+        setter:
+          name: numGpus
+          value: "0"
+          isSet: true
+    io.k8s.cli.substitutions.vscode-prefix:
+      x-k8s-cli:
+        substitution:
+          name: vscode-prefix
+          pattern: /vscode/${namespace}/${name}/
+          values:
+          - marker: ${namespace}
+            ref: '#/definitions/io.k8s.cli.substitutions.namespace'
+          - marker: ${name}
+            ref: '#/definitions/io.k8s.cli.substitutions.name'
+    io.k8s.cli.substitutions.nbprefix-env:
+      x-k8s-cli:
+        substitution:
+          name: nbprefix-env
+          pattern: /notebook/${namespace}/${name}/
+          values:
+          - marker: ${namespace}
+            ref: '#/definitions/io.k8s.cli.substitutions.namespace'
+          - marker: ${name}
+            ref: '#/definitions/io.k8s.cli.substitutions.name'
+    io.k8s.cli.substitutions.dest-service:
+      x-k8s-cli:
+        substitution:
+          name: dest-service
+          pattern: ${name}.${namespace}.svc.cluster.local
+          values:
+          - marker: ${name}
+            ref: '#/definitions/io.k8s.cli.substitutions.name'
+          - marker: ${namespace}
+            ref: '#/definitions/io.k8s.cli.substitutions.namespace'
+    io.k8s.cli.setters.image:
+      x-k8s-cli:
+        setter:
+          name: image
+          value: gcr.io/issue-label-bot-dev/hf-trainer:4f7a6a9-dirty@sha256:05a48afd77890fb8e00c56fc93267d5a87b7d6d7d9581689fdcee02df4629371
+          isSet: true
+    io.k8s.cli.setters.serviceAccount:
+      x-k8s-cli:
+        setter:
+          name: serviceAccount
+          value: default-editor
+    io.k8s.cli.setters.gitSecret:
+      x-k8s-cli:
+        setter:
+          name: gitSecret
+          value: git-creds

@@ -1,0 +1,45 @@
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  labels:
+    app: jlewi-vscode # {"$kpt-set":"name"}
+  name: jlewi-vscode # {"$kpt-set":"name"}
+spec:
+  # TODO(jlewi): Should we take ownership?
+  addOwnerRef: false
+  componentKinds:
+  - group: core
+    kind: ConfigMap
+  - group: kubeflow.org
+    kind: Notebook
+  - group: apps
+    kind: StatefulSet
+  - group: apps
+    kind: Deployment
+  - group: rbac.authorization.k8s.io
+    kind: RoleBinding
+  - group: rbac.authorization.k8s.io
+    kind: Role
+  - group: core
+    kind: ServiceAccount
+  - group: core
+    kind: Service
+  - group: networking.istio.io
+    kind: VirtualService
+  descriptor:
+    description: Notebook for kubeflow code intelligence
+    keywords:
+    - vscode
+    - notebook
+    links:
+    - description: vscode
+      url: https://issue-label-bot.endpoints.issue-label-bot-dev.cloud.goog/vscode/kubeflow-jlewi/jlewi-vscode/ # {"$kpt-set":"vscode-url"}
+    # The type text is what shows up in the software column in the applications dashboard.
+    # It will be a link to the first in the list of links.
+    # Additional links will show up in the details page.
+    type: vscode
+    version: v1
+  # TODO(jlewi): Use commonLabels to ensure it gets applied to all resources?
+  selector:
+    matchLabels:
+      app: jlewi-vscode # {"$kpt-set":"name"}

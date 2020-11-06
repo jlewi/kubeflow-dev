@@ -90,37 +90,6 @@ Looks like there is an issue with running it behind a reverse proxy
   ERROR proxy 0 disposed too early {"type":"undefined","proxyId":0}
   INFO  WebSocket opened / {"client":9,"ip":"127.0.0.1"}
   ```
-## Using Kubeflow's reverse proxy
-
-This isn't working yet because of https://github.com/cdr/code-server/issues/670
-
-1. Define a service to create a reverse proxy route
- 
-   ```
-    apiVersion: v1
-	kind: Service
-	metadata:
-	  annotations:
-	    getambassador.io/config: |-
-	      ---
-	      apiVersion: ambassador/v0
-	      kind:  Mapping
-	      name: ${NOTEBOOK_NAME}_vscode_mapping
-	      prefix: /vscode/${NOTEBOOK_NAME}
-	      rewrite: /
-	      service: ${SERVICE_NAME}.kubeflow
-	  labels:
-	    ksonnet.io/component: tensorboard
-	  name: ${SERVICE_NAME}
-	  namespace: kubeflow
-	spec:
-	  ports:
-	  - name: http
-	    port: 80
-	    targetPort: 8443
-	  selector:
-	    notebook-name: ${NOTEBOOK_NAME}
-   ```
 
 ## References
 

@@ -1,6 +1,7 @@
 # IMG is the base path for images..
 # Individual images will be
 # $(IMG)/$(NAME):$(TAG)
+CONTEXT=label-bot-dev
 
 PROJECT ?= code-search-demo
 IMG ?= gcr.io/${PROJECT}/vscode
@@ -48,3 +49,13 @@ build-gcb: build-dir
 push: build
 	docker push $(IMG):$(TAG) 
 	docker push $(IMG):latest
+
+
+apply:
+	# TODO(jlewi): What's the best way to make sure the statefulset pod gets kicked?
+	# should we delete it manually or could we add a unique annotation?
+	kustomize build | kubectl --context=$(CONTEXT) apply -f -
+	# TODO(jlewi): How do we avoid hardcoding the pod name? i.e. how
+	# do we make it a function of the name? Should we use yq to read the value
+	# of name? 
+	kubectl --context=$(CONTEXT) delete pods jlewi-vscode-0

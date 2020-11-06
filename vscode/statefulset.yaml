@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: jlewi-vscode # {"$kpt-set":"name"}
+  name: jlewicodeserver # {"$kpt-set":"name"}
 spec:
   podManagementPolicy: OrderedReady
   replicas: 1
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      statefulset: jlewi-vscode # {"$kpt-set":"name"}
-  serviceName: jlewi-vscode # {"$kpt-set":"name"}
+      statefulset: jlewicodeserver # {"$kpt-set":"name"}
+  serviceName: jlewicodeserver # {"$kpt-set":"name"}
   template:
     metadata:
       annotations:
         # Do we need the istio side car for virtual service reverse proxy
-        sidecar.istio.io/inject: "true"
+        sidecar.istio.io/inject: "false"
       labels:
-        app: jlewi-vscode # {"$kpt-set":"name"}
-        code-server: jlewi-vscode # {"$kpt-set":"name"}
-        statefulset: jlewi-vscode # {"$kpt-set":"name"}
+        app: jlewicodeserver # {"$kpt-set":"name"}
+        code-server: jlewicodeserver # {"$kpt-set":"name"}
+        statefulset: jlewicodeserver # {"$kpt-set":"name"}
     spec:
       securityContext:
         # 1000 = jovyan
@@ -43,7 +43,8 @@ spec:
         command:
         - /usr/local/bin/code-server
         - --auth=none
-        - --bind-addr=localhost:8080
+        #- --bind-addr=jlewicodeserver-0:8080
+        - --bind-addr=jlewicodeserver-0.jlewicodeserver.label-bot-dev.svc.cluster.local:8080
         # TODO(jlewi): How do we want to set this
         - --user-data-dir=/home/jovyan/data
         - --verbose
@@ -51,6 +52,14 @@ spec:
         # - tail
         # - -f
         # - /dev/null
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
         resources:
           limits:
             nvidia.com/gpu: 0 # {"$kpt-set":"numGpus"}
@@ -71,7 +80,7 @@ spec:
       volumes:
       - name: workspace
         persistentVolumeClaim:
-          claimName: workspace-jlewi-vscode # {"$kpt-set":"pvc-name"}
+          claimName: workspace-jlewicodeserver # {"$kpt-set":"pvc-name"}
       - name: ssh
         secret:
           secretName: git-creds # {"$kpt-set":"gitSecret"}

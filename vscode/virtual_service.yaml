@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: jlewi-vscode # {"$kpt-set":"name"}
+  name: jlewicodeserver # {"$kpt-set":"name"}
 spec:
   gateways:
   # WARNING: THE GATEWAY WILL CHANGE IN LATER VERSIONS OF KUBEFLOW.
@@ -13,13 +13,14 @@ spec:
     - uri:
         # The prefix must have a trailing slash
         # And when you navigate to the URL you must include the trailing slash.
-        prefix: /jlewivscode/ # {"$kpt-set":"vscode-prefix"}
+        prefix: /vscode/label-bot-dev/jlewicodeserver/ # {"$kpt-set":"vscode-prefix"}
     rewrite:
-      uri: / # {"$kpt-set":"vscode-prefix"}
+      #uri: / # {"$kpt-set":"vscode-prefix"}
+      uri: /
     route:
     - destination:
-        host: jlewi-vscode-0.jlewi-vscode.kubeflow-jlewi.svc.cluster.local # {"$kpt-set":"vscode-host"}
+        host: jlewicodeserver-0.jlewicodeserver.label-bot-dev.svc.cluster.local # {"$kpt-set":"vscode-host"}
         port:
-          number: 80
+          number: 8080
     timeout: 300s
     websocketUpgrade: true

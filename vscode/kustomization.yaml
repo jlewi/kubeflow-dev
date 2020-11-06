@@ -4,7 +4,8 @@ namespace: label-bot-dev # {"$ref":"#/definitions/io.k8s.cli.substitutions.names
 # N.B. Don't set common labels; kustomzie will use that to update selectors which will break things.
 resources:
 - application.yaml
-- statefulset.yaml
+- deployment.yaml
+#- statefulset.yaml
 - pvc.yaml
 - service.yaml
 - virtual_service.yaml

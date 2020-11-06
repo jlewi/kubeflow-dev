@@ -24,7 +24,7 @@ openAPI:
       x-k8s-cli:
         setter:
           name: name
-          value: jlewicodeserver
+          value: jlvs
           isSet: true
     io.k8s.cli.substitutions.name:
       x-k8s-cli:
@@ -54,7 +54,7 @@ openAPI:
       x-k8s-cli:
         substitution:
           name: vscode-url
-          pattern: NAME-0.NAME.SPACE.svc.cluster.local
+          pattern: NAME.SPACE.svc.cluster.local
           values:
           - marker: NAME
             ref: '#/definitions/io.k8s.cli.setters.name'

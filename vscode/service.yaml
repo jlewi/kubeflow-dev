@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: jlewicodeserver # {"$kpt-set":"name"}
+  name: jlvs # {"$kpt-set":"name"}
 spec:
   ports:
   - name: http-vscode
@@ -9,5 +9,6 @@ spec:
     protocol: TCP
     targetPort: 8080
   selector:
-    app: jlewicodeserver # {"$kpt-set":"name"}
-  clusterIP: None
+    app: jlvs # {"$kpt-set":"name"}
+  # Uncomment for statefulset
+  #clusterIP: None

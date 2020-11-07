@@ -82,6 +82,10 @@ spec:
         # size reasons, as well as durability.        
         - name: TRANSFORMERS_CACHE
           value: /home/jovyan/.cache
+        # Set the home directory explicitly to ensure it matches the PVC. Otherwise our home
+        # directory won't be durable.
+        - name: HOME
+          value: /home/jovyan
         #image: tensorflow/tensorflow:2.3.1-jupyter
         image: gcr.io/deeplearning-platform-release/pytorch-cpu.1-4
         name: jlewi-nb # {"$kpt-set":"name"}

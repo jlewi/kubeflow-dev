@@ -81,6 +81,8 @@ spec:
       - name: ssh
         secret:
           secretName: git-creds # {"$kpt-set":"gitSecret"}
+          # See https://www.jannikarndt.de/blog/2018/03/ssh_key_as_kubernetes_secret/
+          defaultMode: 256
       - emptyDir:
           medium: Memory
         name: dshm

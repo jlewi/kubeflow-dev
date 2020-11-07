@@ -5,13 +5,6 @@ Kubernetes resources to run VS Code Server
 This is possible because of [coder.com](https://coder.com/) which has published
 a remote server for Visual Studio Code.
 
-Unfortunately, I haven't been able to get this working behind ISTIO (1.4)
-
-  * So for now you will need to use `kubectl port-forward`.
-  * TODO(jlewi): Try using a Deployment instead of statefulset?
-  * With ISTIO i'm getting upstream/disconnect errors 
-  * https://github.com/cdr/code-server/issues/670 related to reverse proxies
-
 
 ## Instructions
 
@@ -42,9 +35,12 @@ Unfortunately, I haven't been able to get this working behind ISTIO (1.4)
 
 Notes about trying to make it work over istio
 
-* codeserver has a healthcheck on "/healthz"
+* Using a statefulset rather than a deployment causes problems when running behind ISTIO
+
 
 ## Known issues
+
+* Frequent reconnections; why is this?
 
 * Connection seems to be flaky
   

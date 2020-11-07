@@ -22,6 +22,8 @@ Instructions for using Git and GitHub in particular with Kubeflow.
     chmod 600 ~/.ssh/github_kf
     chmod 644 ~/.ssh/github_kf.pub
     ```
+
+    * See [ref](https://www.jannikarndt.de/blog/2018/03/ssh_key_as_kubernetes_secret/)
 1. In your Jupyter notebook upload the private and public key
 
 1. In jupyter start a notebook and copy the public and private key to `~/.ssh/id_rsa` and `~/.ssh/id_rsa.pub`
